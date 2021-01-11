@@ -1,0 +1,13 @@
+macro(set_option OPTION HELP_TEXT DEFAULT_VALUE)
+    option(${OPTION} ${HELP_TEXT} ${DEFAULT_VALUE})
+    message(STATUS "${OPTION}: ${${OPTION}} (${HELP_TEXT})")
+endmacro(set_option)
+
+macro(set_build_option OPTION HELP_TEXT DEFAULT_VALUE)
+    if (DC_FORCE_BUILD_PRESET_OPTIONS)
+        set(${OPTION} ${DEFAULT_VALUE})
+    else()
+        option(${OPTION} ${HELP_TEXT} ${DEFAULT_VALUE})
+    endif()
+    message(STATUS "${OPTION}: ${${OPTION}} (${HELP_TEXT})")
+endmacro(set_build_option)

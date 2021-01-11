@@ -1,0 +1,32 @@
+name: Checks
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  TestUbuntu:
+    runs-on: ubuntu-latest
+    name: Test Ubuntu
+    strategy:
+      fail-fast: false
+      matrix:
+        build-preset: [Debug, DebugASan, Release, FaultyThreadASan, FaultyThreadTSan, Fiber, FiberASan, Matrix]
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+      with:
+        submodules: 'true'
+    - name: Setup
+      uses: ./.github/actions/ubuntu/setup
+      with:
+        version: 19
+    - name: Test Debug
+      uses: ./.github/actions/cmake_and_test
+      with:
+        cxx-compiler: clang++-19
+        c-compiler: clang-19
+        generator: Ninja
+        preset: ${{matrix.build-preset}}

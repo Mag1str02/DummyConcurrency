@@ -1,0 +1,18 @@
+name: Build and Test
+
+description: Builds and runs tests on specific build preset
+
+inputs:
+  version:
+    required: true
+runs:
+  using: composite
+  steps:
+    - name: Install Packages
+      run: |
+        sudo apt update
+        sudo apt install ninja-build
+        wget https://apt.llvm.org/llvm.sh
+        chmod +x llvm.sh
+        sudo ./llvm.sh ${{inputs.version}} all
+      shell: bash

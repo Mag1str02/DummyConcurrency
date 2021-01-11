@@ -1,0 +1,31 @@
+name: Build and Test
+
+description: Builds and runs tests on specific build preset
+
+inputs:
+  preset:
+    required: true
+  cxx-compiler:
+    required: true
+  c-compiler:
+    required: true
+  generator:
+    required: true
+runs:
+  using: composite
+  steps:
+    - name: Build
+      uses: threeal/cmake-action@v2.0.0
+      with:
+        source-dir: ${{ github.workspace }}
+        build-dir: ${{ github.workspace }}/build
+        generator: Ninja
+        cxx-compiler: ${{inputs.cxx-compiler}}
+        c-compiler: ${{inputs.c-compiler}}
+        build-args: --target RunAllTests --parallel 16
+        options: DC_BUILD_TYPE=${{inputs.preset}}
+    - name: Test
+      shell: bash
+      run: | 
+        ${{github.workspace}}/build/Tests/bin/RunAllTests
+         

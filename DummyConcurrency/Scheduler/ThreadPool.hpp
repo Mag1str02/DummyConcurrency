@@ -1,0 +1,47 @@
+#pragma once
+
+#include "IntrusiveQueue.hpp"
+
+#include "DummyConcurrency/Scheduler/Interface/Scheduler.hpp"
+#include "DummyConcurrency/Scheduler/Interface/Task.hpp"
+
+#include <twist/ed/std/condition_variable.hpp>
+#include <twist/ed/std/mutex.hpp>
+#include <twist/ed/std/thread.hpp>
+
+#include <vector>
+
+// Fixed-size pool of worker threads
+namespace DummyConcurrency::Scheduler {
+
+    class ThreadPool : public IScheduler {
+    public:
+        explicit ThreadPool(size_t threads);
+        ~ThreadPool();
+
+        // Non-copyable
+        ThreadPool(const ThreadPool&)            = delete;
+        ThreadPool& operator=(const ThreadPool&) = delete;
+
+        // Non-movable
+        ThreadPool(ThreadPool&&)            = delete;
+        ThreadPool& operator=(ThreadPool&&) = delete;
+
+        void Start();
+
+        virtual void Submit(IntrusiveTask* task) override;
+
+        static ThreadPool* Current();
+
+        void Stop();
+
+    private:
+        static void Worker(ThreadPool* current_thread_pool);
+
+        IntrusiveUnboundedBlockingQueue<IntrusiveTask> task_queue_;
+        std::vector<twist::ed::std::thread>            workers_;
+        uint32_t                                       workers_amount_;
+        bool                                           stopped_ = false;
+    };
+
+}  // namespace DummyConcurrency::Scheduler

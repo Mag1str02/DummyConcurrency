@@ -1,0 +1,2 @@
+add_executable(ExampleThreadPool ThreadPool.cpp)
+target_link_libraries(ExampleThreadPool PUBLIC DummyConcurrency)
