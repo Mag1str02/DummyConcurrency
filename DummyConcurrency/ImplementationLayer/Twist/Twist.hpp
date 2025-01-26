@@ -1,7 +1,5 @@
 #pragma once
 
-#ifdef DC_USE_TWIST
-
 #include <twist/assist/fiber.hpp>
 #include <twist/ed/static/thread_local/ptr.hpp>
 #include <twist/ed/std/atomic.hpp>
@@ -20,18 +18,16 @@ namespace DummyConcurrency::ImplementationLayer {
     using SpinWait                     = twist::ed::SpinWait;
     using Fiber                        = twist::assist::Fiber;
     using FiberHandle                  = twist::assist::FiberHandle;
-    using twist::assist::SwitchToFiber;
     using twist::assist::NewFiber;
+    using twist::assist::SwitchToFiber;
 
-    namespace Futex = twist::ed::futex;
+    namespace Futex {
+        using twist::ed::futex::PrepareWake;
+        using twist::ed::futex::Wait;
+        using twist::ed::futex::WakeAll;
+        using twist::ed::futex::WakeOne;
+    }  // namespace Futex
 
 #define STATIC_THREAD_LOCAL_PTR(type, name) TWISTED_STATIC_THREAD_LOCAL_PTR(type, name);
+
 }  // namespace DummyConcurrency::ImplementationLayer
-
-#else
-
-namespace DummyConcurrency::ImplementationLayer {
-    using namespace std;
-}
-
-#endif

@@ -21,10 +21,10 @@ namespace DummyConcurrency::Fiber {
     }
 
     void ICoroutine::Resume() {
-        Context::ExecutionContext     caller_context;
+        Context::ExecutionContext        caller_context;
         ImplementationLayer::FiberHandle impl_caller_fiber;
 
-        caller_context_     = &caller_context;
+        caller_context_    = &caller_context;
         impl_caller_fiber_ = &impl_caller_fiber;
 
         impl_caller_fiber = ImplementationLayer::SwitchToFiber(impl_fiber_.Handle());

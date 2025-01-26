@@ -1,6 +1,6 @@
 #pragma once
 
-#if DC_EXCEPTION_CONTEXT_IMPLEMENTATION_unix 
+#if DC_EXCEPTION_CONTEXT_IMPLEMENTATION_unix
 
 #include <DummyConcurrency/Context/Exceptions/unix/Context.hpp>
 

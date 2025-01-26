@@ -4,7 +4,7 @@
 #include "DummyConcurrency/Threading/Synchronization/SpinLock.hpp"
 #include "DummyConcurrency/Utils/IntrusiveForwardList.hpp"
 
-#include <DummyConcurrency/ImplementationLayer.hpp>
+#include <DummyConcurrency/ImplementationLayer/ImplementationLayer.hpp>
 
 namespace DummyConcurrency::Fiber {
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "DummyConcurrency/ImplementationLayer.hpp"
+#include "DummyConcurrency/ImplementationLayer/ImplementationLayer.hpp"
 #include "DummyConcurrency/Utils/IntrusiveForwardList.hpp"
 
 namespace DummyConcurrency {
