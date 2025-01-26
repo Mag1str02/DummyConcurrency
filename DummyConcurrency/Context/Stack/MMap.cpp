@@ -23,10 +23,10 @@ namespace DummyConcurrency::Context {
             size_t page_size_;
         };
 
-        size_t PageSize() {
-            static PageSizeDetector page_size_detector;
+        size_t GetCachedPageSize() {
+            static PageSizeDetector sPageSizeDetector;
 
-            return page_size_detector.GetPageSize();
+            return sPageSizeDetector.GetPageSize();
         }
 
     }  // namespace
@@ -80,11 +80,11 @@ namespace DummyConcurrency::Context {
     //////////////////////////////////////////////////////////////////////
 
     static size_t PagesToBytes(size_t count) {
-        return count * PageSize();
+        return count * MmapAllocation::PageSize();
     }
 
     size_t MmapAllocation::PageSize() {
-        return PageSize();
+        return GetCachedPageSize();
     }
 
     MmapAllocation MmapAllocation::AllocatePages(size_t count, void* hint) {

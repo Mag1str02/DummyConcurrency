@@ -15,11 +15,11 @@ int main() {
     });
 
     std::println("Begining: {}", std::this_thread::get_id());
-    loop.Run();
+    loop.RunNext();
     std::println("Hello from main 2: {}", std::this_thread::get_id());
-    loop.Run();
+    loop.RunNext();
     std::println("Hello from main 4: {}", std::this_thread::get_id());
-    loop.Run();
+    loop.RunNext();
     std::println("Hello from main 6: {}", std::this_thread::get_id());
 
     return 0;
