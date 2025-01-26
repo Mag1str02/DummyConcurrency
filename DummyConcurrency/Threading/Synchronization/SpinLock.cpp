@@ -1,12 +1,10 @@
 #include "SpinLock.hpp"
 
-#include <twist/ed/wait/spin.hpp>
-
 namespace DummyConcurrency::Threading {
 
     void SpinLock::Lock() {
         while (state_.exchange(1) == 1) {
-            twist::ed::SpinWait spin_wait;
+            ImplementationLayer::SpinWait spin_wait;
             while (state_.load() == 1) {
                 spin_wait();
             }
@@ -35,4 +33,4 @@ namespace DummyConcurrency::Threading {
         Unlock();
     }
 
-}  // namespace DummyConcurrency::Thread
+}  // namespace DummyConcurrency::Threading

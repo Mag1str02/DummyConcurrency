@@ -3,7 +3,7 @@
 #include "Stack.hpp"
 
 #include <DummyConcurrency/Context/Context.hpp>
-#include <twist/assist/fiber.hpp>
+#include <DummyConcurrency/ImplementationLayer.hpp>
 
 namespace DummyConcurrency::Fiber {
 
@@ -28,8 +28,8 @@ namespace DummyConcurrency::Fiber {
         Context::ExecutionContext  coro_context_;
         Context::ExecutionContext* caller_context_ = nullptr;
 
-        twist::assist::Fiber        twist_fiber_;
-        twist::assist::FiberHandle* twist_caller_fiber_ = nullptr;
+        ImplementationLayer::Fiber        impl_fiber_;
+        ImplementationLayer::FiberHandle* impl_caller_fiber_ = nullptr;
     };  // namespace DummyConcurrency::Fiber
 
     template <typename F> class Coroutine : public ICoroutine {
@@ -43,7 +43,7 @@ namespace DummyConcurrency::Fiber {
             } catch (...) {
                 DC_PANIC("Exceptions are forbidden in coroutins");
             }
-            twist::assist::SwitchToFiber(*twist_caller_fiber_);
+            ImplementationLayer::SwitchToFiber(*impl_caller_fiber_);
 
             completed_ = true;
             coro_context_.ExitTo(*caller_context_);

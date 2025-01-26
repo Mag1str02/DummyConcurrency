@@ -2,12 +2,9 @@
 
 #include "IntrusiveQueue.hpp"
 
+#include "DummyConcurrency/ImplementationLayer.hpp"
 #include "DummyConcurrency/Scheduler/Interface/Scheduler.hpp"
 #include "DummyConcurrency/Scheduler/Interface/Task.hpp"
-
-#include <twist/ed/std/condition_variable.hpp>
-#include <twist/ed/std/mutex.hpp>
-#include <twist/ed/std/thread.hpp>
 
 #include <vector>
 
@@ -39,7 +36,7 @@ namespace DummyConcurrency::Scheduler {
         static void Worker(ThreadPool* current_thread_pool);
 
         IntrusiveUnboundedBlockingQueue<IntrusiveTask> task_queue_;
-        std::vector<twist::ed::std::thread>            workers_;
+        std::vector<ImplementationLayer::Thread>       workers_;
         uint32_t                                       workers_amount_;
         bool                                           stopped_ = false;
     };

@@ -2,8 +2,7 @@
 
 #include "DummyConcurrency/Fiber/Core/Awaiter.hpp"
 
-#include <twist/ed/std/atomic.hpp>
-#include <twist/ed/wait/spin.hpp>
+#include <DummyConcurrency/ImplementationLayer.hpp>
 
 namespace DummyConcurrency::Fiber {
 
@@ -29,6 +28,6 @@ namespace DummyConcurrency::Fiber {
         static inline Awaiter* const kFired    = reinterpret_cast<Awaiter*>(0);
         static inline Awaiter* const kNotFired = reinterpret_cast<Awaiter*>(1);
 
-        twist::ed::std::atomic<Awaiter*> queue_head_ = kNotFired;
+        ImplementationLayer::Atomic<Awaiter*> queue_head_ = kNotFired;
     };
 }  // namespace DummyConcurrency::Fiber

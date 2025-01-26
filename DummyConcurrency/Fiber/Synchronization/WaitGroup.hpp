@@ -4,7 +4,7 @@
 #include "DummyConcurrency/Threading/Synchronization/SpinLock.hpp"
 #include "DummyConcurrency/Utils/IntrusiveForwardList.hpp"
 
-#include <twist/ed/std/atomic.hpp>
+#include <DummyConcurrency/ImplementationLayer.hpp>
 
 namespace DummyConcurrency::Fiber {
 
@@ -61,7 +61,7 @@ namespace DummyConcurrency::Fiber {
         static Awaiter* GetPointer(uint64_t val);
         static uint64_t SetPointer(uint64_t val, Awaiter* ptr);
 
-        twist::ed::std::atomic<uint64_t> state_ = 0;
+        ImplementationLayer::Atomic<uint64_t> state_ = 0;
     };
 
 }  // namespace DummyConcurrency::Fiber

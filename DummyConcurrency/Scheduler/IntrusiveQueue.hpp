@@ -1,9 +1,7 @@
 #pragma once
 
+#include "DummyConcurrency/ImplementationLayer.hpp"
 #include "DummyConcurrency/Utils/IntrusiveForwardList.hpp"
-
-#include <twist/ed/std/condition_variable.hpp>
-#include <twist/ed/std/mutex.hpp>
 
 namespace DummyConcurrency {
 
@@ -34,9 +32,9 @@ namespace DummyConcurrency {
         }
 
     private:
-        IntrusiveForwardList<T>            queue_;
-        twist::ed::std::mutex              mutex_;
-        twist::ed::std::condition_variable pop_wait_;
+        IntrusiveForwardList<T>                queue_;
+        ImplementationLayer::Mutex             mutex_;
+        ImplementationLayer::ConditionVariable pop_wait_;
 
         bool closed_ = false;
     };

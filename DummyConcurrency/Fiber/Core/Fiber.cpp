@@ -4,16 +4,16 @@
 #include "Coroutine.hpp"
 #include "Handle.hpp"
 
-#include <twist/ed/static/thread_local/ptr.hpp>
+#include "DummyConcurrency/ImplementationLayer.hpp"
 
 namespace DummyConcurrency::Fiber {
 
-    TWISTED_STATIC_THREAD_LOCAL_PTR(Fiber, kCurrentFiber);
+    STATIC_THREAD_LOCAL_PTR(Fiber, gCurrentFiber);
 
     Fiber::Fiber(IScheduler& sched, ICoroutine& coro) : scheduler_(sched), coroutine_(coro) {}
 
     Fiber* Fiber::Self() {
-        return kCurrentFiber;
+        return gCurrentFiber;
     }
 
     IScheduler& Fiber::GetScheduler() const {
@@ -21,7 +21,7 @@ namespace DummyConcurrency::Fiber {
     }
 
     void Fiber::Suspend(IAwaiter& awaiter) {
-        DC_ASSERT(kCurrentFiber == this, "Suspend can only be called on active fiber");
+        DC_ASSERT(gCurrentFiber == this, "Suspend can only be called on active fiber");
 
         suspend_awaiter_ = &awaiter;
         coroutine_.Suspend();
@@ -29,13 +29,13 @@ namespace DummyConcurrency::Fiber {
 
     void Fiber::Run() noexcept {
         suspend_awaiter_ = nullptr;
-        kCurrentFiber    = this;
+        gCurrentFiber    = this;
 
         coroutine_.Resume();
 
         // It is possible to other fiber to leave from resume
-        Fiber* returned_fiber = kCurrentFiber;
-        kCurrentFiber         = nullptr;
+        Fiber* returned_fiber = gCurrentFiber;
+        gCurrentFiber         = nullptr;
         if (returned_fiber->coroutine_.IsCompleted()) {
             delete returned_fiber;
         } else {
@@ -44,9 +44,9 @@ namespace DummyConcurrency::Fiber {
     }
 
     void Fiber::SwitchTo(Fiber& other) {
-        DC_ASSERT(kCurrentFiber == this, "SwitchTo can only be called on active fiber");
+        DC_ASSERT(gCurrentFiber == this, "SwitchTo can only be called on active fiber");
 
-        kCurrentFiber = &other;
+        gCurrentFiber = &other;
         coroutine_.SwitchTo(other.coroutine_);
     }
     void Fiber::Schedule() {

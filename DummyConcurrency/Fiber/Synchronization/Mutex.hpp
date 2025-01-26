@@ -2,7 +2,7 @@
 
 #include "DummyConcurrency/Fiber/Core/Awaiter.hpp"
 
-#include <twist/ed/std/atomic.hpp>
+#include <DummyConcurrency/ImplementationLayer.hpp>
 
 namespace DummyConcurrency::Fiber {
 
@@ -33,8 +33,8 @@ namespace DummyConcurrency::Fiber {
         static inline Awaiter* const kUnlocked = reinterpret_cast<Awaiter*>(0);
         static inline Awaiter* const kLocked   = reinterpret_cast<Awaiter*>(1);
 
-        twist::ed::std::atomic<Awaiter*> head_ = kUnlocked;
-        Awaiter*                         tail_ = nullptr;
+        ImplementationLayer::Atomic<Awaiter*> head_ = kUnlocked;
+        Awaiter*                              tail_ = nullptr;
 
         FiberHandle unlocker_;
     };

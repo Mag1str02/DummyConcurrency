@@ -1,6 +1,6 @@
 #pragma once
 
-#include <twist/ed/std/atomic.hpp>
+#include <DummyConcurrency/ImplementationLayer.hpp>
 
 namespace DummyConcurrency::Threading {
 
@@ -17,7 +17,7 @@ namespace DummyConcurrency::Threading {
         void unlock();    // NOLINT
 
     private:
-        twist::ed::std::atomic<uint32_t> state_ = 0;
+        ImplementationLayer::Atomic<uint32_t> state_ = 0;
     };
 
 }  // namespace DummyConcurrency::Threading

@@ -1,13 +1,10 @@
 #include "ThreadPool.hpp"
 
-#include <twist/ed/static/thread_local/ptr.hpp>
-#include <twist/rt/cap/static/thread_local/ptr.hpp>
-
 #include <cassert>
 
 namespace DummyConcurrency::Scheduler {
 
-    TWISTED_STATIC_THREAD_LOCAL_PTR(ThreadPool, kCurrentThreadPool);
+    STATIC_THREAD_LOCAL_PTR(ThreadPool, gCurrentThreadPool);
 
     ThreadPool::ThreadPool(size_t thread) : workers_amount_(thread) {}
 
@@ -27,7 +24,7 @@ namespace DummyConcurrency::Scheduler {
     }
 
     ThreadPool* ThreadPool::Current() {
-        return kCurrentThreadPool;
+        return gCurrentThreadPool;
     }
 
     void ThreadPool::Stop() {
@@ -39,7 +36,7 @@ namespace DummyConcurrency::Scheduler {
     }
 
     void ThreadPool::Worker(ThreadPool* current_thread_pool) {
-        kCurrentThreadPool = current_thread_pool;
+        gCurrentThreadPool = current_thread_pool;
 
         do {
             auto* current_task = Current()->task_queue_.Pop();
