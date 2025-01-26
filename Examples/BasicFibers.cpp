@@ -21,6 +21,7 @@ int main() {
     std::println("Hello from main 4: {}", std::this_thread::get_id());
     loop.RunNext();
     std::println("Hello from main 6: {}", std::this_thread::get_id());
+    loop.RunNext();
 
     return 0;
 }
