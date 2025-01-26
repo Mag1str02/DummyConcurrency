@@ -3,9 +3,6 @@ set(DummyConcurrencySources
     Context/Exceptions/${DC_EXCEPTION_CONTEXT_IMPLEMENTATION}/Context.cpp
     Context/Machine/${DC_MACHINE_CONTEXT_IMPLEMENTATION}/Context.cpp
     Context/Machine/${DC_MACHINE_CONTEXT_IMPLEMENTATION}/Context.S
-    Context/Stack/MMap.cpp
-    Context/Wheels/MMap.cpp
-    Context/Wheels/PageSize.cpp
     Fiber/Core/Coroutine.cpp
     Fiber/Core/Fiber.cpp
     Fiber/Core/Handle.cpp
@@ -18,3 +15,7 @@ set(DummyConcurrencySources
     Scheduler/RunLoop.cpp
     Threading/Synchronization/WaitGroup.cpp
     Threading/Synchronization/SpinLock.cpp)
+
+if (UNIX)
+    set(DummyConcurrencySources ${DummyConcurrencySources} Context/Stack/MMap.cpp)
+endif()

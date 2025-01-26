@@ -1,9 +1,9 @@
 set_option(DC_FORCE_BUILD_PRESET_OPTIONS "Forces build preset options" ON)
 set_option(DC_EXCEPTIONS_CONTEXT "Enables support for exceptions" OFF)
 set_option(DC_USE_UCONTEXT "Use ucontext" OFF)
-set_option(DC_ENABLE_TESTS "Enable test targets" ON)
 set_option(DC_ENABLE_EXAMPLES "Enable example targets" ON)
-set_option(DC_USE_TWIST "Build library on top of twist" ON)
+set_option(DC_ENABLE_TESTS "Enable test targets" OFF)
+set_option(DC_USE_TWIST "Build library on top of twist" OFF)
 
 if(NOT DC_USE_TWIST AND DC_ENABLE_TESTS)
   message(SEND_ERROR "Can not enable tests without twist")

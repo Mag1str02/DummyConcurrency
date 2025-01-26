@@ -3,7 +3,6 @@
 #include <DummyConcurrency/Context/StackView.hpp>
 
 #include <cstdlib>
-// std::exchange, std::swap
 #include <utility>
 
 namespace DummyConcurrency::Context {
@@ -13,8 +12,8 @@ namespace DummyConcurrency::Context {
     class NewStack {
     private:
         struct Alloc {
-            std::byte* start;
-            size_t     size;
+            std::byte* Start;
+            size_t     Size;
         };
 
     public:
@@ -40,18 +39,18 @@ namespace DummyConcurrency::Context {
             };
         }
 
-        void* LowerBound() const { return alloc_.start; }
+        void* LowerBound() const { return alloc_.Start; }
 
-        StackView MutView() { return {alloc_.start, alloc_.size}; }
+        StackView MutView() { return {alloc_.Start, alloc_.Size}; }
 
         ~NewStack() {
-            if (alloc_.start != nullptr) {
-                delete[] alloc_.start;
+            if (alloc_.Start != nullptr) {
+                delete[] alloc_.Start;
             }
         }
 
     private:
-        NewStack(Alloc alloc) : alloc_(alloc) {}
+        explicit NewStack(Alloc alloc) : alloc_(alloc) {}
 
         void Swap(NewStack& that) { std::swap(alloc_, that.alloc_); }
 

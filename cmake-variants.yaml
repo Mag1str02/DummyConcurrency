@@ -4,40 +4,48 @@ buildType:
     Debug:
       short: Debug
       long: Emit debug information
+      buildType: Debug
       settings:
         DC_BUILD_TYPE: "Debug"
     DebugASan:
       short: DebugASan
       long: Instrument with Address Sanitizer
+      buildType: Debug
       settings:
         DC_BUILD_TYPE: "DebugASan"
     Release:
       short: Release
       long: Optimize generated code 
+      buildType: ReleaseWithDebInfo
       settings:
         DC_BUILD_TYPE: "Release"
     FaultyThreadASan:
       short: FaultyThreadASan
       long: Multi-threaded execution with fault injections and Address Sanitizer
+      buildType: Debug
       settings:
         DC_BUILD_TYPE: "FaultyThreadASan"
     FaultyThreadTSan:
       short: FaultyThreadTSan
       long: Multi-threaded execution with fault injections and Thread Sanitizer
+      buildType: Debug
       settings:
         DC_BUILD_TYPE: "FaultyThreadTSan"
     Fiber:
       short: Fiber
       long: Deterministic simulation with fibers
+      buildType: ReleaseWithDebInfo
       settings:
         DC_BUILD_TYPE: "Fiber"
     FiberASan:
       short: FiberASan
       long: Deterministic simulation with fibers and Address Sanitizer
+      buildType: ReleaseWithDebInfo
       settings:
         DC_BUILD_TYPE: "FiberASan"
     Matrix:
       short: Matrix 
       long: Isolated deterministic simulation with fibers
+      buildType: ReleaseWithDebInfo
       settings:
         DC_BUILD_TYPE: "Matrix"

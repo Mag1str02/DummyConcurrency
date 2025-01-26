@@ -1,10 +1,10 @@
 #pragma once
 
-#include <cstdlib>
-
 #include <DummyConcurrency/Common.hpp>
 
-namespace tmp_wheels {
+#include <cstdlib>
+
+namespace DummyConcurrency::Context {
 
     // View on a contiguous chunk of writeable / read-only memory
     // The memory is owned by some other object and that object must maintain the
@@ -76,11 +76,11 @@ namespace tmp_wheels {
             size_ -= offset;
         }
 
-        operator ConstMemView() const noexcept { return {start_, size_}; }
+        operator ConstMemView() const noexcept { return {start_, size_}; }  // NOLINT
 
     private:
         char*  start_;
         size_t size_;
     };
 
-}  // namespace tmp_wheels
+}  // namespace DummyConcurrency::Context

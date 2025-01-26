@@ -1,2 +1,5 @@
 add_executable(ExampleThreadPool ThreadPool.cpp)
+add_executable(ExampleFiber BasicFibers.cpp)
+
+target_link_libraries(ExampleFiber PUBLIC DummyConcurrency)
 target_link_libraries(ExampleThreadPool PUBLIC DummyConcurrency)
