@@ -1,11 +1,5 @@
-#if (APPLE)
-  #define ASM_SYMBOL(name) _##name
-#else
-  #define ASM_SYMBOL(name) name
-#endif
-
-.global ASM_SYMBOL(SetupMachineContext)
-.global ASM_SYMBOL(SwitchMachineContext)
+.global SetupMachineContext
+.global (SwitchMachineContext
 
 # https://eli.thegreenplace.net/2011/02/04/where-the-top-of-the-stack-is-on-x86/
 

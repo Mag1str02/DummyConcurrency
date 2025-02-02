@@ -8,9 +8,9 @@ int main() {
     ThreadPool pool(2);
 
     auto func = []() {
-        std::println("Hi from thread: {}", std::this_thread::get_id());
+        std::cout << "Hi from thread: {}" << std::this_thread::get_id() << std::endl;
         std::this_thread::sleep_for(1s);
-        std::println("Buy from thread: {}", std::this_thread::get_id());
+        std::cout << "Bye from thread: {}" << std::this_thread::get_id() << std::endl;
     };
     Submit(pool, func);
 

@@ -47,7 +47,7 @@ namespace DummyConcurrency::Fiber {
 
             completed_ = true;
             coro_context_.ExitTo(*caller_context_);
-            std::unreachable();
+            // Unreachable
         }
 
     private:

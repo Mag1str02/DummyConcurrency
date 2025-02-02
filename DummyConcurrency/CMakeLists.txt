@@ -11,12 +11,11 @@ target_compile_definitions(
     DC_EXCEPTION_CONTEXT_IMPLEMENTATION_${DC_EXCEPTION_CONTEXT_IMPLEMENTATION})
 
 target_include_directories(DummyConcurrency PUBLIC ${CMAKE_CURRENT_LIST_DIR}/..)
-message("------------------- ${DC_USE_TWIST}")
 
-if(DC_USE_TWIST)
+if(DC_ENABLE_TESTS)
   target_link_libraries(DummyConcurrency PUBLIC twist)
   target_include_directories(
     DummyConcurrency
     PUBLIC ${twist_SOURCE_DIR}/source)
-  target_compile_definitions(DummyConcurrency PUBLIC DC_USE_TWIST)
+  target_compile_definitions(DummyConcurrency PUBLIC DC_IMPLEMENTATION_LAYER_TWIST)
 endif()

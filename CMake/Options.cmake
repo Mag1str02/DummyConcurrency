@@ -3,11 +3,6 @@ set_option(DC_EXCEPTIONS_CONTEXT "Enables support for exceptions" OFF)
 set_option(DC_USE_UCONTEXT "Use ucontext" OFF)
 set_option(DC_ENABLE_EXAMPLES "Enable example targets" ON)
 set_option(DC_ENABLE_TESTS "Enable test targets" ON)
-set_option(DC_USE_TWIST "Build library on top of twist" ON)
-
-if(NOT DC_USE_TWIST AND DC_ENABLE_TESTS)
-  message(SEND_ERROR "Can not enable tests without twist")
-endif()
 
 if(DC_BUILD_TYPE STREQUAL "Debug")
   set_build_option(CMAKE_BUILD_TYPE "CMake build type" Debug)
