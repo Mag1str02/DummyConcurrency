@@ -1,11 +1,11 @@
 .global SetupMachineContext
-.global (SwitchMachineContext
+.global SwitchMachineContext
 
 # https://eli.thegreenplace.net/2011/02/04/where-the-top-of-the-stack-is-on-x86/
 
 # SetupMachineContext(stack, trampoline, arg)
 
-ASM_SYMBOL(SetupMachineContext):
+SetupMachineContext:
     # Arguments
     # 1) %rcx - bottom of the stack
     # 2) %rdx - trampoline
@@ -63,7 +63,7 @@ ASM_SYMBOL(SetupMachineContext):
 
 # SwitchMachineContext(from_rsp, to_rsp)
 
-ASM_SYMBOL(SwitchMachineContext):
+SwitchMachineContext:
     # SwitchMachineContext frame created on top of the current stack
 
     # 1. Save current execution context to 'from'
