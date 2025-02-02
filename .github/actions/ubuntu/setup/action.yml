@@ -1,6 +1,6 @@
-name: Build and Test
+name: Prepare compiler
 
-description: Builds and runs tests on specific build preset
+description: Installs compiler
 
 inputs:
   version:
