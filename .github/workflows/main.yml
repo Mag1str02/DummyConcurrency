@@ -30,13 +30,14 @@ jobs:
         c-compiler: clang-19
         generator: Ninja
         preset: ${{matrix.build-preset}}
+        shell: bash
   TestWindows:
     runs-on: windows-latest
     name: Test Windows
     strategy:
       fail-fast: false
       matrix:
-        build-preset: [Debug, DebugASan, Release, FaultyThreadASan, FaultyThreadTSan, Fiber, FiberASan, Matrix]
+        build-preset: [Debug, DebugASan, Release, FaultyThreadASan, Fiber, Matrix]
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v4
@@ -47,7 +48,8 @@ jobs:
     - name: Test
       uses: ./.github/actions/cmake_and_test
       with:
-        cxx-compiler: clang++-19
-        c-compiler: clang-19
+        cxx-compiler: clang++
+        c-compiler: clang
         generator: Ninja
         preset: ${{matrix.build-preset}}
+        shell: pwsh
