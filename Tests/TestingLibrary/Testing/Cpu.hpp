@@ -19,7 +19,11 @@ namespace Testing {
 
     private:
         size_t SpentMicros() const {
+#if WINDOWS
+            const size_t clocks = 0;
+#else
             const size_t clocks = std::clock() - start_ts_;
+#endif
             return ClocksToMicros(clocks);
         }
 

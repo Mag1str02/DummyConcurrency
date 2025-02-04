@@ -1,0 +1,19 @@
+name: Prepare
+
+description: Installs compiler
+
+runs:
+  using: composite
+  steps:
+    - name: Install clang
+      uses: msys2/setup-msys2@v2
+      with:
+        location: D:\
+        update: true
+        install: >-
+          mingw-w64-clang-x86_64-clang
+          mingw-w64-clang-x86_64-ninja
+    - name: Add msys to path
+      shell: pwsh
+      run: |
+        echo "D:\msys64\clang64\bin\" | Out-File -Append -FilePath $env:GITHUB_PATH -Encoding utf8

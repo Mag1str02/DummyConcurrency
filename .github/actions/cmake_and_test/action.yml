@@ -11,6 +11,8 @@ inputs:
     required: true
   generator:
     required: true
+  shell:
+    required: true
 runs:
   using: composite
   steps:
@@ -25,7 +27,7 @@ runs:
         build-args: --target RunAllTests --parallel 16
         options: DC_BUILD_TYPE=${{inputs.preset}}
     - name: Test
-      shell: bash
+      shell: ${{inputs.shell}}
       run: | 
         ${{github.workspace}}/build/Tests/bin/RunAllTests
          
