@@ -8,7 +8,7 @@ set(CMAKE_CXX_FLAGS
 
 # --------------------------------------------------------------------
 
-if(DC_ENABLE_TESTS)
+if(DC_DEVELOPER_MODE)
   project_log("FetchContent: twist_all")
 
   FetchContent_Declare(

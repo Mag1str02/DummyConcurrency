@@ -12,7 +12,7 @@ target_compile_definitions(
 
 target_include_directories(DummyConcurrency PUBLIC ${CMAKE_CURRENT_LIST_DIR}/..)
 
-if(DC_ENABLE_TESTS)
+if(DC_DEVELOPER_MODE)
   target_link_libraries(DummyConcurrency PUBLIC twist)
   target_include_directories(
     DummyConcurrency

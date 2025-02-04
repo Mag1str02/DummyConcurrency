@@ -9,7 +9,7 @@
 using namespace DummyConcurrency;  // NOLINT
 
 TEST_SUITE(SchedulingThreadPool_Stress) {
-    TWIST_STRESS_TEST(SubmitAndWait, 5s) {
+    TWIST_STRESS_TEST(SubmitAndWait, 10s) {
         ThreadPool pool{4};
         pool.Start();
 

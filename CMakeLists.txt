@@ -23,7 +23,8 @@ include(CMake/Task.cmake)
 # add_subdirectory(tasks)
 add_subdirectory(DummyConcurrency)
 
-if(DC_ENABLE_TESTS)
+if(DC_DEVELOPER_MODE)
+  add_subdirectory(Benchmark)
   add_subdirectory(Tests)
 endif()
 
