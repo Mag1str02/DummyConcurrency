@@ -2,7 +2,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "bin")
 
 # --------------------------------------------------------------------
 
-set(LIBS_LIST "wheels;twist;course-testing;fmt;function2")
+set(LIBS_LIST "wheels;twist;Testing;fmt;function2")
 
 if((CMAKE_BUILD_TYPE MATCHES Release) AND NOT TWIST_FAULTY)
     list(APPEND LIBS_LIST "mimalloc")
@@ -165,18 +165,12 @@ endfunction()
 
 # Benchmark
 
-function(add_task_benchmark BINARY_NAME)
-    get_task_target(BENCH_NAME ${BINARY_NAME})
-
-    prepend(BENCH_SOURCES "${TASK_DIR}/" ${ARGN})
-    add_task_executable(${BENCH_NAME} ${BENCH_SOURCES})
-    target_link_libraries(${BENCH_NAME} benchmark)
-
-    if(${TOOL_BUILD})
-        get_task_target(RUN_BENCH_TARGET "run_benchmark")
-        add_custom_target(${RUN_BENCH_TARGET} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${BENCH_NAME})
-        add_dependencies(${RUN_BENCH_TARGET} ${BENCH_NAME})
-    endif()
+function(add_task_benchmark BENCH_MAIN)
+    add_executable(Benchmark_${BENCH_MAIN} ${BENCH_MAIN}.cpp)
+    target_link_libraries(Benchmark_${BENCH_MAIN} 
+        PUBLIC DummyConcurrency 
+        PUBLIC Testing
+        )
 endfunction()
 
 # --------------------------------------------------------------------
