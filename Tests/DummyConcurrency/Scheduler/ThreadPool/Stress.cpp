@@ -13,7 +13,7 @@ TEST_SUITE(SchedulingThreadPool_Stress) {
         ThreadPool pool{4};
         pool.Start();
 
-        Testing::TimeBudget time_budget;
+        Testing::TimeBudget time_budget(9s);
 
         for (size_t iter = 0; time_budget; ++iter) {
             size_t                        todo = 1 + iter % 11;
