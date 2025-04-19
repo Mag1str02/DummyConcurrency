@@ -2,7 +2,7 @@
 
 #include <DummyConcurrency/ImplementationLayer/ImplementationLayer.hpp>
 
-namespace DummyConcurrency::Threading {
+namespace DummyConcurrency {
 
     class WaitGroup {
     public:

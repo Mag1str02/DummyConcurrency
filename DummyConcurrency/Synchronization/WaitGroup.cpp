@@ -1,6 +1,6 @@
 #include "WaitGroup.hpp"
 
-namespace DummyConcurrency::Threading {
+namespace DummyConcurrency {
 
     void WaitGroup::Add(size_t cnt) {
         job_cnt_.fetch_add(cnt);

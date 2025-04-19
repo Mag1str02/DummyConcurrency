@@ -13,8 +13,9 @@ set(DummyConcurrencySources
     Fiber/Synchronization/WaitGroup.cpp
     Scheduler/ThreadPool.cpp
     Scheduler/RunLoop.cpp
-    Threading/Synchronization/WaitGroup.cpp
-    Threading/Synchronization/SpinLock.cpp)
+    Synchronization/WaitGroup.cpp
+    Synchronization/SpinLock.cpp
+)
 
 if (UNIX)
     set(DummyConcurrencySources ${DummyConcurrencySources} Context/Stack/MMap.cpp)
