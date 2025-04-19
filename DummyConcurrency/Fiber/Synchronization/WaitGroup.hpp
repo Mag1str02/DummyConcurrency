@@ -1,7 +1,7 @@
 #pragma once
 
 #include "DummyConcurrency/Fiber/Core/Awaiter.hpp"
-#include "DummyConcurrency/Threading/Synchronization/SpinLock.hpp"
+#include "DummyConcurrency/Synchronization/SpinLock.hpp"
 #include "DummyConcurrency/Utils/IntrusiveForwardList.hpp"
 
 #include <DummyConcurrency/ImplementationLayer/ImplementationLayer.hpp>
@@ -32,7 +32,7 @@ namespace DummyConcurrency::Fiber {
             SpinlockWaitGroup* wg_;
         };
 
-        Threading::SpinLock           lock_;
+        SpinLock                      lock_;
         uint32_t                      counter_ = 0;
         IntrusiveForwardList<Awaiter> wait_queue_;
     };

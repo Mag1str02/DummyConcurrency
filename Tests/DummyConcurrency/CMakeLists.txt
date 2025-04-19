@@ -1,3 +1,4 @@
+add_subdirectory(DataStructures)
 add_subdirectory(Fiber)
 add_subdirectory(Scheduler)
-add_subdirectory(Thread)
+add_subdirectory(Synchronization)

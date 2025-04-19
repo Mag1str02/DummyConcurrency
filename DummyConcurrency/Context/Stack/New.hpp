@@ -1,6 +1,7 @@
 #pragma once
 
 #include <DummyConcurrency/Context/StackView.hpp>
+#include <DummyConcurrency/Utils/Traits.hpp>
 
 #include <cstdlib>
 #include <utility>
@@ -9,7 +10,7 @@ namespace DummyConcurrency::Context {
 
     // NewStack = heap allocation view new char[size]
 
-    class NewStack {
+    class NewStack : public NonCopyable {
     private:
         struct Alloc {
             std::byte* Start;
@@ -18,10 +19,6 @@ namespace DummyConcurrency::Context {
 
     public:
         NewStack() = delete;
-
-        // Non-copyable
-        NewStack(const NewStack&)            = delete;
-        NewStack& operator=(const NewStack&) = delete;
 
         // Move-constructible
         NewStack(NewStack&& that) : alloc_(std::exchange(that.alloc_, {nullptr, 0})) {}

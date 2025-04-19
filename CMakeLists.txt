@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.20)
 
-project(concurrency_course)
+project(DummyConcurrency)
 
 include(CMake/Utils.cmake)
 include(CMake/Options.cmake)

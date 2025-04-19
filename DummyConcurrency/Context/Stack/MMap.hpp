@@ -2,18 +2,9 @@
 
 #include <DummyConcurrency/Context/Stack/View.hpp>
 #include <DummyConcurrency/Context/StackView.hpp>
+#include <DummyConcurrency/Utils/Traits.hpp>
 
 namespace DummyConcurrency::Context {
-
-    struct NonCopyable {
-        NonCopyable(const NonCopyable& that)            = delete;
-        NonCopyable& operator=(const NonCopyable& that) = delete;
-
-    protected:
-        // To be used only as a base class
-        NonCopyable()  = default;
-        ~NonCopyable() = default;
-    };
 
     class MmapAllocation : public NonCopyable {
     public:

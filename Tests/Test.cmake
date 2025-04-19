@@ -17,7 +17,7 @@ macro(begin_test_group GROUP_NAME)
     target_link_libraries(${CURRENT_TEST_GROUP} 
         PUBLIC wheels 
         PUBLIC DummyConcurrency
-        PUBLIC course-testing
+        PUBLIC Testing
     )
     target_include_directories(${CURRENT_TEST_GROUP} 
         PUBLIC ${wheels_SOURCE_DIR}/source

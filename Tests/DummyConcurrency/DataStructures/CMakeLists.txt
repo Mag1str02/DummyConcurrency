@@ -1,0 +1,2 @@
+add_subdirectory(AtomicSharedPtr)
+add_subdirectory(LockFreeStack)
