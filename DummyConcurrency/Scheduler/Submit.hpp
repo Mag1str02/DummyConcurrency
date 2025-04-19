@@ -5,22 +5,22 @@
 
 namespace DummyConcurrency::Scheduler {
 
-    template <typename F> class SubmitTask : public IntrusiveTask {
-    public:
-        static IntrusiveTask* Create(F function) { return new SubmitTask(std::move(function)); }
+    template <typename F> 
+    void Submit(IScheduler& scheduler, F function) {
+        class SubmitTask : public IntrusiveTask {
+        public:
+            explicit SubmitTask(F function) : function_(std::move(function)) {}
 
-        virtual void Run() noexcept {
-            function_();
-            delete this;
-        }
+            virtual void Run() noexcept {
+                function_();
+                delete this;
+            }
 
-    private:
-        explicit SubmitTask(F function) : function_(std::move(function)) {}
-        F function_;
-    };
+        private:
+            F function_;
+        };
 
-    template <typename F> void Submit(IScheduler& scheduler, F function) {
-        scheduler.Submit(SubmitTask<F>::Create(std::move(function)));
+        scheduler.Submit(new SubmitTask(std::move(function)));
     }
 
 }  // namespace DummyConcurrency::Scheduler
