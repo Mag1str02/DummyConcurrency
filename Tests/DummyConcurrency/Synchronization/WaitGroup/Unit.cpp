@@ -1,7 +1,5 @@
 #include <DummyConcurrency/DummyConcurrency.hpp>
 
-#include <Testing/Cpu.hpp>
-
 #include <wheels/test/framework.hpp>
 #include <wheels/test/util/cpu_timer.hpp>
 
