@@ -44,7 +44,7 @@ namespace DummyConcurrency::Future::State {
             if (node == nullptr) {
                 node = results_.load();
             }
-            (*callback_.Get())(std::move(node->result));
+            (*callback_.Get())(std::move(node->Res));
             if (state_.Finish() == OneAllStateMachine::Result::Completed) {
                 delete this;
             }
@@ -68,7 +68,7 @@ namespace DummyConcurrency::Future::State {
             auto* node      = new Node(result = std::move(result));
             auto* expected  = results_.load();
             do {
-                node->next = expected;
+                node->Next = expected;
             } while (!results_.compare_exchange_weak(expected, node));
             if (has_value) {
                 one_result_.store(node);
@@ -77,7 +77,7 @@ namespace DummyConcurrency::Future::State {
         void DeleteResults() {
             auto* node = results_.load();
             while (node != nullptr) {
-                auto* next = node->next;
+                auto* next = node->Next;
                 delete node;
                 node = next;
             }

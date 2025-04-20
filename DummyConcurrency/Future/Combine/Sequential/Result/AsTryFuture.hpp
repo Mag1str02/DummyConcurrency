@@ -25,7 +25,7 @@ namespace DummyConcurrency::Future {
 
     template <typename T, std::enable_if_t<!::DummyConcurrency::Traits::IsResult<T>, bool> = true>
     TryFuture<T> AsTryFuture(Future<T> f) {
-        return std::move(f) | Future::Map([](T v) { return result::Ok(v); });
+        return std::move(f) | Map([](T v) { return ResultOk(v); });
     }
 
     // Chaining
@@ -40,7 +40,7 @@ namespace DummyConcurrency::Future {
 
             template <typename T>
             auto Pipe(Future<T> f) {
-                return Future::AsTryFuture(std::move(f));
+                return ::DummyConcurrency::Future::AsTryFuture(std::move(f));
             }
         };
 

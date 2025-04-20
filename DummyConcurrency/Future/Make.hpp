@@ -33,9 +33,17 @@ namespace DummyConcurrency::Future {
     TryFuture<T> Ok(T value) {
         return Ready(ResultOk(std::move(value)));
     }
-    template <typename T>
-    TryFuture<T> Error(Error e) {
-        return Ready<Result<T>>(ResultError(e));
+    struct [[nodiscard]] Failure {
+        Error e;  // NOLINT
+
+        template <typename T>
+        operator TryFuture<T>() const {  // NOLINT
+            return Ready<Result<T>>(ResultError(e));
+        }
+    };
+
+    inline auto Error(Error e) {
+        return Failure{e};
     }
 
     /*
@@ -87,7 +95,7 @@ namespace DummyConcurrency::Future {
     Future<std::invoke_result_t<F>> Submit(Scheduler::IScheduler& scheduler, F function) {
         using Value                           = std::invoke_result_t<F>;
         State::ContractState<Value>* contract = State::ContractState<Value>::Create();
-        Submit(scheduler, [contract, func = std::move(function)]() { contract->SetValue(func()); });
+        ::DummyConcurrency::Scheduler::Submit(scheduler, [contract, func = std::move(function)]() { contract->SetValue(func()); });
 
         return Future<Value>(contract, Scheduler::Inline());
     }

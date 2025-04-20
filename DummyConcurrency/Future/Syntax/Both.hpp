@@ -1,6 +1,6 @@
 #pragma once
 
-#include <DummyConcurrency/Future/Combine/Concur/All.hpp>
+#include <DummyConcurrency/Future/Combine/Concurrent/All.hpp>
 
 /*
  * Syntactic sugar for future::Both combinator

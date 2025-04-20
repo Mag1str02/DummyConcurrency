@@ -11,8 +11,10 @@ set(DummyConcurrencySources
     Fiber/Synchronization/Event.cpp
     Fiber/Synchronization/Mutex.cpp
     Fiber/Synchronization/WaitGroup.cpp
+    Scheduler/Inline.cpp
     Scheduler/ThreadPool.cpp
     Scheduler/RunLoop.cpp
+    Synchronization/Event.cpp
     Synchronization/WaitGroup.cpp
     Synchronization/SpinLock.cpp
 )

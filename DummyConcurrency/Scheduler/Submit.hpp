@@ -7,7 +7,7 @@ namespace DummyConcurrency::Scheduler {
 
     template <typename F> 
     void Submit(IScheduler& scheduler, F function) {
-        class SubmitTask : public IntrusiveTask {
+        class SubmitTask : public ITask {
         public:
             explicit SubmitTask(F function) : function_(std::move(function)) {}
 

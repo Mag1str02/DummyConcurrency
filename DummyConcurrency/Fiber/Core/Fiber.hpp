@@ -6,7 +6,7 @@
 
 namespace DummyConcurrency::Fiber {
 
-    class Fiber : public Scheduler::IntrusiveTask {
+    class Fiber : public ITask {
     public:
         template <typename F> static Fiber* Create(IScheduler& schedule, F&& body, Hint hint);
         static Fiber*                       Self();

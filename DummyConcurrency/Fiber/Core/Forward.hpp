@@ -11,7 +11,7 @@ namespace DummyConcurrency::Fiber {
     class Fiber;
     class IAwaiter;
 
-    using Scheduler::IntrusiveTask;
+    using Scheduler::ITask;
     using Scheduler::IScheduler;
 
 }  // namespace DummyConcurrency::Fiber
