@@ -2,7 +2,7 @@
 
 namespace DummyConcurrency::Scheduler {
 
-    void RunLoop::Submit(IntrusiveTask* task) {
+    void RunLoop::Submit(ITask* task) {
         queue_.PushBack(task);
     }
 
@@ -11,7 +11,7 @@ namespace DummyConcurrency::Scheduler {
     size_t RunLoop::RunAtMost(size_t limit) {
         size_t cnt = 0;
         while (!queue_.IsEmpty() && cnt < limit) {
-            IntrusiveTask* task = queue_.PopFront();
+            ITask* task = queue_.PopFront();
             task->Run();
             ++cnt;
         }
@@ -21,7 +21,7 @@ namespace DummyConcurrency::Scheduler {
     size_t RunLoop::Run() {
         size_t cnt = 0;
         while (!queue_.IsEmpty()) {
-            IntrusiveTask* task = queue_.PopFront();
+            ITask* task = queue_.PopFront();
             task->Run();
             ++cnt;
         }

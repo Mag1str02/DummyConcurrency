@@ -18,7 +18,7 @@ namespace DummyConcurrency::Scheduler {
         assert(stopped_);
     }
 
-    void ThreadPool::Submit(IntrusiveTask* task) {
+    void ThreadPool::Submit(ITask* task) {
         assert(!stopped_);
         task_queue_.Push(std::move(task));
     }

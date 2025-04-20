@@ -4,12 +4,10 @@
 
 namespace DummyConcurrency::Scheduler {
 
-    struct ITask {
+    struct ITask : IntrusiveForwardListNode<ITask> {
         virtual ~ITask() = default;
 
         virtual void Run() noexcept = 0;
     };
-
-    struct IntrusiveTask : ITask, IntrusiveForwardListNode<IntrusiveTask> {};
 
 }  // namespace DummyConcurrency::Scheduler

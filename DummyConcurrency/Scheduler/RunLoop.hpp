@@ -20,7 +20,7 @@ namespace DummyConcurrency::Scheduler {
         RunLoop& operator=(RunLoop&&) = delete;
 
         // task::IScheduler
-        void Submit(IntrusiveTask* task) override;
+        void Submit(ITask* task) override;
 
         // Run tasks
 
@@ -35,7 +35,7 @@ namespace DummyConcurrency::Scheduler {
         bool NonEmpty() const { return !IsEmpty(); }
 
     private:
-        IntrusiveForwardList<IntrusiveTask> queue_;
+        IntrusiveForwardList<ITask> queue_;
     };
 
 }  // namespace DummyConcurrency::Scheduler
