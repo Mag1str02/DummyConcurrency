@@ -3,6 +3,7 @@
 #include <Testing/Cpu.hpp>
 
 #include <wheels/test/framework.hpp>
+#include <wheels/test/util/cpu_timer.hpp>
 
 #include <atomic>
 #include <thread>
@@ -104,7 +105,7 @@ TEST_SUITE(ThreadSynchronizationWaitGroup_Unit) {
             });
         }
 
-        Testing::ProcessCPUTimer timer;
+        wheels::ProcessCPUTimer timer;
 
         wg.Wait();
 

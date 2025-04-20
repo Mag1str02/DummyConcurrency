@@ -1,9 +1,8 @@
 #include <DummyConcurrency/DummyConcurrency.hpp>
 
-#include <Testing/Cpu.hpp>
-
 #include <wheels/core/stop_watch.hpp>
 #include <wheels/test/framework.hpp>
+#include <wheels/test/util/cpu_timer.hpp>
 
 #include <atomic>
 #include <chrono>  // IWYU pragma: keep
@@ -162,7 +161,7 @@ TEST_SUITE(SchedulingThreadPool_Unit) {
             });
         }
 
-        Testing::ProcessCPUTimer cpu_timer;
+        wheels::ProcessCPUTimer cpu_timer;
 
         std::this_thread::sleep_for(1s);
 
