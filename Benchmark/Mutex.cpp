@@ -3,14 +3,18 @@
 
 #include <thread>
 
+#include <unistd.h>
+
 using namespace DummyConcurrency;
 
 int main() {
+    std::cerr << getpid() << std::endl;
+    std::getchar();
+
     uint32_t                 thread_count = std::thread::hardware_concurrency();
     ThreadPool               tp(2);
     FMutex                   mutex;
     TWaitGroup               wg;
-    Testing::BenchTimeBudget budget(10s);
     uint32_t                 counter = 0;
 
     wg.Add(thread_count);
