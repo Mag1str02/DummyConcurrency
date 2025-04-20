@@ -12,6 +12,10 @@ target_compile_definitions(
 
 target_include_directories(DummyConcurrency PUBLIC ${CMAKE_CURRENT_LIST_DIR}/..)
 
+if (WINDOWS)
+  target_link_libraries(DummyConcurrency PUBLIC synchronization)
+endif()
+
 if(DC_DEVELOPER_MODE)
   target_link_libraries(DummyConcurrency PUBLIC twist)
   target_include_directories(

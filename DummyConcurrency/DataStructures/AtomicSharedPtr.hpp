@@ -4,11 +4,6 @@
 #include <DummyConcurrency/ImplementationLayer/ImplementationLayer.hpp>
 #include <DummyConcurrency/Utils/Traits.hpp>
 
-#include <twist/ed/std/atomic.hpp>
-
-#include <twist/assist/memory.hpp>
-#include <twist/trace/scope.hpp>
-
 #include <cassert>
 #include <cstdlib>  // std::abort
 #include <print>

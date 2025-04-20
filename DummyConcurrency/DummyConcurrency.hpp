@@ -10,6 +10,7 @@
 #include "DummyConcurrency/Scheduler/RunLoop.hpp"                // IWYU pragma: export
 #include "DummyConcurrency/Scheduler/Submit.hpp"                 // IWYU pragma: export
 #include "DummyConcurrency/Scheduler/ThreadPool.hpp"             // IWYU pragma: export
+#include "DummyConcurrency/Synchronization/Event.hpp"            // IWYU pragma: export
 #include "DummyConcurrency/Synchronization/SpinLock.hpp"         // IWYU pragma: export
 #include "DummyConcurrency/Synchronization/WaitGroup.hpp"        // IWYU pragma: export
 
@@ -24,6 +25,7 @@ namespace DummyConcurrency {
 
     using TSpinLock  = SpinLock;
     using TWaitGroup = WaitGroup;
+    using TEvent     = Event;
 
     template <typename T>
     using AtomicSharedPtr = DataStructures::AtomicSharedPtr<T>;
