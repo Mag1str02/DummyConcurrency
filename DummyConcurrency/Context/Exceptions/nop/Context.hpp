@@ -1,6 +1,6 @@
 #pragma once
 
-#include <DummyConcurrency/Common.hpp>
+#include <DummyConcurrency/Utils/Assert.hpp>
 
 #include <exception>
 

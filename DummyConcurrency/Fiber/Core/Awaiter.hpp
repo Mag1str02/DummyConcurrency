@@ -2,7 +2,7 @@
 
 #include "Handle.hpp"
 
-#include <DummyConcurrency/Common.hpp>
+#include <DummyConcurrency/Utils/Assert.hpp>
 
 namespace DummyConcurrency::Fiber {
 

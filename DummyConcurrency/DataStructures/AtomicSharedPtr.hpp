@@ -1,7 +1,8 @@
 #pragma once
 
-#include <DummyConcurrency/Common.hpp>
 #include <DummyConcurrency/ImplementationLayer/ImplementationLayer.hpp>
+#include <DummyConcurrency/Utils/Assert.hpp>
+#include <DummyConcurrency/Utils/StampedPtr.hpp>
 #include <DummyConcurrency/Utils/Traits.hpp>
 
 #include <cassert>
@@ -13,114 +14,6 @@
 namespace DummyConcurrency::DataStructures {
 
     namespace Detail {
-
-        template <typename T>
-        class StampedPtr {
-        public:
-            StampedPtr() = default;
-            StampedPtr(T* p, uint64_t s) : RawPtr(p), Stamp(s) {}
-
-            T* operator->() const { return RawPtr; }
-            T& operator*() const { return *RawPtr; }
-
-            explicit operator bool() const { return RawPtr != nullptr; }
-
-            bool operator==(const StampedPtr& other) { return RawPtr == other.RawPtr && Stamp == other.Stamp; }
-
-            StampedPtr IncrementStamp() const { return StampedPtr{RawPtr, Stamp + 1}; }
-            StampedPtr DecrementStamp() const {
-                DC_ASSERT(Stamp > 0, "Invalid stamp");
-                return StampedPtr{RawPtr, Stamp - 1};
-            }
-
-        public:
-            T*       RawPtr;
-            uint64_t Stamp;
-        };
-
-        template <typename T>
-        class Packer {
-        public:
-            using PackedStampedPtr = uintptr_t;
-
-            static constexpr size_t    kFreeBits      = 16;
-            static constexpr size_t    kFreeBitsShift = 64 - kFreeBits;
-            static constexpr uintptr_t kFreeBitsMask  = (uintptr_t)((1 << kFreeBits) - 1) << kFreeBitsShift;
-            static constexpr size_t    kMaxStamp      = (1 << kFreeBits) - 1;
-
-            static PackedStampedPtr Pack(StampedPtr<T> stamped_ptr) {
-                DC_ASSERT(stamped_ptr.Stamp <= kMaxStamp, "Stamp is larger than maximum possible");
-                return ClearFreeBits((uintptr_t)stamped_ptr.RawPtr) | (stamped_ptr.Stamp << kFreeBitsShift);
-            }
-            static StampedPtr<T> Unpack(PackedStampedPtr packed_ptr) { return {GetRawPointer(packed_ptr), GetStamp(packed_ptr)}; }
-
-        private:
-            static int       GetBit(uintptr_t mask, size_t index) { return (mask >> index) & 1; }
-            static uintptr_t SetFreeBits(uintptr_t mask) { return mask | kFreeBitsMask; }
-            static uintptr_t ClearFreeBits(uintptr_t mask) { return mask & ~kFreeBitsMask; }
-
-            // https://en.wikipedia.org/wiki/X86-64#Canonical_form_addresses
-            static uintptr_t ToCanonicalForm(uintptr_t ptr) {
-                if (GetBit(ptr, 47) != 0) {
-                    return SetFreeBits(ptr);
-                } else {
-                    return ClearFreeBits(ptr);
-                }
-            }
-
-            static uint64_t GetStamp(PackedStampedPtr packed_ptr) { return packed_ptr >> kFreeBitsShift; }
-            static T*       GetRawPointer(PackedStampedPtr packed_ptr) { return (T*)ToCanonicalForm(packed_ptr); }
-        };
-
-        template <typename T> using PackedStampedPtr = typename Detail::Packer<T>::PackedStampedPtr;
-
-        template <typename T>
-        PackedStampedPtr<T> Pack(StampedPtr<T> ptr) {
-            return Detail::Packer<T>::Pack(ptr);
-        }
-        template <typename T>
-        StampedPtr<T> Unpack(PackedStampedPtr<T> ptr) {
-            return Detail::Packer<T>::Unpack(ptr);
-        }
-
-        //////////////////////////////////////////////////////////////////////
-
-        // 48-bit pointer + 16-bit stamp packed into single 64-bit word
-
-        // Usage:
-
-        // asp.Store({raw_ptr, 42});
-        // auto ptr = asp.Load();
-        // if (asp) { ... }
-        // asp->Foo();
-        // asp.CompareExchangeWeak(expected_stamped_ptr, {raw_ptr, 42});
-
-        // auto e =
-        // top_.compare_exchange(target.Pack(),
-
-        template <typename T>
-        class AtomicStampedPtr {
-        public:
-            explicit AtomicStampedPtr(StampedPtr<T> ptr) : packed_ptr_(Pack(ptr)) {}
-
-            void Store(StampedPtr<T> ptr) { packed_ptr_.store(Pack(ptr)); }
-
-            StampedPtr<T> Load() const { return Unpack<T>(packed_ptr_.load()); }
-            StampedPtr<T> Exchange(StampedPtr<T> target) { return Unpack<T>(packed_ptr_.exchange(Pack(target))); }
-
-            bool CompareExchangeWeak(StampedPtr<T>& expected, StampedPtr<T> desired) {
-                PackedStampedPtr<T> expected_packed = Pack(expected);
-
-                bool succeeded = packed_ptr_.compare_exchange_weak(expected_packed, Pack(desired));
-                if (!succeeded) {
-                    expected = Unpack<T>(expected_packed);
-                }
-                return succeeded;
-            }
-
-        private:
-            ImplementationLayer::Atomic<PackedStampedPtr<T>> packed_ptr_;
-        };
 
         template <typename T>
         class DiffCounted : NonMovable, NonCopyable {
@@ -251,18 +144,18 @@ namespace DummyConcurrency::DataStructures {
 
     public:
         // nullptr
-        AtomicSharedPtr() : ptr_(Detail::StampedPtr<Container>(nullptr, 0)) {}
+        AtomicSharedPtr() : ptr_(StampedPtr<Container>(nullptr, 0)) {}
 
         ~AtomicSharedPtr() {
-            Detail::StampedPtr<Container> ptr = ptr_.Load();
+            StampedPtr<Container> ptr = ptr_.Load();
             if (ptr.RawPtr != nullptr) {
                 ptr.RawPtr->ModifyState(-1, ptr.Stamp);
             }
         }
 
         SharedPtr<T> Load() {
-            Detail::StampedPtr<Container> current = ptr_.Load();
-            Detail::StampedPtr<Container> new_ptr = current;
+            StampedPtr<Container> current = ptr_.Load();
+            StampedPtr<Container> new_ptr = current;
             do {
                 if (current.RawPtr == nullptr) {
                     break;
@@ -272,7 +165,7 @@ namespace DummyConcurrency::DataStructures {
             } while (!ptr_.CompareExchangeWeak(current, new_ptr));
             SharedPtr<T> res;
             res.ptr_ = current.RawPtr;
-            if (current.RawPtr != nullptr && new_ptr.Stamp > Detail::Packer<Container>::kMaxStamp / 2) {
+            if (current.RawPtr != nullptr && new_ptr.Stamp > StampedPtr<Container>::kMaxStamp / 2) {
                 new_ptr.RawPtr->ModifyState(1, 0);
                 new_ptr.Stamp = 0;
                 current.Stamp = new_ptr.Stamp + 1;
@@ -291,8 +184,8 @@ namespace DummyConcurrency::DataStructures {
             if (target.ptr_ != nullptr) {
                 target.ptr_->ModifyState(1, 0);
             }
-            Detail::StampedPtr<Container> new_ptr(target.ptr_, 0);
-            Detail::StampedPtr<Container> old = ptr_.Exchange(new_ptr);
+            StampedPtr<Container> new_ptr(target.ptr_, 0);
+            StampedPtr<Container> old = ptr_.Exchange(new_ptr);
             if (old.RawPtr != nullptr) {
                 old.RawPtr->ModifyState(-1, old.Stamp);
             }
@@ -301,11 +194,11 @@ namespace DummyConcurrency::DataStructures {
         explicit operator SharedPtr<T>() { return Load(); }
 
         bool CompareExchangeWeak(SharedPtr<T>& expected, SharedPtr<T> desired) {
-            Detail::StampedPtr<Container> current = ptr_.Load();
+            StampedPtr<Container> current = ptr_.Load();
             if (desired.ptr_ != nullptr) {
                 desired.ptr_->ModifyState(1, 0);
             }
-            Detail::StampedPtr<Container> new_ptr;
+            StampedPtr<Container> new_ptr;
             new_ptr.Stamp  = 0;
             new_ptr.RawPtr = desired.ptr_;
             do {
@@ -324,7 +217,7 @@ namespace DummyConcurrency::DataStructures {
         }
 
     private:
-        Detail::AtomicStampedPtr<Container> ptr_;
+        AtomicStampedPtr<Container> ptr_;
     };
 
 }  // namespace DummyConcurrency::DataStructures

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "DummyConcurrency/Common.hpp"
+#include <DummyConcurrency/Utils/Assert.hpp>
 
 #include <stddef.h>
 
@@ -8,7 +8,8 @@ namespace DummyConcurrency {
 
     struct IntrusiveForwardListNodeDefaultTag {};
 
-    template <typename T, typename Tag = IntrusiveForwardListNodeDefaultTag> struct IntrusiveForwardListNode {
+    template <typename T, typename Tag = IntrusiveForwardListNodeDefaultTag>
+    struct IntrusiveForwardListNode {
         // Shortcut
         using Node = IntrusiveForwardListNode;
 
