@@ -40,6 +40,9 @@ namespace DummyConcurrency::Fiber {
         virtual void Run() noexcept override {
             try {
                 body_();
+            } catch (const std::exception& exception) {
+                auto msg = std::format("Exceptions are forbidden in coroutins: '{}'", exception.what());
+                DC_PANIC(msg);
             } catch (...) {
                 DC_PANIC("Exceptions are forbidden in coroutins");
             }

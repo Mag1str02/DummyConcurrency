@@ -12,7 +12,7 @@ add_compile_options(-Wall -Wextra -Wpedantic -g -fno-omit-frame-pointer)
 # Turn warnings into errors
 add_compile_options(-Wno-language-extension-token)
 
-add_compile_options(-Wno-error=unused-command-line-argument)
+add_compile_options(-Wno-unused-command-line-argument)
 
 add_compile_options(-gdwarf-4)
 
