@@ -42,6 +42,4 @@ namespace DummyConcurrency::Fiber {
         return new FiberContainer(scheduler, std::move(body), hint);
     }
 
-    bool IsInFiber();
-
 }  // namespace DummyConcurrency::Fiber

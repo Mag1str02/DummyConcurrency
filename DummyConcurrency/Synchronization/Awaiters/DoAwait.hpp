@@ -26,6 +26,7 @@ namespace DummyConcurrency::Synchronization {
         if (Fiber::Fiber::Self()) {
             FiberAwaiter awaiter(std::move(function));
             Fiber::Suspend(awaiter);
+            awaiter.AfterSuspend();
         } else {
             ThreadAwaiter awaiter;
             if (function(&awaiter)) {

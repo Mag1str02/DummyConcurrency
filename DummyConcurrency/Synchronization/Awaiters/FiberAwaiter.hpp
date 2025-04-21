@@ -8,7 +8,9 @@ namespace DummyConcurrency::Synchronization {
 
     class IFiberAwaiter : public Fiber::IAwaiter, public IAwaiter {
     public:
-        virtual void Wake() noexcept override final { Schedule(); }
+        virtual void Wake() noexcept override final;
+
+        void AfterSuspend();
     };
 
 }  // namespace DummyConcurrency::Synchronization

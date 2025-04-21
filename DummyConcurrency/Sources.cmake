@@ -11,6 +11,7 @@ set(DummyConcurrencySources
     Scheduler/Inline.cpp
     Scheduler/ThreadPool.cpp
     Scheduler/RunLoop.cpp
+    Synchronization/Awaiters/FiberAwaiter.cpp
     Synchronization/FiberAware/Event.cpp
     Synchronization/FiberAware/Mutex.cpp
     Synchronization/FiberAware/WaitGroup.cpp
