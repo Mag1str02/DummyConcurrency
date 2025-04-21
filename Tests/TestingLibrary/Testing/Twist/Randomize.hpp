@@ -22,6 +22,6 @@ namespace Testing::Twist {
 
         void Check(TestBody body, Params params);
 
-    }  // namespace randomize
+    }  // namespace Randomize
 
-}  // namespace Testing::twist
+}  // namespace Testing::Twist

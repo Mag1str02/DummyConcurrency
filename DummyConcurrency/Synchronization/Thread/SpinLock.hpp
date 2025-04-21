@@ -20,4 +20,4 @@ namespace DummyConcurrency::Synchronization::Thread {
         ImplementationLayer::Atomic<uint32_t> state_ = 0;
     };
 
-}  // namespace DummyConcurrency::Threading
+}  // namespace DummyConcurrency::Synchronization::Thread

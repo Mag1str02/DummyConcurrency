@@ -10,7 +10,7 @@ namespace DummyConcurrency::Fiber {
         friend class Fiber;
 
     public:
-        Handle()                              = default;
+        Handle()                         = default;
         Handle(const Handle&)            = delete;
         Handle& operator=(const Handle&) = delete;
         Handle(Handle&& other) : fiber_(other.fiber_) { other.fiber_ = nullptr; };

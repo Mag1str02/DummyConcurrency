@@ -6,7 +6,7 @@ using namespace DummyConcurrency;
 
 int main() {
     ThreadPool pool(16);
-    TEvent event;
+    TEvent     event;
 
     auto func = [&]() {
         std::cout << "Hi from thread: " << std::this_thread::get_id() << std::endl;

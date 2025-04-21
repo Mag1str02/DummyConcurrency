@@ -33,4 +33,4 @@ namespace DummyConcurrency::Synchronization::Thread {
         Unlock();
     }
 
-}  // namespace DummyConcurrency::Threading
+}  // namespace DummyConcurrency::Synchronization::Thread

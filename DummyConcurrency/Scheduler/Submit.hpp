@@ -5,7 +5,7 @@
 
 namespace DummyConcurrency::Scheduler {
 
-    template <typename F> 
+    template <typename F>
     void Submit(IScheduler& scheduler, F function) {
         class SubmitTask : public ITask {
         public:

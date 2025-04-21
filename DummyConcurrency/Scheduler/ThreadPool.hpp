@@ -35,10 +35,10 @@ namespace DummyConcurrency::Scheduler {
     private:
         static void Worker(ThreadPool* current_thread_pool);
 
-        IntrusiveUnboundedBlockingQueue<ITask> task_queue_;
-        std::vector<ImplementationLayer::Thread>       workers_;
-        uint32_t                                       workers_amount_;
-        bool                                           stopped_ = false;
+        IntrusiveUnboundedBlockingQueue<ITask>   task_queue_;
+        std::vector<ImplementationLayer::Thread> workers_;
+        uint32_t                                 workers_amount_;
+        bool                                     stopped_ = false;
     };
 
 }  // namespace DummyConcurrency::Scheduler

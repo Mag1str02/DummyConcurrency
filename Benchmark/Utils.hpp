@@ -9,9 +9,7 @@ class Timer {
 public:
     Timer() : start_(Clock::now()) {}
 
-    double GetDuration() {
-        return std::chrono::duration<double>(Clock::now() - start_).count();
-    }
+    double GetDuration() { return std::chrono::duration<double>(Clock::now() - start_).count(); }
 
 private:
     TimePoint start_;

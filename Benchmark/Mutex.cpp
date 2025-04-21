@@ -11,11 +11,11 @@ int main() {
     std::cerr << getpid() << std::endl;
     std::getchar();
 
-    uint32_t                 thread_count = std::thread::hardware_concurrency();
-    ThreadPool               tp(2);
-    FMutex                   mutex;
-    TWaitGroup               wg;
-    uint32_t                 counter = 0;
+    uint32_t   thread_count = std::thread::hardware_concurrency();
+    ThreadPool tp(2);
+    FMutex     mutex;
+    TWaitGroup wg;
+    uint32_t   counter = 0;
 
     wg.Add(thread_count);
     for (uint32_t i = 0; i < thread_count; ++i) {

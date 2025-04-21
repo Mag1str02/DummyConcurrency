@@ -186,8 +186,8 @@ namespace Testing::Twist {
             fmt::println("Executions checked: {}", sim_count);
         }
 
-    }  // namespace randomize
-}  // namespace Testing::twist
+    }  // namespace Randomize
+}  // namespace Testing::Twist
 
 #endif
 
@@ -233,8 +233,8 @@ namespace Testing::Twist {
             std::cout.flush();
         }
 
-    }  // namespace randomize
-}  // namespace Testing::twist
+    }  // namespace Randomize
+}  // namespace Testing::Twist
 
 #else
 
@@ -247,7 +247,7 @@ namespace Testing::Twist {
             WHEELS_PANIC("Random checking is not supported for this build");
         }
 
-    }  // namespace randomize
-}  // namespace Testing::twist
+    }  // namespace Randomize
+}  // namespace Testing::Twist
 
 #endif

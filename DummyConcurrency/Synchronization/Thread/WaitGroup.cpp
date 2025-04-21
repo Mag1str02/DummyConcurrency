@@ -25,4 +25,4 @@ namespace DummyConcurrency::Synchronization::Thread {
         }
     }
 
-}  // namespace DummyConcurrency::Synchronization
+}  // namespace DummyConcurrency::Synchronization::Thread
