@@ -8,7 +8,7 @@ namespace DummyConcurrency {
     template <typename T>
     class StampedPtr {
     public:
-        T*       RawPtr;
+        T*       RawPtr = nullptr;
         uint16_t Stamp;
 
     public:
@@ -87,6 +87,7 @@ namespace DummyConcurrency {
     template <typename T>
     class AtomicStampedPtr {
     public:
+        AtomicStampedPtr() = default;
         explicit AtomicStampedPtr(StampedPtr<T> ptr) : packed_ptr_(Pack(ptr)) {}
 
         void Store(StampedPtr<T> ptr) { packed_ptr_.store(Pack(ptr)); }
@@ -105,7 +106,7 @@ namespace DummyConcurrency {
         }
 
     private:
-        ImplementationLayer::Atomic<PackedStampedPtr<T>> packed_ptr_;
+        ImplementationLayer::Atomic<PackedStampedPtr<T>> packed_ptr_ = 0;
     };
 
 }  // namespace DummyConcurrency

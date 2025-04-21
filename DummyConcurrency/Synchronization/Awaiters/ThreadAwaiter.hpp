@@ -9,7 +9,7 @@ namespace DummyConcurrency::Synchronization {
     class ThreadAwaiter : public IAwaiter {
     public:
         virtual void Wake() noexcept override final { event_.Fire(); }
-        virtual void Wait() noexcept override final { event_.Wait(); };
+        void         Wait() noexcept { event_.Wait(); };
 
     private:
         Thread::Event event_;

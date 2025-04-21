@@ -1,14 +1,12 @@
 #pragma once
 
+#include <DummyConcurrency/Utils/IntrusiveForwardList.hpp>
+
 namespace DummyConcurrency::Synchronization {
 
-    class IAwaiter {
+    class IAwaiter : public IntrusiveForwardListNode<IAwaiter> {
     public:
         virtual void Wake() noexcept = 0;
-        virtual void Wait() noexcept = 0;
-
-    public:
-        IAwaiter* Next;
     };
 
 }  // namespace DummyConcurrency::Synchronization

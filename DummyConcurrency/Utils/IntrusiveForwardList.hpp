@@ -11,13 +11,11 @@ namespace DummyConcurrency {
     template <typename T, typename Tag = IntrusiveForwardListNodeDefaultTag>
     struct IntrusiveForwardListNode {
         // Shortcut
-        using Node = IntrusiveForwardListNode;
+        using Node = T;
 
-        Node* next_ = nullptr;
+        Node* Next = nullptr;
 
-        Node* Next() noexcept { return next_; }
-
-        void SetNext(Node* node) noexcept { next_ = node; }
+        void SetNext(Node* node) noexcept { Next = node; }
 
         void ResetNext() noexcept { SetNext(nullptr); }
 
@@ -26,9 +24,10 @@ namespace DummyConcurrency {
         T* AsItem() noexcept { return static_cast<T*>(this); }
     };
 
-    template <typename T, typename Tag = IntrusiveForwardListNodeDefaultTag> class IntrusiveForwardList {
+    template <typename T, typename Tag = IntrusiveForwardListNodeDefaultTag>
+    class IntrusiveForwardList {
         // Node type
-        using Node = IntrusiveForwardListNode<T, Tag>;
+        using Node = T;
 
         using List = IntrusiveForwardList<T, Tag>;
 
@@ -52,13 +51,13 @@ namespace DummyConcurrency {
         void PushBack(Node* node) noexcept {
             ++size_;
 
-            node->next_ = nullptr;
+            node->Next = nullptr;
 
             if (IsEmpty()) {
                 head_ = tail_ = node;
             } else {
-                tail_->next_ = node;
-                tail_        = node;
+                tail_->Next = node;
+                tail_       = node;
             }
         }
 
@@ -73,8 +72,8 @@ namespace DummyConcurrency {
                 tail_ = that.tail_;
                 size_ = that.size_;
             } else {
-                tail_->next_ = that.head_;
-                tail_        = that.tail_;
+                tail_->Next = that.head_;
+                tail_       = that.tail_;
                 size_ += that.size_;
             }
 
@@ -86,8 +85,8 @@ namespace DummyConcurrency {
             if (IsEmpty()) {
                 head_ = tail_ = node;
             } else {
-                node->next_ = head_;
-                head_       = node;
+                node->Next = head_;
+                head_      = node;
             }
         }
 
@@ -102,10 +101,10 @@ namespace DummyConcurrency {
             if (head_ == tail_) {
                 head_ = tail_ = nullptr;
             } else {
-                head_ = head_->next_;
+                head_ = head_->Next;
             }
 
-            front->next_ = nullptr;
+            front->Next = nullptr;
 
             return front->AsItem();
         }
@@ -125,7 +124,7 @@ namespace DummyConcurrency {
             Node* iter = head_;
             while (iter != nullptr) {
                 handler(iter->AsItem());
-                iter = iter->next_;
+                iter = iter->Next;
             }
         }
 

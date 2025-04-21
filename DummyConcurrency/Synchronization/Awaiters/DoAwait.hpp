@@ -13,7 +13,11 @@ namespace DummyConcurrency::Synchronization {
         class FiberAwaiter : public IFiberAwaiter {
         public:
             explicit FiberAwaiter(F&& function) : function_(std::move(function)) {}
-            virtual void OnSuspend() noexcept override { function_(this); }
+            virtual void OnSuspend() noexcept override {
+                if (!function_(this)) {
+                    Schedule();
+                }
+            }
 
         private:
             F function_;
@@ -24,7 +28,9 @@ namespace DummyConcurrency::Synchronization {
             Fiber::Suspend(awaiter);
         } else {
             ThreadAwaiter awaiter;
-            function(&awaiter);
+            if (function(&awaiter)) {
+                awaiter.Wait();
+            }
         }
     }
 

@@ -13,12 +13,11 @@ namespace DummyConcurrency::Synchronization::FiberAware {
             IAwaiter* expected_head = queue_head_.load();
             do {
                 if (expected_head == kFired) {
-                    current_awaiter->Wake();
-                    return;
+                    return false;
                 }
                 current_awaiter->Next = expected_head;
             } while (!queue_head_.compare_exchange_strong(expected_head, current_awaiter));
-            current_awaiter->Wait();
+            return true;
         });
     }
 
