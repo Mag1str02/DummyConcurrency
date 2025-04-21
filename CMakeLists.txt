@@ -20,7 +20,6 @@ add_subdirectory(Dependencies)
 include(CMake/Werror.cmake)
 include(CMake/Task.cmake)
 
-# add_subdirectory(tasks)
 add_subdirectory(DummyConcurrency)
 
 if(DC_DEVELOPER_MODE)
