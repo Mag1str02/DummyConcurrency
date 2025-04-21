@@ -1,8 +1,6 @@
 
 #include "DummyConcurrency/DummyConcurrency.hpp"
 
-#include <format>
-
 using namespace std::chrono_literals;
 using namespace DummyConcurrency;
 

@@ -38,6 +38,17 @@ TEST_SUITE(FiberSynchronizationEvent_Random) {
                 test.Done();
             });
 
+            test.Add(1);
+
+            Scheduler::Submit(scheduler, [&] {
+                event.Wait();
+
+                int d = data.Read();
+                TWIST_TEST_ASSERT(d == 1, "Unfinished work");
+
+                test.Done();
+            });
+
             test.Wait();
         }
 
