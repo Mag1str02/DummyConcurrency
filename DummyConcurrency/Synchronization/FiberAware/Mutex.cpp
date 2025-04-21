@@ -1,30 +1,38 @@
 #include "Mutex.hpp"
 
-#include "DummyConcurrency/Fiber/Scheduling/Suspend.hpp"
+#include "DummyConcurrency/Synchronization/Awaiters/DoAwait.hpp"
 
 namespace DummyConcurrency::Synchronization::FiberAware {
 
     void Mutex::Lock() {
-        Awaiter* expected = kUnlocked;
+        IAwaiter* expected = kUnlocked;
         if (head_.compare_exchange_strong(expected, kLocked)) {
             return;
         }
-        Awaiter awaiter(this);
-        Suspend(awaiter);
-        if (unlocker_.IsValid()) {
-            unlocker_.Schedule();
-        }
+        DoAwait([this](IAwaiter* current_awaiter) {
+            IAwaiter* expected = head_.load();
+            IAwaiter* new_state;
+            do {
+                new_state             = kLocked;
+                current_awaiter->Next = kUnlocked;
+                if (expected != kUnlocked) {
+                    new_state             = current_awaiter;
+                    current_awaiter->Next = expected;
+                }
+            } while (!head_.compare_exchange_weak(expected, new_state));
+            return new_state == current_awaiter;
+        });
     }
 
     bool Mutex::TryLock() {
-        Awaiter* expected = kUnlocked;
+        IAwaiter* expected = kUnlocked;
         return head_.compare_exchange_strong(expected, kLocked);
     }
 
     void Mutex::Unlock() {
         if (tail_ == kUnlocked) {
-            Awaiter* expected_head = head_.load();
-            Awaiter* new_head;
+            IAwaiter* expected_head = head_.load();
+            IAwaiter* new_head;
             do {
                 new_head = kLocked;
                 if (expected_head == kLocked) {
@@ -35,16 +43,16 @@ namespace DummyConcurrency::Synchronization::FiberAware {
                 return;
             }
             while (expected_head != kLocked) {
-                Awaiter* next       = expected_head->Next;
+                IAwaiter* next      = expected_head->Next;
                 expected_head->Next = tail_;
                 tail_               = expected_head;
                 expected_head       = next;
             }
         }
         if (tail_ != kUnlocked) {
-            Awaiter* curr = tail_;
-            tail_         = tail_->Next;
-            curr->Switch(unlocker_);
+            IAwaiter* curr = tail_;
+            tail_          = tail_->Next;
+            curr->Wake();
         }
     }
 
@@ -52,29 +60,11 @@ namespace DummyConcurrency::Synchronization::FiberAware {
     void Mutex::lock() {  // NOLINT
         Lock();
     }
-
     bool Mutex::try_lock() {  // NOLINT
         return TryLock();
     }
-
     void Mutex::unlock() {  // NOLINT
         Unlock();
     }
-    Mutex::Awaiter::Awaiter(Mutex* mutex) : mutex_(mutex) {}
-    void Mutex::Awaiter::OnSuspend() noexcept {
-        Awaiter* expected = mutex_->head_.load();
-        Awaiter* new_state;
-        do {
-            new_state = mutex_->kLocked;
-            Next      = kUnlocked;
-            if (expected != kUnlocked) {
-                new_state = this;
-                Next      = expected;
-            }
-        } while (!mutex_->head_.compare_exchange_weak(expected, new_state));
-        if (new_state != this) {
-            Schedule();
-        }
-    }
 
-}  // namespace DummyConcurrency::Fiber
+}  // namespace DummyConcurrency::Synchronization::FiberAware
