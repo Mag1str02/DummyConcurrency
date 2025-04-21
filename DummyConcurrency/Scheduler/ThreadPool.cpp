@@ -6,7 +6,9 @@ namespace DummyConcurrency::Scheduler {
 
     STATIC_THREAD_LOCAL_PTR(ThreadPool, gCurrentThreadPool);
 
-    ThreadPool::ThreadPool(size_t thread) : workers_amount_(thread) {}
+    ThreadPool::ThreadPool(size_t thread) : workers_amount_(thread) {
+        DC_ASSERT(workers_amount_ > 0, "ThreadPool size cannot be zero");
+    }
 
     void ThreadPool::Start() {
         for (uint32_t i = 0; i < workers_amount_; ++i) {
@@ -28,6 +30,7 @@ namespace DummyConcurrency::Scheduler {
     }
 
     void ThreadPool::Stop() {
+        DC_ASSERT(!workers_.empty(), "ThreadPool stopped before it was started");
         stopped_ = true;
         task_queue_.Close();
         for (auto& thread : workers_) {

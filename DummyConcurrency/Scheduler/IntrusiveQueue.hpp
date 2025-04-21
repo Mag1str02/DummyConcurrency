@@ -6,7 +6,8 @@
 namespace DummyConcurrency {
 
     // Unbounded blocking multi-producers/multi-consumers (MPMC) queue
-    template <typename T> class IntrusiveUnboundedBlockingQueue {
+    template <typename T>
+    class IntrusiveUnboundedBlockingQueue {
     public:
         void Push(T* value) {
             std::lock_guard guard(mutex_);
