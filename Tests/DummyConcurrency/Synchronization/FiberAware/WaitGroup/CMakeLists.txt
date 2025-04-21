@@ -1,4 +1,4 @@
-begin_test_group(FiberSynchronizationWaitGroup)
+begin_test_group(SynchronizationFiberAwareWaitGroup)
 
 add_test(Unit.cpp Debug)
 add_test(Unit.cpp DebugASan)

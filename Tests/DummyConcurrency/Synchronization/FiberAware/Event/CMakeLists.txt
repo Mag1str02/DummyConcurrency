@@ -1,4 +1,4 @@
-begin_test_group(FiberSynchronizationEvent)
+begin_test_group(SynchronizationFiberAwareEvent)
 
 add_test(Unit.cpp Debug)
 add_test(Unit.cpp DebugASan)

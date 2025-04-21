@@ -1,4 +1,4 @@
-begin_test_group(FiberSynchronizationMutex)
+begin_test_group(SynchronizationFiberAwareMutex)
 
 add_test(Unit.cpp Debug)
 add_test(Unit.cpp DebugASan)
