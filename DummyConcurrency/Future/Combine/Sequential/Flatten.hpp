@@ -20,9 +20,9 @@ namespace DummyConcurrency::Future {
                 auto* contract = State::ContractState<T>::Create();
                 std::move(future).Consume(
                     [contract](Future<T> value) {
-                        std::move(value).Consume([contract](T value) { contract->SetValue(std::move(value)); }, Scheduler::Inline());
+                        std::move(value).Consume([contract](T value) { contract->SetValue(std::move(value)); }, Runtime::Inline());
                     },
-                    Scheduler::Inline());
+                    Runtime::Inline());
                 return Future<T>(contract, future.GetScheduler());
             }
         };

@@ -32,7 +32,7 @@ namespace DummyConcurrency::Future {
                     [contract, func = std::move(User)](Result<T> result) {
                         if (result) {
                             func(std::move(result.value()))
-                                .Consume([contract](Result<U<T>> result) { contract->SetValue(result); }, Scheduler::Inline());
+                                .Consume([contract](Result<U<T>> result) { contract->SetValue(result); }, Runtime::Inline());
                         } else {
                             contract->SetValue(ResultError(result.error()));
                         }

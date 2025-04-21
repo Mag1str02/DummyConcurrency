@@ -1,7 +1,7 @@
 #pragma once
 
 #include <DummyConcurrency/Future/Syntax/Pipe.hpp>
-#include <DummyConcurrency/Scheduler/Inline.hpp>
+#include <DummyConcurrency/Runtime/Scheduler/Inline.hpp>
 #include <DummyConcurrency/Synchronization/Thread/Event.hpp>
 #include <DummyConcurrency/Utils/ManualLifetime.hpp>
 
@@ -16,14 +16,14 @@ namespace DummyConcurrency::Future {
                 value_container.Construct(std::move(value));
                 event.Fire();
             },
-            Scheduler::Inline());
+            Runtime::Inline());
         event.Wait();
         return value_container.Move();
     }
 
     template <typename T>
     void Detach(Future<T> future) {
-        std::move(future).Consume([](auto...) {}, Scheduler::Inline());
+        std::move(future).Consume([](auto...) {}, Runtime::Inline());
     }
 
     namespace Combinators {

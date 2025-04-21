@@ -12,7 +12,7 @@ int main() {
         std::println("Hello from fiber");
         event.Wait();
     });
-    Scheduler::Submit(pool, [&]() {
+    Runtime::Submit(pool, [&]() {
         std::println("Hello from thread {}", std::this_thread::get_id());
         event.Wait();
     });

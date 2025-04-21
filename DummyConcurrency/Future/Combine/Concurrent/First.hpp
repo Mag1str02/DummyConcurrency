@@ -13,9 +13,9 @@ namespace DummyConcurrency::Future {
     auto First(Future<T> a, Future<T> b) {
         static_assert(!::DummyConcurrency::Traits::IsResult<T>);
         auto* contract = State::PlainFirstContract<T>::Create(2);
-        std::move(a).Consume([contract](T value) { contract->SetValue(std::move(value)); }, Scheduler::Inline());
-        std::move(b).Consume([contract](T value) { contract->SetValue(std::move(value)); }, Scheduler::Inline());
-        return Future<T>(contract, Scheduler::Inline());
+        std::move(a).Consume([contract](T value) { contract->SetValue(std::move(value)); }, Runtime::Inline());
+        std::move(b).Consume([contract](T value) { contract->SetValue(std::move(value)); }, Runtime::Inline());
+        return Future<T>(contract, Runtime::Inline());
     }
 
 }  // namespace DummyConcurrency::Future

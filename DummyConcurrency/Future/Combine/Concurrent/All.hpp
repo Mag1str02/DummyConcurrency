@@ -6,7 +6,7 @@
 
 #include <DummyConcurrency/Future/Combine/Sequential/Result/AsTryFuture.hpp>
 #include <DummyConcurrency/Future/Result/Traits.hpp>
-#include <DummyConcurrency/Scheduler/Inline.hpp>
+#include <DummyConcurrency/Runtime/Scheduler/Inline.hpp>
 
 #include <tuple>
 
@@ -18,9 +18,9 @@ namespace DummyConcurrency::Future {
         static_assert(!::DummyConcurrency::Traits::IsResult<B>);
 
         auto* contract = State::BothContract<A, B>::Create();
-        std::move(a).Consume([contract](A value) { contract->SetValueA(std::move(value)); }, Scheduler::Inline());
-        std::move(b).Consume([contract](B value) { contract->SetValueB(std::move(value)); }, Scheduler::Inline());
-        return Future<std::tuple<A, B>>(contract, Scheduler::Inline());
+        std::move(a).Consume([contract](A value) { contract->SetValueA(std::move(value)); }, Runtime::Inline());
+        std::move(b).Consume([contract](B value) { contract->SetValueB(std::move(value)); }, Runtime::Inline());
+        return Future<std::tuple<A, B>>(contract, Runtime::Inline());
     }
 
 }  // namespace DummyConcurrency::Future

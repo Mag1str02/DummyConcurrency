@@ -7,7 +7,7 @@ using namespace std::chrono_literals;
 using namespace DummyConcurrency;
 
 int main() {
-    Scheduler::RunLoop loop;
+    Runtime::RunLoop loop;
     Fiber::Go(loop, []() {
         std::cout << "Hello from fiber 1: " << std::this_thread::get_id() << std::endl;
         Fiber::Yield();

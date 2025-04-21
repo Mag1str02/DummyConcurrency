@@ -1,7 +1,7 @@
 #pragma once
 
-#include "DummyConcurrency/Scheduler/Interface/Scheduler.hpp"
-#include "DummyConcurrency/Scheduler/Interface/Task.hpp"
+#include "DummyConcurrency/Runtime/Scheduler/Scheduler.hpp"
+#include "DummyConcurrency/Runtime/Scheduler/Task.hpp"
 
 namespace DummyConcurrency::Fiber {
 
@@ -11,7 +11,7 @@ namespace DummyConcurrency::Fiber {
     class Fiber;
     class IAwaiter;
 
-    using Scheduler::IScheduler;
-    using Scheduler::ITask;
+    using Runtime::IScheduler;
+    using Runtime::ITask;
 
 }  // namespace DummyConcurrency::Fiber

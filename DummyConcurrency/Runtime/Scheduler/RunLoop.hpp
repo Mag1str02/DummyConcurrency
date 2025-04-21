@@ -1,9 +1,9 @@
 #pragma once
 
-#include "DummyConcurrency/Scheduler/Interface/Scheduler.hpp"
-#include "DummyConcurrency/Scheduler/Interface/Task.hpp"
+#include "DummyConcurrency/Runtime/Scheduler/Scheduler.hpp"
+#include "DummyConcurrency/Runtime/Scheduler/Task.hpp"
 
-namespace DummyConcurrency::Scheduler {
+namespace DummyConcurrency::Runtime {
 
     // Single-threaded task queue
 
@@ -38,4 +38,4 @@ namespace DummyConcurrency::Scheduler {
         IntrusiveForwardList<ITask> queue_;
     };
 
-}  // namespace DummyConcurrency::Scheduler
+}  // namespace DummyConcurrency::Runtime

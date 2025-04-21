@@ -11,7 +11,7 @@ namespace DummyConcurrency::Future {
     Future<T> Ready(T value) {
         auto* contract = State::ContractState<T>::Create();
         contract->SetValue(std::move(value));
-        return Future<T>(contract, Scheduler::Inline());
+        return Future<T>(contract, Runtime::Inline());
     }
 
     template <typename T>
@@ -88,16 +88,16 @@ namespace DummyConcurrency::Future {
     template <typename T>
     std::tuple<Future<T>, Promise<T>> Contract() {
         auto* state = State::ContractState<T>::Create();
-        return {Future<T>(state, Scheduler::Inline()), Promise<T>(state)};
+        return {Future<T>(state, Runtime::Inline()), Promise<T>(state)};
     }
 
     template <typename F>
-    Future<std::invoke_result_t<F>> Submit(Scheduler::IScheduler& scheduler, F function) {
+    Future<std::invoke_result_t<F>> Submit(Runtime::IScheduler& scheduler, F function) {
         using Value                           = std::invoke_result_t<F>;
         State::ContractState<Value>* contract = State::ContractState<Value>::Create();
-        ::DummyConcurrency::Scheduler::Submit(scheduler, [contract, func = std::move(function)]() { contract->SetValue(func()); });
+        ::DummyConcurrency::Runtime::Submit(scheduler, [contract, func = std::move(function)]() { contract->SetValue(func()); });
 
-        return Future<Value>(contract, Scheduler::Inline());
+        return Future<Value>(contract, Runtime::Inline());
     }
 
 }  // namespace DummyConcurrency::Future

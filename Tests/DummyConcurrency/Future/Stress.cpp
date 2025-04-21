@@ -3,8 +3,8 @@
 #include <DummyConcurrency/Future/Future.hpp>
 #include <DummyConcurrency/Future/Make.hpp>
 #include <DummyConcurrency/Future/Terminate.hpp>
-#include <DummyConcurrency/Scheduler/RunLoop.hpp>
-#include <DummyConcurrency/Scheduler/ThreadPool.hpp>
+#include <DummyConcurrency/Runtime/Scheduler/RunLoop.hpp>
+#include <DummyConcurrency/Runtime/Scheduler/ThreadPool.hpp>
 
 #include <twist/ed/std/thread.hpp>
 
@@ -57,7 +57,7 @@ void StressTestContract() {
 //////////////////////////////////////////////////////////////////////
 
 void StressTestPipeline() {
-    Scheduler::ThreadPool pool{4};
+    Runtime::ThreadPool pool{4};
     pool.Start();
 
     size_t iter = 0;
@@ -110,7 +110,7 @@ void StressTestPipeline() {
 //////////////////////////////////////////////////////////////////////
 
 void StressTestFirst() {
-    Scheduler::ThreadPool pool{4};
+    Runtime::ThreadPool pool{4};
     pool.Start();
 
     size_t iter = 0;
@@ -169,7 +169,7 @@ void StressTestFirst() {
 //////////////////////////////////////////////////////////////////////
 
 void StressTestBoth() {
-    Scheduler::ThreadPool pool{4};
+    Runtime::ThreadPool pool{4};
     pool.Start();
 
     size_t iter = 0;

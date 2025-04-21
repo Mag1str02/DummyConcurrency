@@ -1,6 +1,6 @@
 #include "Inline.hpp"
 
-namespace DummyConcurrency::Scheduler {
+namespace DummyConcurrency::Runtime {
 
     class Inline : public IScheduler {
     public:
@@ -12,4 +12,4 @@ namespace DummyConcurrency::Scheduler {
         return sInstance;
     }
 
-}  // namespace DummyConcurrency::Scheduler
+}  // namespace DummyConcurrency::Runtime

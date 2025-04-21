@@ -4,14 +4,14 @@
 #include <DummyConcurrency/Future/State/ConsumerContract.hpp>
 #include <DummyConcurrency/Future/State/Rendezvous.hpp>
 
-#include <DummyConcurrency/Scheduler/Inline.hpp>
-#include <DummyConcurrency/Scheduler/Submit.hpp>
+#include <DummyConcurrency/Runtime/Scheduler/Inline.hpp>
+#include <DummyConcurrency/Runtime/Scheduler/Submit.hpp>
 #include <DummyConcurrency/Utils/ManualLifetime.hpp>
 
 namespace DummyConcurrency::Future::State {
 
     template <typename T>
-    class ContractState : public Scheduler::ITask, public IConsumerContract<T> {
+    class ContractState : public Runtime::ITask, public IConsumerContract<T> {
     public:
         static ContractState* Create() { return new ContractState(); }
 
@@ -22,7 +22,7 @@ namespace DummyConcurrency::Future::State {
             }
         }
 
-        virtual void SetCallback(Callback<T> callback, Scheduler::IScheduler& scheduler) override {
+        virtual void SetCallback(Callback<T> callback, Runtime::IScheduler& scheduler) override {
             callback_.Construct(std::move(callback));
             scheduler_ = &scheduler;
             if (state_.Consume()) {
@@ -43,7 +43,7 @@ namespace DummyConcurrency::Future::State {
         RendezvousStateMachine      state_;
         ManualLifetime<T>           value_;
         ManualLifetime<Callback<T>> callback_;
-        Scheduler::IScheduler*      scheduler_;
+        Runtime::IScheduler*      scheduler_;
     };
 
 }  // namespace DummyConcurrency::Future::State

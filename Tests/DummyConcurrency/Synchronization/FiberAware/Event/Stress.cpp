@@ -29,7 +29,7 @@ TEST_SUITE(FiberSynchronizationEvent_Stress) {
 
             iter.Add(1);
 
-            Scheduler::Submit(scheduler, [&] {
+            Runtime::Submit(scheduler, [&] {
                 event.Wait();
 
                 int d = data.Read();

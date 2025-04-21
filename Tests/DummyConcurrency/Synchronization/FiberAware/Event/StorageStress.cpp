@@ -23,7 +23,7 @@ TEST_SUITE(FiberSynchronizationEvent_StorageStress) {
 
             iter.Add(1);
 
-            Scheduler::Submit(scheduler, [&iter, &scheduler] {
+            Runtime::Submit(scheduler, [&iter, &scheduler] {
                 auto* event = new FEvent{};
 
                 Go(scheduler, [event] { event->Fire(); });

@@ -3,8 +3,8 @@
 #include <DummyConcurrency/Future/Future.hpp>
 #include <DummyConcurrency/Future/Make.hpp>
 #include <DummyConcurrency/Future/Terminate.hpp>
-#include <DummyConcurrency/Scheduler/RunLoop.hpp>
-#include <DummyConcurrency/Scheduler/ThreadPool.hpp>
+#include <DummyConcurrency/Runtime/Scheduler/RunLoop.hpp>
+#include <DummyConcurrency/Runtime/Scheduler/ThreadPool.hpp>
 
 #include <wheels/test/framework.hpp>
 #include <wheels/test/util/cpu_timer.hpp>
@@ -90,7 +90,7 @@ TEST_SUITE(Futures) {
     }
 
     SIMPLE_TEST(SubmitPool) {
-        Scheduler::ThreadPool pool{4};
+        Runtime::ThreadPool pool{4};
         pool.Start();
 
         auto compute = Future::Submit(pool, [] -> int { return 11; });
@@ -103,7 +103,7 @@ TEST_SUITE(Futures) {
     }
 
     SIMPLE_TEST(SubmitLoop) {
-        Scheduler::RunLoop loop;
+        Runtime::RunLoop loop;
 
         bool done = false;
 
@@ -122,7 +122,7 @@ TEST_SUITE(Futures) {
     }
 
     SIMPLE_TEST(SubmitPoolWait) {
-        Scheduler::ThreadPool pool{4};
+        Runtime::ThreadPool pool{4};
         pool.Start();
 
         auto f = Future::Submit(pool, [] {
@@ -150,7 +150,7 @@ TEST_SUITE(Futures) {
     }
 
     SIMPLE_TEST(Flatten) {
-        Scheduler::RunLoop loop;
+        Runtime::RunLoop loop;
 
         auto ff = Future::Submit(loop, [&loop] { return Future::Submit(loop, [] { return 7; }); });
 
@@ -172,7 +172,7 @@ TEST_SUITE(Futures) {
     }
 
     SIMPLE_TEST(FlatMap) {
-        Scheduler::RunLoop loop;
+        Runtime::RunLoop loop;
 
         Future::Future<int> f = Future::Submit(loop, [] { return 23; }) |
                                 Future::FlatMap([&](int v) { return Future::Submit(loop, [v] { return v + 5; }); }) |
@@ -260,8 +260,8 @@ TEST_SUITE(Futures) {
     }
 
     SIMPLE_TEST(Via) {
-        Scheduler::RunLoop loop1;
-        Scheduler::RunLoop loop2;
+        Runtime::RunLoop loop1;
+        Runtime::RunLoop loop2;
 
         size_t steps = 0;
 
@@ -536,7 +536,7 @@ TEST_SUITE(Futures) {
     }
 
     SIMPLE_TEST(DoNotWait1) {
-        Scheduler::ThreadPool pool{4};
+        Runtime::ThreadPool pool{4};
         pool.Start();
 
         std::atomic_bool submit = false;
@@ -560,7 +560,7 @@ TEST_SUITE(Futures) {
     }
 
     SIMPLE_TEST(DoNotWait2) {
-        Scheduler::ThreadPool pool{4};
+        Runtime::ThreadPool pool{4};
         pool.Start();
 
         std::atomic_bool submit = false;
@@ -584,7 +584,7 @@ TEST_SUITE(Futures) {
     }
 
     SIMPLE_TEST(Inline1) {
-        Scheduler::RunLoop loop;
+        Runtime::RunLoop loop;
 
         bool ok = false;
 
@@ -599,7 +599,7 @@ TEST_SUITE(Futures) {
     }
 
     SIMPLE_TEST(Inline2) {
-        Scheduler::RunLoop loop;
+        Runtime::RunLoop loop;
 
         auto v = Future::Get(Future::Value(1) | Future::Via(loop));
 
@@ -607,7 +607,7 @@ TEST_SUITE(Futures) {
     }
 
     SIMPLE_TEST(Inline3) {
-        Scheduler::RunLoop loop;
+        Runtime::RunLoop loop;
 
         bool flat_map = false;
         bool map1     = false;
@@ -637,7 +637,7 @@ TEST_SUITE(Futures) {
     }
 
     SIMPLE_TEST(Inline4) {
-        Scheduler::RunLoop loop;
+        Runtime::RunLoop loop;
 
         Future::Submit(loop, [&] { return Future::Submit(loop, [] { return 19; }); }) | Future::Flatten() | Future::Detach();
 
@@ -646,7 +646,7 @@ TEST_SUITE(Futures) {
     }
 
     SIMPLE_TEST(Inline5) {
-        Scheduler::RunLoop loop;
+        Runtime::RunLoop loop;
 
         auto [f1, p1] = Future::Contract<Result<int>>();
         auto [f2, p2] = Future::Contract<Result<int>>();

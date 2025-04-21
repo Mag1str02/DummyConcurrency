@@ -2,7 +2,7 @@
 
 #include <DummyConcurrency/Future/State/Callback.hpp>
 
-#include <DummyConcurrency/Scheduler/Interface/Scheduler.hpp>
+#include <DummyConcurrency/Runtime/Scheduler/Scheduler.hpp>
 
 namespace DummyConcurrency::Future::State {
 
@@ -10,7 +10,7 @@ namespace DummyConcurrency::Future::State {
     class IConsumerContract {
     public:
         virtual ~IConsumerContract()                                                     = default;
-        virtual void SetCallback(Callback<T> callback, Scheduler::IScheduler& scheduler) = 0;
+        virtual void SetCallback(Callback<T> callback, Runtime::IScheduler& scheduler) = 0;
     };
 
 };  // namespace DummyConcurrency::Future::State

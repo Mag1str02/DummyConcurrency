@@ -30,7 +30,7 @@ namespace DummyConcurrency::Future {
                             contract->SetValue(std::move(result));
                         } else {
                             error_callback(result.error())
-                                .Consume([contract](Result<T> result) { contract->SetValue(std::move(result)); }, Scheduler::Inline());
+                                .Consume([contract](Result<T> result) { contract->SetValue(std::move(result)); }, Runtime::Inline());
                         }
                     },
                     future.GetScheduler());

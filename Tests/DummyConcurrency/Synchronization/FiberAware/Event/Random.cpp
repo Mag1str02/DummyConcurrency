@@ -40,7 +40,7 @@ TEST_SUITE(FiberSynchronizationEvent_Random) {
 
             test.Add(1);
 
-            Scheduler::Submit(scheduler, [&] {
+            Runtime::Submit(scheduler, [&] {
                 event.Wait();
 
                 int d = data.Read();

@@ -1,9 +1,9 @@
 #pragma once
 
-#include "DummyConcurrency/Scheduler/Interface/Scheduler.hpp"
-#include "DummyConcurrency/Scheduler/Interface/Task.hpp"
+#include "DummyConcurrency/Runtime/Scheduler/Scheduler.hpp"
+#include "DummyConcurrency/Runtime/Scheduler/Task.hpp"
 
-namespace DummyConcurrency::Scheduler {
+namespace DummyConcurrency::Runtime {
 
     template <typename F>
     void Submit(IScheduler& scheduler, F function) {
@@ -23,4 +23,4 @@ namespace DummyConcurrency::Scheduler {
         scheduler.Submit(new SubmitTask(std::move(function)));
     }
 
-}  // namespace DummyConcurrency::Scheduler
+}  // namespace DummyConcurrency::Runtime

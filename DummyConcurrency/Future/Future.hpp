@@ -14,7 +14,7 @@ namespace DummyConcurrency::Future {
         using State     = State::IConsumerContract<T>;
         using ValueType = T;
 
-        explicit Future(State* state, Scheduler::IScheduler& scheduler) : state_(state), scheduler_(&scheduler) {}
+        explicit Future(State* state, Runtime::IScheduler& scheduler) : state_(state), scheduler_(&scheduler) {}
 
         Future(Future&& other) : state_(other.state_), scheduler_(other.scheduler_) {
             other.state_     = nullptr;
@@ -24,21 +24,21 @@ namespace DummyConcurrency::Future {
         ~Future() { DC_ASSERT(state_ == nullptr, "Future was not consumed"); }
 
         // One-shot
-        void Consume(Callback<T> callback, Scheduler::IScheduler& scheduler) && {
+        void Consume(Callback<T> callback, Runtime::IScheduler& scheduler) && {
             DC_ASSERT(state_ != nullptr, "Future was already consumed");
             state_->SetCallback(std::move(callback), scheduler);
             state_ = nullptr;
         }
 
-        Scheduler::IScheduler& GetScheduler() const { return *scheduler_; }
-        void                   SetScheduler(Scheduler::IScheduler& scheduler) {
+        Runtime::IScheduler& GetScheduler() const { return *scheduler_; }
+        void                   SetScheduler(Runtime::IScheduler& scheduler) {
             DC_ASSERT(state_ != nullptr, "Future was already consumed");
             scheduler_ = &scheduler;
         }
 
     private:
         State*                 state_     = nullptr;
-        Scheduler::IScheduler* scheduler_ = nullptr;
+        Runtime::IScheduler* scheduler_ = nullptr;
     };
 
     template <typename T>

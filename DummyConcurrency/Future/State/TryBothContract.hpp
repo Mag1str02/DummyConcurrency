@@ -9,7 +9,7 @@
 namespace DummyConcurrency::Future::State {
 
     template <typename A, typename B>
-    class TryBothContract : public Scheduler::ITask, public State::IConsumerContract<Result<std::tuple<A, B>>> {
+    class TryBothContract : public Runtime::ITask, public State::IConsumerContract<Result<std::tuple<A, B>>> {
     public:
         static TryBothContract* Create() { return new TryBothContract(); }
 
@@ -50,7 +50,7 @@ namespace DummyConcurrency::Future::State {
             }
         }
 
-        virtual void SetCallback(Callback<Result<std::tuple<A, B>>> callback, Scheduler::IScheduler& scheduler) override {
+        virtual void SetCallback(Callback<Result<std::tuple<A, B>>> callback, Runtime::IScheduler& scheduler) override {
             callback_.Construct(std::move(callback));
             scheduler_ = &scheduler;
             if (state_.Consume() == OneAllStateMachine::Result::Rendezvous) {
@@ -83,7 +83,7 @@ namespace DummyConcurrency::Future::State {
         ImplementationLayer::Atomic<uint32_t> error_result_ = 0;  // kill me...
 
         ManualLifetime<Callback<Result<std::tuple<A, B>>>> callback_;
-        Scheduler::IScheduler*                             scheduler_;
+        Runtime::IScheduler*                             scheduler_;
     };
 
 }  // namespace DummyConcurrency::Future::State

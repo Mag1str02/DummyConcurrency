@@ -3,13 +3,13 @@
 #include "IntrusiveQueue.hpp"
 
 #include "DummyConcurrency/ImplementationLayer/ImplementationLayer.hpp"
-#include "DummyConcurrency/Scheduler/Interface/Scheduler.hpp"
-#include "DummyConcurrency/Scheduler/Interface/Task.hpp"
+#include "DummyConcurrency/Runtime/Scheduler/Scheduler.hpp"
+#include "DummyConcurrency/Runtime/Scheduler/Task.hpp"
 
 #include <vector>
 
 // Fixed-size pool of worker threads
-namespace DummyConcurrency::Scheduler {
+namespace DummyConcurrency::Runtime {
 
     class ThreadPool : public IScheduler {
     public:
@@ -41,4 +41,4 @@ namespace DummyConcurrency::Scheduler {
         bool                                     stopped_ = false;
     };
 
-}  // namespace DummyConcurrency::Scheduler
+}  // namespace DummyConcurrency::Runtime

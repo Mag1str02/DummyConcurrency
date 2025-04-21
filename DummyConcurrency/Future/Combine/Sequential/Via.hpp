@@ -1,6 +1,6 @@
 #pragma once
 
-#include <DummyConcurrency/Scheduler/Interface/Scheduler.hpp>
+#include <DummyConcurrency/Runtime/Scheduler/Scheduler.hpp>
 
 #include <DummyConcurrency/Future/Future.hpp>
 #include <DummyConcurrency/Future/State/Contract.hpp>
@@ -13,9 +13,9 @@ namespace DummyConcurrency::Future {
     namespace Combinators {
 
         struct [[nodiscard]] Via {
-            Scheduler::IScheduler* Scheduler;
+            Runtime::IScheduler* Scheduler;
 
-            explicit Via(Scheduler::IScheduler& s) : Scheduler(&s) {}
+            explicit Via(Runtime::IScheduler& s) : Scheduler(&s) {}
 
             // Non-copyable
             Via(const Via&) = delete;
@@ -36,7 +36,7 @@ namespace DummyConcurrency::Future {
      *
      */
 
-    inline auto Via(Scheduler::IScheduler& scheduler) {
+    inline auto Via(Runtime::IScheduler& scheduler) {
         return Combinators::Via{scheduler};
     }
 

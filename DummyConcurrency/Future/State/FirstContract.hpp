@@ -8,7 +8,7 @@
 namespace DummyConcurrency::Future::State {
 
     template <typename T>
-    class PlainFirstContract : public Scheduler::ITask, public State::IConsumerContract<T> {
+    class PlainFirstContract : public Runtime::ITask, public State::IConsumerContract<T> {
     public:
         static PlainFirstContract* Create(uint32_t producer_count) { return new PlainFirstContract(producer_count); }
 
@@ -24,7 +24,7 @@ namespace DummyConcurrency::Future::State {
             }
         }
 
-        virtual void SetCallback(Callback<T> callback, Scheduler::IScheduler& scheduler) override {
+        virtual void SetCallback(Callback<T> callback, Runtime::IScheduler& scheduler) override {
             callback_.Construct(std::move(callback));
             scheduler_ = &scheduler;
             if (state_.Consume() == OneAllStateMachine::Result::Rendezvous) {
@@ -64,7 +64,7 @@ namespace DummyConcurrency::Future::State {
         OneAllStateMachine          state_;
         twist::ed::std::atomic<T*>  value_ = nullptr;
         ManualLifetime<Callback<T>> callback_;
-        Scheduler::IScheduler*      scheduler_;
+        Runtime::IScheduler*      scheduler_;
     };
 
 }  // namespace DummyConcurrency::Future::State

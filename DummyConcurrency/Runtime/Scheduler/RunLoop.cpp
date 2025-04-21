@@ -1,6 +1,6 @@
 #include "RunLoop.hpp"
 
-namespace DummyConcurrency::Scheduler {
+namespace DummyConcurrency::Runtime {
 
     void RunLoop::Submit(ITask* task) {
         queue_.PushBack(task);
@@ -28,4 +28,4 @@ namespace DummyConcurrency::Scheduler {
         return cnt;
     }
 
-}  // namespace DummyConcurrency::Scheduler
+}  // namespace DummyConcurrency::Runtime

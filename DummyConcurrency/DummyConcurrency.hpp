@@ -4,9 +4,9 @@
 #include "DummyConcurrency/DataStructures/LockFreeStack.hpp"          // IWYU pragma: export
 #include "DummyConcurrency/Fiber/Scheduling/Go.hpp"                   // IWYU pragma: export
 #include "DummyConcurrency/Fiber/Scheduling/Yield.hpp"                // IWYU pragma: export
-#include "DummyConcurrency/Scheduler/RunLoop.hpp"                     // IWYU pragma: export
-#include "DummyConcurrency/Scheduler/Submit.hpp"                      // IWYU pragma: export
-#include "DummyConcurrency/Scheduler/ThreadPool.hpp"                  // IWYU pragma: export
+#include "DummyConcurrency/Runtime/Scheduler/RunLoop.hpp"             // IWYU pragma: export
+#include "DummyConcurrency/Runtime/Scheduler/Submit.hpp"              // IWYU pragma: export
+#include "DummyConcurrency/Runtime/Scheduler/ThreadPool.hpp"          // IWYU pragma: export
 #include "DummyConcurrency/Synchronization/FiberAware/Event.hpp"      // IWYU pragma: export
 #include "DummyConcurrency/Synchronization/FiberAware/Mutex.hpp"      // IWYU pragma: export
 #include "DummyConcurrency/Synchronization/FiberAware/WaitGroup.hpp"  // IWYU pragma: export
@@ -16,8 +16,8 @@
 
 namespace DummyConcurrency {
 
-    using Scheduler::RunLoop;
-    using Scheduler::ThreadPool;
+    using Runtime::RunLoop;
+    using Runtime::ThreadPool;
 
     using FMutex     = Synchronization::FiberAware::Mutex;
     using FEvent     = Synchronization::FiberAware::Event;
@@ -37,6 +37,6 @@ namespace DummyConcurrency {
 
     using Fiber::Go;
     using Fiber::Yield;
-    using Scheduler::Submit;
+    using Runtime::Submit;
 
 }  // namespace DummyConcurrency
