@@ -8,15 +8,15 @@ set(DummyConcurrencySources
     Fiber/Core/Handle.cpp
     Fiber/Scheduling/Yield.cpp
     Fiber/Scheduling/Suspend.cpp
-    Fiber/Synchronization/Event.cpp
-    Fiber/Synchronization/Mutex.cpp
-    Fiber/Synchronization/WaitGroup.cpp
     Scheduler/Inline.cpp
     Scheduler/ThreadPool.cpp
     Scheduler/RunLoop.cpp
-    Synchronization/Event.cpp
-    Synchronization/WaitGroup.cpp
-    Synchronization/SpinLock.cpp
+    Synchronization/FiberAware/Event.cpp
+    Synchronization/FiberAware/Mutex.cpp
+    Synchronization/FiberAware/WaitGroup.cpp
+    Synchronization/Thread/Event.cpp
+    Synchronization/Thread/WaitGroup.cpp
+    Synchronization/Thread/SpinLock.cpp
 )
 
 if (UNIX)

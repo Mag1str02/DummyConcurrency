@@ -39,7 +39,7 @@ namespace DummyConcurrency::Fiber {
         if (returned_fiber->coroutine_.IsCompleted()) {
             delete returned_fiber;
         } else {
-            returned_fiber->suspend_awaiter_->Suspend(FiberHandle(returned_fiber));
+            returned_fiber->suspend_awaiter_->Suspend(Handle(returned_fiber));
         }
     }
 

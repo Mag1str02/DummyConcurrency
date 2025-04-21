@@ -2,7 +2,7 @@
 
 #include "DummyConcurrency/Fiber/Scheduling/Suspend.hpp"
 
-namespace DummyConcurrency::Fiber {
+namespace DummyConcurrency::Synchronization::FiberAware {
 
     void Mutex::Lock() {
         Awaiter* expected = kUnlocked;

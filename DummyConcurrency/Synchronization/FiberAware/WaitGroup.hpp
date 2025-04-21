@@ -1,12 +1,11 @@
 #pragma once
 
-#include "DummyConcurrency/Fiber/Core/Awaiter.hpp"
-#include "DummyConcurrency/Synchronization/SpinLock.hpp"
-#include "DummyConcurrency/Utils/IntrusiveForwardList.hpp"
-
+#include <DummyConcurrency/Fiber/Core/Awaiter.hpp>
 #include <DummyConcurrency/ImplementationLayer/ImplementationLayer.hpp>
+#include <DummyConcurrency/Synchronization/Thread/SpinLock.hpp>
+#include <DummyConcurrency/Utils/IntrusiveForwardList.hpp>
 
-namespace DummyConcurrency::Fiber {
+namespace DummyConcurrency::Synchronization::FiberAware {
 
     class SpinlockWaitGroup;
     class BadPointerWaitGroup;
@@ -23,7 +22,7 @@ namespace DummyConcurrency::Fiber {
         void Wait();
 
     private:
-        class Awaiter : public IAwaiter, public IntrusiveForwardListNode<Awaiter> {
+        class Awaiter : public Fiber::IAwaiter, public IntrusiveForwardListNode<Awaiter> {
         public:
             explicit Awaiter(SpinlockWaitGroup* wg);
             virtual void OnSuspend() noexcept override;
@@ -32,9 +31,9 @@ namespace DummyConcurrency::Fiber {
             SpinlockWaitGroup* wg_;
         };
 
-        SpinLock                      lock_;
-        uint32_t                      counter_ = 0;
-        IntrusiveForwardList<Awaiter> wait_queue_;
+        Synchronization::Thread::SpinLock lock_;
+        uint32_t                          counter_ = 0;
+        IntrusiveForwardList<Awaiter>     wait_queue_;
     };
 
     // lock-free, zero-alloc
@@ -46,7 +45,7 @@ namespace DummyConcurrency::Fiber {
         void Wait();
 
     private:
-        class Awaiter : public IAwaiter {
+        class Awaiter : public Fiber::IAwaiter {
         public:
             explicit Awaiter(BadPointerWaitGroup* wg);
             virtual void OnSuspend() noexcept override;
@@ -64,4 +63,4 @@ namespace DummyConcurrency::Fiber {
         ImplementationLayer::Atomic<uint64_t> state_ = 0;
     };
 
-}  // namespace DummyConcurrency::Fiber
+}  // namespace DummyConcurrency::Synchronization::FiberAware

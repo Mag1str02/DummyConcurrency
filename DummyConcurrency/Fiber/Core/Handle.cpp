@@ -6,20 +6,20 @@
 
 namespace DummyConcurrency::Fiber {
 
-    Fiber* FiberHandle::Release() {
+    Fiber* Handle::Release() {
         DC_ASSERT(IsValid(), "Invalid fiber handle");
         return std::exchange(fiber_, nullptr);
     }
 
-    void FiberHandle::Schedule() {
+    void Handle::Schedule() {
         Release()->Schedule();
     }
 
-    void FiberHandle::Switch(FiberHandle& current_fiber) {
+    void Handle::Switch(Handle& current_fiber) {
         Fiber* current = Fiber::Self();
         DC_ASSERT(current != nullptr, "Cannot switch from outside of fiber");
 
-        current_fiber = FiberHandle(current);
+        current_fiber = Handle(current);
         current->SwitchTo(*Release());
     }
 

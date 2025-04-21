@@ -2,7 +2,7 @@
 
 #include <DummyConcurrency/ImplementationLayer/ImplementationLayer.hpp>
 
-namespace DummyConcurrency {
+namespace DummyConcurrency::Synchronization::Thread {
 
     class SpinLock {
     public:

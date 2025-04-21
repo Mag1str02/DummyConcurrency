@@ -1,6 +1,6 @@
 #include "SpinLock.hpp"
 
-namespace DummyConcurrency {
+namespace DummyConcurrency::Synchronization::Thread {
 
     void SpinLock::Lock() {
         while (state_.exchange(1) == 1) {

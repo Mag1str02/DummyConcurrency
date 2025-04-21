@@ -1,6 +1,6 @@
 #include "Event.hpp"
 
-namespace DummyConcurrency {
+namespace DummyConcurrency::Synchronization::Thread {
 
     void Event::Fire() {
         auto wake_key = ImplementationLayer::Futex::PrepareWake(state_);
@@ -14,4 +14,8 @@ namespace DummyConcurrency {
         }
     }
 
-}  // namespace DummyConcurrency
+    bool Event::IsFired() const {
+        return state_.load() != 0;
+    }
+
+}  // namespace DummyConcurrency::Synchronization::Thread

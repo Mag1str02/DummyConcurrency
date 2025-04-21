@@ -2,7 +2,7 @@
 
 #include <DummyConcurrency/ImplementationLayer/ImplementationLayer.hpp>
 
-namespace DummyConcurrency {
+namespace DummyConcurrency::Synchronization::Thread {
 
     class WaitGroup {
     public:
@@ -18,4 +18,4 @@ namespace DummyConcurrency {
         ImplementationLayer::Atomic<uint32_t> futex_state_{0};
     };
 
-}  // namespace DummyConcurrency::Threading
+}  // namespace DummyConcurrency::Synchronization::Thread

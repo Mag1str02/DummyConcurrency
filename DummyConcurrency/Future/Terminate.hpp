@@ -2,15 +2,15 @@
 
 #include <DummyConcurrency/Future/Syntax/Pipe.hpp>
 #include <DummyConcurrency/Scheduler/Inline.hpp>
-#include <DummyConcurrency/Synchronization/Event.hpp>
+#include <DummyConcurrency/Synchronization/Thread/Event.hpp>
 #include <DummyConcurrency/Utils/ManualLifetime.hpp>
 
 namespace DummyConcurrency::Future {
 
     template <typename T>
     T Get(Future<T> future) {
-        Event             event;
-        ManualLifetime<T> value_container;
+        Synchronization::Thread::Event event;
+        ManualLifetime<T>              value_container;
         std::move(future).Consume(
             [&event, &value_container](T value) {
                 value_container.Construct(std::move(value));

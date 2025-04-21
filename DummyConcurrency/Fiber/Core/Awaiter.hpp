@@ -14,7 +14,7 @@ namespace DummyConcurrency::Fiber {
             DC_ASSERT(handle_.IsValid(), "Invalid fiber handle");
             handle_.Schedule();
         }
-        void Switch(FiberHandle& current_fiber) {
+        void Switch(Handle& current_fiber) {
             DC_ASSERT(handle_.IsValid(), "Invalid fiber handle");
             handle_.Switch(current_fiber);
         }
@@ -23,14 +23,14 @@ namespace DummyConcurrency::Fiber {
         virtual void OnSuspend() noexcept {};
 
     private:
-        void Suspend(FiberHandle handle) noexcept {
+        void Suspend(Handle handle) noexcept {
             handle_ = std::move(handle);
             OnSuspend();
         }
 
         friend class Fiber;
 
-        FiberHandle handle_;
+        Handle handle_;
     };
 
 }  // namespace DummyConcurrency::Fiber

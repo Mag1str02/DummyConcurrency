@@ -4,7 +4,7 @@
 
 #include <mutex>
 
-namespace DummyConcurrency::Fiber {
+namespace DummyConcurrency::Synchronization::FiberAware {
 
     namespace {
         static constexpr uint64_t kPointerBits = 48;

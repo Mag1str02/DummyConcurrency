@@ -4,7 +4,7 @@
 
 #include <DummyConcurrency/ImplementationLayer/ImplementationLayer.hpp>
 
-namespace DummyConcurrency::Fiber {
+namespace DummyConcurrency::Synchronization::FiberAware {
 
     class Mutex {
     public:
@@ -18,7 +18,7 @@ namespace DummyConcurrency::Fiber {
         void unlock();    // NOLINT
 
     private:
-        class Awaiter : public IAwaiter {
+        class Awaiter : public Fiber::IAwaiter {
         public:
             explicit Awaiter(Mutex* mutex);
             virtual void OnSuspend() noexcept override;
@@ -36,7 +36,7 @@ namespace DummyConcurrency::Fiber {
         ImplementationLayer::Atomic<Awaiter*> head_ = kUnlocked;
         Awaiter*                              tail_ = nullptr;
 
-        FiberHandle unlocker_;
+        Fiber::Handle unlocker_;
     };
 
-}  // namespace DummyConcurrency::Fiber
+}  // namespace DummyConcurrency::Synchronization::FiberAware

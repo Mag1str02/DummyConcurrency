@@ -6,15 +6,15 @@ namespace DummyConcurrency::Fiber {
 
     // Opaque non-owning handle to the _suspended_ fiber
 
-    class FiberHandle {
+    class Handle {
         friend class Fiber;
 
     public:
-        FiberHandle()                              = default;
-        FiberHandle(const FiberHandle&)            = delete;
-        FiberHandle& operator=(const FiberHandle&) = delete;
-        FiberHandle(FiberHandle&& other) : fiber_(other.fiber_) { other.fiber_ = nullptr; };
-        FiberHandle& operator=(FiberHandle&& other) {
+        Handle()                              = default;
+        Handle(const Handle&)            = delete;
+        Handle& operator=(const Handle&) = delete;
+        Handle(Handle&& other) : fiber_(other.fiber_) { other.fiber_ = nullptr; };
+        Handle& operator=(Handle&& other) {
             if (this == &other) {
                 return *this;
             }
@@ -23,7 +23,7 @@ namespace DummyConcurrency::Fiber {
             return *this;
         };
 
-        static FiberHandle Invalid() { return FiberHandle(nullptr); }
+        static Handle Invalid() { return Handle(nullptr); }
 
         bool IsValid() const { return fiber_ != nullptr; }
 
@@ -32,12 +32,12 @@ namespace DummyConcurrency::Fiber {
 
         // Switch to this fiber immediately
         // For symmetric transfer
-        void Switch(FiberHandle& current_fiber);
+        void Switch(Handle& current_fiber);
 
         Fiber* Release();
 
     private:
-        explicit FiberHandle(Fiber* fiber) : fiber_(fiber) {}
+        explicit Handle(Fiber* fiber) : fiber_(fiber) {}
 
     private:
         Fiber* fiber_ = nullptr;
