@@ -1,11 +1,12 @@
-#include <DummyConcurrency/DummyConcurrency.hpp>
-#include <Testing/BenchTimeBudget.hpp>
+#include "Utils.hpp"
 
-#include <thread>
+#include <DummyConcurrency/DummyConcurrency.hpp>
 
 #include <unistd.h>
+#include <thread>
 
 using namespace DummyConcurrency;
+using namespace std::chrono_literals;
 
 int main() {
     std::cerr << getpid() << std::endl;
@@ -16,6 +17,8 @@ int main() {
     FMutex     mutex;
     TWaitGroup wg;
     uint32_t   counter = 0;
+
+    BenchTimeBudget budget(10s);
 
     wg.Add(thread_count);
     for (uint32_t i = 0; i < thread_count; ++i) {

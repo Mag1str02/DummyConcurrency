@@ -169,7 +169,6 @@ function(add_task_benchmark BENCH_MAIN)
     add_executable(Benchmark_${BENCH_MAIN} ${BENCH_MAIN}.cpp)
     target_link_libraries(Benchmark_${BENCH_MAIN} 
         PUBLIC DummyConcurrency 
-        PUBLIC Testing
         )
 endfunction()
 

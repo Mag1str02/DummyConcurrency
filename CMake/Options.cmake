@@ -1,8 +1,7 @@
 set_option(DC_FORCE_BUILD_PRESET_OPTIONS "Forces build preset options" ON)
 set_option(DC_EXCEPTIONS_CONTEXT "Enables support for exceptions" OFF)
 set_option(DC_USE_UCONTEXT "Use ucontext" OFF)
-set_option(DC_ENABLE_EXAMPLES "Enable example targets" ON)
-set_option(DC_DEVELOPER_MODE "Enable test and benchmark targets" ON)
+set_option(DC_DEVELOPER_MODE "Enable test and usage of twist implementation layer" ON)
 
 if(DC_BUILD_TYPE STREQUAL "Debug")
   set_build_option(UBSAN "Enables undefined behaviour sanitizer" ON)

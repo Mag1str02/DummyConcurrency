@@ -21,12 +21,9 @@ include(CMake/Werror.cmake)
 include(CMake/Task.cmake)
 
 add_subdirectory(DummyConcurrency)
+add_subdirectory(Benchmark)
+add_subdirectory(Examples)
 
 if(DC_DEVELOPER_MODE)
-  add_subdirectory(Benchmark)
   add_subdirectory(Tests)
-endif()
-
-if(DC_ENABLE_EXAMPLES)
-  add_subdirectory(Examples)
 endif()

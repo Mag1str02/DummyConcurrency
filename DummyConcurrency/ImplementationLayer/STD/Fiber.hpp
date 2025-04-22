@@ -2,6 +2,8 @@
 
 #include "DummyConcurrency/Context/StackView.hpp"
 
+#include <span>
+
 namespace DummyConcurrency::ImplementationLayer::STD {
 
     struct Fiber;
@@ -23,7 +25,7 @@ namespace DummyConcurrency::ImplementationLayer::STD {
         FiberHandle Handle() { return FiberHandle(); }
     };
 
-    inline void NewFiber(Fiber*, Context::StackView) {}
+    inline void NewFiber(Fiber*, std::span<std::byte>) {}
 
     inline FiberHandle SwitchToFiber(FiberHandle handle) {
         return handle;

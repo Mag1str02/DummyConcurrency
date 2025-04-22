@@ -1,13 +1,12 @@
 #include "Utils.hpp"
 
 #include <DummyConcurrency/DummyConcurrency.hpp>
-#include <Testing/BenchTimeBudget.hpp>
 
 #include <unistd.h>
 
 using namespace DummyConcurrency;
 
-class TestTask : public Runtime::IntrusiveTask {
+class TestTask : public Runtime::ITask {
 public:
     virtual void Run() noexcept override {
         for (uint32_t i = 0; i < 100; ++i) {}
