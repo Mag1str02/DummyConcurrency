@@ -9,7 +9,7 @@
 
 using namespace DummyConcurrency;
 
-constexpr uint32_t kFibersToCreate = 10'000'000;
+constexpr uint32_t kFibersToCreate = 100'000'000;
 
 void Body(RunLoop& loop, uint32_t& counter) {
     Go(loop, [&]() {

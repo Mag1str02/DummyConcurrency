@@ -1,11 +1,11 @@
 #pragma once
 
-#include <cstdint>
+#include <DummyConcurrency/Fiber/Stack/InlineStackPool.hpp>
 
 namespace DummyConcurrency::Fiber {
 
     struct Hint {
-        uint64_t StackeSize = 1 * 1024 * 1024;
+        IStackPool* Pool = InlineStackPool();
     };
 
 }  // namespace DummyConcurrency::Fiber

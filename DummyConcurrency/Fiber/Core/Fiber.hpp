@@ -8,11 +8,11 @@ namespace DummyConcurrency::Fiber {
 
     class Fiber : public ITask {
     public:
-        template <typename F> static Fiber* Create(IScheduler& schedule, F&& body, Hint hint);
-        static Fiber*                       Self();
+        template <typename F>
+        static Fiber* Create(IScheduler& schedule, F&& body, Hint hint);
+        static Fiber* Self();
 
     public:
-        virtual ~Fiber() = default;
         virtual void Run() noexcept;
 
         void Suspend(IAwaiter& awaiter);
@@ -22,24 +22,33 @@ namespace DummyConcurrency::Fiber {
         IScheduler& GetScheduler() const;
 
     private:
-        Fiber(IScheduler& scheduler, ICoroutine& coroutine);
+        Fiber(IScheduler* scheduler, ICoroutine* coroutine, LeasedStack&& stack);
+        void Destroy();
 
     private:
-        IScheduler& scheduler_;
-        ICoroutine& coroutine_;  // Faster to store pointer to coroutine then using
-                                 // virtual method to get it each time
-
-        IAwaiter* suspend_awaiter_ = nullptr;
+        IAwaiter*   suspend_awaiter_ = nullptr;
+        IScheduler* scheduler_       = nullptr;
+        ICoroutine* coroutine_       = nullptr;
+        LeasedStack stack_;
     };
 
-    template <typename F> Fiber* Fiber::Create(IScheduler& scheduler, F&& body, Hint hint) {
-        struct FiberContainer : public Fiber {
-            Coroutine<F> Coro;
+    template <typename F>
+    Fiber* Fiber::Create(IScheduler& scheduler, F&& body, Hint hint) {
+        class Coroutine : public ICoroutine {
+        public:
+            explicit Coroutine(F&& body, Context::StackView view) : ICoroutine(view), body_(std::move(body)) {}
+            virtual void Body() override { body_(); }
 
-            FiberContainer(IScheduler& scheduler, F&& body, Hint hint) : Fiber(scheduler, Coro), Coro(std::move(body), hint.StackeSize) {}
+        private:
+            F body_;
         };
 
-        return new FiberContainer(scheduler, std::move(body), hint);
+        LeasedStack stack = hint.Pool->GetStack();
+
+        void*      coroutine_address = stack->PreAllocate<Coroutine>();
+        void*      fiber_address     = stack->PreAllocate<Fiber>();
+        Coroutine* coroutine         = new (coroutine_address) Coroutine(std::move(body), stack->View());
+        return new (fiber_address) Fiber(&scheduler, coroutine, std::move(stack));
     }
 
 }  // namespace DummyConcurrency::Fiber

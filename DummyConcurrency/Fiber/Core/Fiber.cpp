@@ -10,34 +10,44 @@ namespace DummyConcurrency::Fiber {
 
     STATIC_THREAD_LOCAL_PTR(Fiber, gCurrentFiber);
 
-    Fiber::Fiber(IScheduler& sched, ICoroutine& coro) : scheduler_(sched), coroutine_(coro) {}
+    Fiber::Fiber(IScheduler* scheduler, ICoroutine* coroutine, LeasedStack&& stack) :
+        scheduler_(scheduler), coroutine_(coroutine), stack_(std::move(stack)) {}
+
+    void Fiber::Destroy() {
+        Fiber*      fiber     = this;
+        ICoroutine* coroutine = coroutine_;
+        LeasedStack stack     = std::move(stack_);
+
+        coroutine->~ICoroutine();
+        fiber->~Fiber();
+    }
 
     Fiber* Fiber::Self() {
         return gCurrentFiber;
     }
 
     IScheduler& Fiber::GetScheduler() const {
-        return scheduler_;
+        return *scheduler_;
     }
 
     void Fiber::Suspend(IAwaiter& awaiter) {
         DC_ASSERT(gCurrentFiber == this, "Suspend can only be called on active fiber");
 
         suspend_awaiter_ = &awaiter;
-        coroutine_.Suspend();
+        coroutine_->Suspend();
     }
 
     void Fiber::Run() noexcept {
         suspend_awaiter_ = nullptr;
         gCurrentFiber    = this;
 
-        coroutine_.Resume();
+        coroutine_->Resume();
 
         // It is possible to other fiber to leave from resume
         Fiber* returned_fiber = gCurrentFiber;
         gCurrentFiber         = nullptr;
-        if (returned_fiber->coroutine_.IsCompleted()) {
-            delete returned_fiber;
+        if (returned_fiber->coroutine_->IsCompleted()) {
+            returned_fiber->Destroy();
         } else {
             returned_fiber->suspend_awaiter_->Suspend(Handle(returned_fiber));
         }
@@ -47,10 +57,10 @@ namespace DummyConcurrency::Fiber {
         DC_ASSERT(gCurrentFiber == this, "SwitchTo can only be called on active fiber");
 
         gCurrentFiber = &other;
-        coroutine_.SwitchTo(other.coroutine_);
+        coroutine_->SwitchTo(*other.coroutine_);
     }
     void Fiber::Schedule() {
-        scheduler_.Submit(this);
+        scheduler_->Submit(this);
     }
 
 }  // namespace DummyConcurrency::Fiber

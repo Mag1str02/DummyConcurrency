@@ -1,9 +1,9 @@
 #pragma once
 
-#include <DummyConcurrency/Fiber/Stack/New.hpp>
+#include "IStackPool.hpp"
 
 namespace DummyConcurrency::Fiber {
 
-    using Stack = Fiber::NewStack;
+    IStackPool* InlineStackPool();
 
 }  // namespace DummyConcurrency::Fiber

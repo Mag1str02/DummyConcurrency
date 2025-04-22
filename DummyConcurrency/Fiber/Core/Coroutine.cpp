@@ -2,10 +2,11 @@
 
 namespace DummyConcurrency::Fiber {
 
-    ICoroutine::ICoroutine(size_t stack_size) : stack_(Stack::AllocateBytes(stack_size)) {
-        coro_context_.Setup(stack_.MutView(), this);
+
+    ICoroutine::ICoroutine(Context::StackView view) {
+        coro_context_.Setup(view, this);
         caller_context_ = nullptr;
-        ImplementationLayer::NewFiber(&impl_fiber_, stack_.MutView());
+        ImplementationLayer::NewFiber(&impl_fiber_, view);
     }
 
     void ICoroutine::SwitchTo(ICoroutine& other) {
@@ -38,6 +39,22 @@ namespace DummyConcurrency::Fiber {
 
     bool ICoroutine::IsCompleted() const {
         return completed_;
+    }
+
+    void ICoroutine::Run() noexcept {
+        try {
+            Body();
+        } catch (const std::exception& exception) {
+            auto msg = std::format("Exceptions are forbidden in coroutins: '{}'", exception.what());
+            DC_PANIC(msg);
+        } catch (...) {
+            DC_PANIC("Exceptions are forbidden in coroutins");
+        }
+        ImplementationLayer::SwitchToFiber(*impl_caller_fiber_);
+
+        completed_ = true;
+        coro_context_.ExitTo(*caller_context_);
+        // Unreachable
     }
 
 }  // namespace DummyConcurrency::Fiber

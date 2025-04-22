@@ -9,6 +9,11 @@ set(DummyConcurrencySources
     Fiber/Core/Handle.cpp
     Fiber/Scheduling/Yield.cpp
     Fiber/Scheduling/Suspend.cpp
+    Fiber/Stack/InlineStackPool.cpp
+    Fiber/Stack/IStackPool.cpp
+    Fiber/Stack/New.cpp
+    Fiber/Stack/Size.cpp
+    Fiber/Stack/StackPool.cpp
 
     Runtime/Scheduler/Inline.cpp
     Runtime/Scheduler/ThreadPool.cpp
@@ -22,7 +27,3 @@ set(DummyConcurrencySources
     Synchronization/Thread/WaitGroup.cpp
     Synchronization/Thread/SpinLock.cpp
 )
-
-if (UNIX)
-    set(DummyConcurrencySources ${DummyConcurrencySources} Context/Stack/MMap.cpp)
-endif()
