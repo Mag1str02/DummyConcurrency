@@ -8,8 +8,8 @@ namespace DummyConcurrency::Context {
 
     struct SanitizerContext {
         void Setup(StackView stack) {
-            stack_      = stack.data();
-            stack_size_ = stack.size();
+            stack_      = stack.Bottom;
+            stack_size_ = size_t(stack.Top - stack.Bottom);
         }
 
         void AfterStart() { __sanitizer_finish_switch_fiber(nullptr, &(from_->stack_), &(from_->stack_size_)); }
