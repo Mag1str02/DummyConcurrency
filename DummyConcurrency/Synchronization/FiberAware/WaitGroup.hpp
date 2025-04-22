@@ -6,7 +6,7 @@
 #include <DummyConcurrency/Utils/IntrusiveForwardList.hpp>
 #include <DummyConcurrency/Utils/StampedPtr.hpp>
 
-namespace DummyConcurrency::Synchronization::FiberAware {
+namespace NDummyConcurrency::NSynchronization::NFiberAware {
 
     class SpinlockWaitGroup;
     class BadPointerWaitGroup;
@@ -21,7 +21,7 @@ namespace DummyConcurrency::Synchronization::FiberAware {
         void Wait();
 
     private:
-        Synchronization::Thread::SpinLock lock_;
+        NSynchronization::NThread::SpinLock lock_;
         uint32_t                          counter_ = 0;
         IntrusiveForwardList<IAwaiter>    wait_queue_;
     };
@@ -38,4 +38,4 @@ namespace DummyConcurrency::Synchronization::FiberAware {
         AtomicStampedPtr<IAwaiter> state_;
     };
 
-}  // namespace DummyConcurrency::Synchronization::FiberAware
+}  // namespace NDummyConcurrency::NSynchronization::FiberAware

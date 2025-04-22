@@ -4,7 +4,7 @@
 
 #include <mutex>
 
-namespace DummyConcurrency::Synchronization::FiberAware {
+namespace NDummyConcurrency::NSynchronization::NFiberAware {
 
     void SpinlockWaitGroup::Add(size_t count) {
         std::lock_guard guard(lock_);
@@ -88,4 +88,4 @@ namespace DummyConcurrency::Synchronization::FiberAware {
         });
     }
 
-}  // namespace DummyConcurrency::Synchronization::FiberAware
+}  // namespace NDummyConcurrency::NSynchronization::FiberAware

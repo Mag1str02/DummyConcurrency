@@ -10,7 +10,7 @@
 static_assert(twist::build::IsolatedSim());
 
 using TestMessage = twist::test::Message<int>;
-using namespace DummyConcurrency;  // NOLINT
+using namespace NDummyConcurrency;  // NOLINT
 
 TEST_SUITE(ModelLockFreeStack) {
     // 3 threads, Push + TryPop, <= 2 preemptions

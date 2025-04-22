@@ -6,7 +6,7 @@
 #include <twist/ed/std/thread.hpp>
 #include <twist/test/assert.hpp>
 
-using namespace DummyConcurrency;  // NOLINT
+using namespace NDummyConcurrency;  // NOLINT
 
 TEST_SUITE(ThreadSynchronizationWaitGroup_Storage) {
     /*

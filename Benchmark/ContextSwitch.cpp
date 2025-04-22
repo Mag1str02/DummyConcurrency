@@ -4,7 +4,7 @@
 
 #include <unistd.h>
 
-using namespace DummyConcurrency;
+using namespace NDummyConcurrency;
 
 int main() {
     std::cerr << getpid() << std::endl;

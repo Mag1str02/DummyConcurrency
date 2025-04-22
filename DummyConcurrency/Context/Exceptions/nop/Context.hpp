@@ -4,7 +4,7 @@
 
 #include <exception>
 
-namespace DummyConcurrency::Context {
+namespace NDummyConcurrency::NContext {
 
     struct ExceptionsContext {
         void SwitchTo(ExceptionsContext& /*target*/) {
@@ -13,4 +13,4 @@ namespace DummyConcurrency::Context {
         }
     };
 
-}  // namespace DummyConcurrency::Context
+}  // namespace NDummyConcurrency::NContext

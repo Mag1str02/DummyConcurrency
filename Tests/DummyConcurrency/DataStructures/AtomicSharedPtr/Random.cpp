@@ -8,7 +8,7 @@
 #include <twist/test/assert.hpp>
 #include <twist/test/lock_free.hpp>
 
-using namespace DummyConcurrency;  // NOLINT
+using namespace NDummyConcurrency;  // NOLINT
 
 static_assert(twist::build::IsolatedSim());
 

@@ -1,10 +1,10 @@
 #include "SpinLock.hpp"
 
-namespace DummyConcurrency::Synchronization::Thread {
+namespace NDummyConcurrency::NSynchronization::NThread {
 
     void SpinLock::Lock() {
         while (state_.exchange(1) == 1) {
-            ImplementationLayer::SpinWait spin_wait;
+            NImplementationLayer::SpinWait spin_wait;
             while (state_.load() == 1) {
                 spin_wait();
             }
@@ -33,4 +33,4 @@ namespace DummyConcurrency::Synchronization::Thread {
         Unlock();
     }
 
-}  // namespace DummyConcurrency::Synchronization::Thread
+}  // namespace NDummyConcurrency::NSynchronization::Thread

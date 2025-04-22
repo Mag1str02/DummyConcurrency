@@ -2,7 +2,7 @@
 
 #include "DummyConcurrency/Fiber/Core/Fiber.hpp"
 
-namespace DummyConcurrency::Fiber {
+namespace NDummyConcurrency::NFiber {
 
     void Suspend(IAwaiter& awaiter) {
         Fiber* current_fiber = Fiber::Self();
@@ -11,4 +11,4 @@ namespace DummyConcurrency::Fiber {
         current_fiber->Suspend(awaiter);
     }
 
-}  // namespace DummyConcurrency::Fiber
+}  // namespace NDummyConcurrency::NFiber

@@ -5,7 +5,7 @@
 #include <expected>
 #include <variant>
 
-namespace DummyConcurrency {
+namespace NDummyConcurrency::NResult {
 
     using Unit = std::monostate;
 
@@ -13,4 +13,4 @@ namespace DummyConcurrency {
     using Result = std::expected<T, Error>;
     using Status = Result<Unit>;
 
-}  // namespace DummyConcurrency
+}  // namespace NDummyConcurrency::NResult

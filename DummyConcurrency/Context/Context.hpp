@@ -7,7 +7,7 @@
 #include <DummyConcurrency/Context/Machine/Context.hpp>
 #include <DummyConcurrency/Context/Sanitizer/Context.hpp>
 
-namespace DummyConcurrency::Context {
+namespace NDummyConcurrency::NContext {
 
     // Execution Context =
     // 1) Machine context (registers) +
@@ -59,4 +59,4 @@ namespace DummyConcurrency::Context {
         ExceptionsContext exceptions_;
     };
 
-}  // namespace DummyConcurrency::Context
+}  // namespace NDummyConcurrency::NContext

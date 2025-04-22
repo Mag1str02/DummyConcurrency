@@ -2,9 +2,9 @@
 
 #include <functional>
 
-namespace DummyConcurrency::Future {
+namespace NDummyConcurrency::NFuture {
 
     template <typename T>
     using Callback = std::function<void(T)>;
 
-}  // namespace DummyConcurrency::Future
+}  // namespace NDummyConcurrency::NFuture

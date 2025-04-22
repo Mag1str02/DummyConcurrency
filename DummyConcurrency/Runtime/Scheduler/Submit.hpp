@@ -3,7 +3,7 @@
 #include "DummyConcurrency/Runtime/Scheduler/Scheduler.hpp"
 #include "DummyConcurrency/Runtime/Scheduler/Task.hpp"
 
-namespace DummyConcurrency::Runtime {
+namespace NDummyConcurrency::NRuntime {
 
     template <typename F>
     void Submit(IScheduler& scheduler, F function) {
@@ -23,4 +23,4 @@ namespace DummyConcurrency::Runtime {
         scheduler.Submit(new SubmitTask(std::move(function)));
     }
 
-}  // namespace DummyConcurrency::Runtime
+}  // namespace NDummyConcurrency::Runtime

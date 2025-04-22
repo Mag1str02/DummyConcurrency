@@ -3,7 +3,7 @@
 #include <DummyConcurrency/ImplementationLayer/ImplementationLayer.hpp>
 #include <DummyConcurrency/Utils/Assert.hpp>
 
-namespace DummyConcurrency {
+namespace NDummyConcurrency {
 
     template <typename T>
     class StampedPtr {
@@ -106,7 +106,7 @@ namespace DummyConcurrency {
         }
 
     private:
-        ImplementationLayer::Atomic<PackedStampedPtr<T>> packed_ptr_ = 0;
+        NImplementationLayer::Atomic<PackedStampedPtr<T>> packed_ptr_ = 0;
     };
 
 }  // namespace DummyConcurrency

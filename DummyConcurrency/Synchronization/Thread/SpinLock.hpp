@@ -2,7 +2,7 @@
 
 #include <DummyConcurrency/ImplementationLayer/ImplementationLayer.hpp>
 
-namespace DummyConcurrency::Synchronization::Thread {
+namespace NDummyConcurrency::NSynchronization::NThread {
 
     class SpinLock {
     public:
@@ -17,7 +17,7 @@ namespace DummyConcurrency::Synchronization::Thread {
         void unlock();    // NOLINT
 
     private:
-        ImplementationLayer::Atomic<uint32_t> state_ = 0;
+        NImplementationLayer::Atomic<uint32_t> state_ = 0;
     };
 
-}  // namespace DummyConcurrency::Synchronization::Thread
+}  // namespace NDummyConcurrency::NSynchronization::Thread

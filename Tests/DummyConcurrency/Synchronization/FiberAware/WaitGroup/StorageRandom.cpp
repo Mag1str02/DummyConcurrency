@@ -2,7 +2,7 @@
 
 #include <Testing/Twist.hpp>
 
-using namespace DummyConcurrency;  // NOLINT
+using namespace NDummyConcurrency;  // NOLINT
 
 TEST_SUITE(FiberSynchronizationWaitGroup_StorageRandom) {
     TWIST_RANDOMIZE(Storage, 5s) {

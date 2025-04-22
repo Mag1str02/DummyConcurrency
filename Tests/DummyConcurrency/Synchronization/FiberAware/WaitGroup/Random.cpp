@@ -7,7 +7,7 @@
 
 #include <array>
 
-using namespace DummyConcurrency;  // NOLINT
+using namespace NDummyConcurrency;  // NOLINT
 
 TEST_SUITE(FiberSynchronizationWaitGroup_Random) {
     TWIST_RANDOMIZE(OneWaiter, 5s) {

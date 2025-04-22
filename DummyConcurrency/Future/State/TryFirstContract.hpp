@@ -1,15 +1,15 @@
 #pragma once
 
-#include "DummyConcurrency/Future/State/ConsumerContract.hpp"
-#include "DummyConcurrency/Future/State/OneAllStateMachine.hpp"
+#include <DummyConcurrency/Future/Future.hpp>
+#include <DummyConcurrency/Future/State/ConsumerContract.hpp>
+#include <DummyConcurrency/Future/State/OneAllStateMachine.hpp>
+#include <DummyConcurrency/Result/Result.hpp>
+#include <DummyConcurrency/Utils/ManualLifetime.hpp>
 
-#include "DummyConcurrency/Future/Result/Result.hpp"
-#include "DummyConcurrency/Utils/ManualLifetime.hpp"
-
-namespace DummyConcurrency::Future::State {
+namespace NDummyConcurrency::NFuture::NState {
 
     template <typename T>
-    class TryFirstContract : public Runtime::ITask, public State::IConsumerContract<Result<T>> {
+    class TryFirstContract : public NRuntime::ITask, public NState::IConsumerContract<Result<T>> {
     public:
         static TryFirstContract* Create(uint32_t producer_count) { return new TryFirstContract(producer_count); }
 
@@ -31,7 +31,7 @@ namespace DummyConcurrency::Future::State {
                 delete this;
             }
         }
-        virtual void SetCallback(Callback<Result<T>> callback, Runtime::IScheduler& scheduler) override {
+        virtual void SetCallback(Callback<Result<T>> callback, NRuntime::IScheduler& scheduler) override {
             callback_.Construct(std::move(callback));
             scheduler_ = &scheduler;
             if (state_.Consume() == OneAllStateMachine::Result::Rendezvous) {
@@ -87,11 +87,11 @@ namespace DummyConcurrency::Future::State {
     private:
         OneAllStateMachine state_;
 
-        ImplementationLayer::Atomic<Node*> results_    = nullptr;
-        ImplementationLayer::Atomic<Node*> one_result_ = nullptr;
+        NImplementationLayer::Atomic<Node*> results_    = nullptr;
+        NImplementationLayer::Atomic<Node*> one_result_ = nullptr;
 
         ManualLifetime<Callback<Result<T>>> callback_;
-        Runtime::IScheduler*                scheduler_;
+        NRuntime::IScheduler*                scheduler_;
     };
 
-}  // namespace DummyConcurrency::Future::State
+}  // namespace NDummyConcurrency::NFuture::NState

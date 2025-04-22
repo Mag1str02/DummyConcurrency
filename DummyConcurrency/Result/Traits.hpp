@@ -2,7 +2,7 @@
 
 #include "Result.hpp"
 
-namespace DummyConcurrency::Traits {
+namespace NDummyConcurrency::NResult::NTraits {
 
     namespace Detail {
 
@@ -28,4 +28,4 @@ namespace DummyConcurrency::Traits {
     template <CResult Result>
     using ValueOf = typename Detail::ResultTraits<Result>::Type;
 
-}  // namespace DummyConcurrency::Traits
+}  // namespace NDummyConcurrency::NResult::NTraits

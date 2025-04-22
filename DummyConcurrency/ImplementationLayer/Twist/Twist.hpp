@@ -9,7 +9,7 @@
 #include <twist/ed/wait/futex.hpp>
 #include <twist/ed/wait/spin.hpp>
 
-namespace DummyConcurrency::ImplementationLayer {
+namespace NDummyConcurrency::NImplementationLayer {
 
     template <typename T> using Atomic = twist::ed::std::atomic<T>;
     using Thread                       = twist::ed::std::thread;
@@ -30,4 +30,4 @@ namespace DummyConcurrency::ImplementationLayer {
 
 #define STATIC_THREAD_LOCAL_PTR(type, name) TWISTED_STATIC_THREAD_LOCAL_PTR(type, name);
 
-}  // namespace DummyConcurrency::ImplementationLayer
+}  // namespace NDummyConcurrency::NImplementationLayer

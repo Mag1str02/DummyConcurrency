@@ -14,7 +14,7 @@
 #include <atomic>
 #include <random>
 
-using namespace DummyConcurrency;  // NOLINT
+using namespace NDummyConcurrency;  // NOLINT
 
 //////////////////////////////////////////////////////////////////////
 

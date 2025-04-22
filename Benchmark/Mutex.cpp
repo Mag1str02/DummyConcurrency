@@ -5,7 +5,7 @@
 #include <unistd.h>
 #include <thread>
 
-using namespace DummyConcurrency;
+using namespace NDummyConcurrency;
 using namespace std::chrono_literals;
 
 int main() {

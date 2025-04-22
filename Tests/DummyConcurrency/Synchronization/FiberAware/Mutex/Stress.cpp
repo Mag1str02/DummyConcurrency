@@ -8,7 +8,7 @@
 
 #include <fmt/core.h>
 
-using namespace DummyConcurrency;  // NOLINT
+using namespace NDummyConcurrency;  // NOLINT
 
 TEST_SUITE(FiberSynchronizationMutex_Stress) {
     TWIST_STRESS_TEST(Iter, 5s) {

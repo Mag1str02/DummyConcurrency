@@ -2,7 +2,7 @@
 
 #include <DummyConcurrency/Synchronization/Awaiters/DoAwait.hpp>
 
-namespace DummyConcurrency::Synchronization::FiberAware {
+namespace NDummyConcurrency::NSynchronization::NFiberAware {
 
     void Event::Wait() {
         // Awoid context switch if already fired
@@ -30,4 +30,4 @@ namespace DummyConcurrency::Synchronization::FiberAware {
         }
     }
 
-}  // namespace DummyConcurrency::Synchronization::FiberAware
+}  // namespace NDummyConcurrency::NSynchronization::FiberAware

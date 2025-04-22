@@ -7,7 +7,7 @@
 #include <thread>
 #include <vector>
 
-using namespace DummyConcurrency;  // NOLINT
+using namespace NDummyConcurrency;  // NOLINT
 
 TEST_SUITE(ThreadSynchronizationWaitGroup_Unit) {
     SIMPLE_TEST(JustWorks) {

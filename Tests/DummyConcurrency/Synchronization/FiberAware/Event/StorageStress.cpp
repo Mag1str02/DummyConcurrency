@@ -5,7 +5,7 @@
 
 #include <fmt/core.h>
 
-using namespace DummyConcurrency;  // NOLINT
+using namespace NDummyConcurrency;  // NOLINT
 
 TEST_SUITE(FiberSynchronizationEvent_StorageStress) {
     TWIST_STRESS_TEST(Storage, 5s) {
@@ -23,7 +23,7 @@ TEST_SUITE(FiberSynchronizationEvent_StorageStress) {
 
             iter.Add(1);
 
-            Runtime::Submit(scheduler, [&iter, &scheduler] {
+            NRuntime::Submit(scheduler, [&iter, &scheduler] {
                 auto* event = new FEvent{};
 
                 Go(scheduler, [event] { event->Fire(); });

@@ -2,7 +2,7 @@
 
 #include <wheels/test/framework.hpp>
 
-using namespace DummyConcurrency;  // NOLINT
+using namespace NDummyConcurrency;  // NOLINT
 
 TEST_SUITE(FiberSynchronizationEvent_Unit) {
     SIMPLE_TEST(OneWaiter) {

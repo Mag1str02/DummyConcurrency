@@ -3,11 +3,11 @@
 #include <DummyConcurrency/Context/Context.hpp>
 #include <DummyConcurrency/ImplementationLayer/ImplementationLayer.hpp>
 
-namespace DummyConcurrency::Fiber {
+namespace NDummyConcurrency::NFiber {
 
-    class ICoroutine : protected Context::ITrampoline {
+    class ICoroutine : protected NContext::ITrampoline {
     public:
-        explicit ICoroutine(Context::StackView view);
+        explicit ICoroutine(NContext::StackView view);
         virtual ~ICoroutine() = default;
 
         ICoroutine(const ICoroutine& other)            = delete;
@@ -24,11 +24,11 @@ namespace DummyConcurrency::Fiber {
     private:
         bool completed_ = false;
 
-        Context::ExecutionContext  coro_context_;
-        Context::ExecutionContext* caller_context_ = nullptr;
+        NContext::ExecutionContext  coro_context_;
+        NContext::ExecutionContext* caller_context_ = nullptr;
 
-        ImplementationLayer::Fiber        impl_fiber_;
-        ImplementationLayer::FiberHandle* impl_caller_fiber_ = nullptr;
-    };  // namespace DummyConcurrency::Fiber
+        NImplementationLayer::Fiber        impl_fiber_;
+        NImplementationLayer::FiberHandle* impl_caller_fiber_ = nullptr;
+    };  // namespace NDummyConcurrency::NFiber
 
-}  // namespace DummyConcurrency::Fiber
+}  // namespace NDummyConcurrency::NFiber

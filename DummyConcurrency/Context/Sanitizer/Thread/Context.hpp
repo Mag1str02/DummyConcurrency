@@ -4,7 +4,7 @@
 
 #include <sanitizer/tsan_interface.h>
 
-namespace DummyConcurrency::Context {
+namespace NDummyConcurrency::NContext {
 
     struct SanitizerContext {
         void Setup(StackView /*stack*/) { fiber_ = __tsan_create_fiber(0); }
@@ -39,4 +39,4 @@ namespace DummyConcurrency::Context {
         SanitizerContext* exit_from_{nullptr};
     };
 
-}  // namespace DummyConcurrency::Context
+}  // namespace NDummyConcurrency::NContext

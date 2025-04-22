@@ -1,8 +1,4 @@
-
-#include <DummyConcurrency/Future/Combinators.hpp>
-#include <DummyConcurrency/Future/Future.hpp>
-#include <DummyConcurrency/Future/Make.hpp>
-#include <DummyConcurrency/Future/Terminate.hpp>
+#include <DummyConcurrency/Syntax/Syntax.hpp>
 #include <DummyConcurrency/Runtime/Scheduler/RunLoop.hpp>
 #include <DummyConcurrency/Runtime/Scheduler/ThreadPool.hpp>
 
@@ -20,7 +16,7 @@
 #include <atomic>
 #include <chrono>
 
-using namespace DummyConcurrency;
+using namespace NDummyConcurrency;
 using namespace std::chrono_literals;
 
 //////////////////////////////////////////////////////////////////////
@@ -36,12 +32,12 @@ void StressTestContract() {
     int                 iter = 0;
 
     while (budget) {
-        auto [f, p] = Future::Contract<int>();
+        auto [f, p] = NFuture::Contract<int>();
 
         twist::ed::std::thread producer([p = std::move(p), iter]() mutable { std::move(p).Set((int)iter); });
 
         twist::ed::std::thread consumer([f = std::move(f), iter]() mutable {
-            int v = Future::Get(std::move(f));
+            int v = NFuture::Get(std::move(f));
             ASSERT_EQ(v, iter);
         });
 
@@ -57,7 +53,7 @@ void StressTestContract() {
 //////////////////////////////////////////////////////////////////////
 
 void StressTestPipeline() {
-    Runtime::ThreadPool pool{4};
+    NRuntime::ThreadPool pool{4};
     pool.Start();
 
     size_t iter = 0;
@@ -71,19 +67,19 @@ void StressTestPipeline() {
         std::atomic_size_t counter2 = 0;
         std::atomic_size_t counter3 = 0;
 
-        std::vector<Future::Future<Unit>> futs;
+        std::vector<Future<Unit>> futs;
 
         for (size_t j = 0; j < pipelines; ++j) {
-            auto f = Future::Submit(pool,
+            auto f = NFuture::Submit(pool,
                                     [&]() {
                                         ++counter1;
                                         return Unit();
                                     }) |
-                     Future::Via(pool) | Future::Map([&](Unit) {
+                     NFuture::Via(pool) | NFuture::Map([&](Unit) {
                          ++counter2;
                          return Unit();
                      }) |
-                     Future::Map([&](Unit) {
+                     NFuture::Map([&](Unit) {
                          ++counter3;
                          return Unit();
                      });
@@ -92,7 +88,7 @@ void StressTestPipeline() {
         }
 
         for (auto&& f : futs) {
-            Future::Get(std::move(f));
+            NFuture::Get(std::move(f));
         }
 
         ASSERT_EQ(counter1.load(), pipelines);
@@ -110,7 +106,7 @@ void StressTestPipeline() {
 //////////////////////////////////////////////////////////////////////
 
 void StressTestFirst() {
-    Runtime::ThreadPool pool{4};
+    NRuntime::ThreadPool pool{4};
     pool.Start();
 
     size_t iter = 0;
@@ -122,29 +118,29 @@ void StressTestFirst() {
 
         std::atomic<size_t> done{0};
 
-        auto f = Future::Submit(pool, [&, i] -> Result<int> {
+        auto f = NFuture::Submit(pool, [&, i] -> Result<int> {
             wheels::Defer defer([&done] { ++done; });
 
             if (i % 3 == 0) {
-                return ResultError(TimeoutError());
+                return NResult::Failure(TimeoutError());
             } else {
-                return ResultOk(1);
+                return NResult::Ok(1);
             }
         });
 
-        auto g = Future::Submit(pool, [&, i] -> Result<int> {
+        auto g = NFuture::Submit(pool, [&, i] -> Result<int> {
             wheels::Defer defer([&done] { ++done; });
 
             if (i % 4 == 0) {
-                return ResultError(TimeoutError());
+                return NResult::Failure(TimeoutError());
             } else {
-                return ResultOk(2);
+                return NResult::Ok(2);
             }
         });
 
-        auto first = Future::FirstOk(std::move(f), std::move(g));
+        auto first = NFuture::FirstOk(std::move(f), std::move(g));
 
-        auto r = Future::Get(std::move(first));
+        auto r = NFuture::Get(std::move(first));
 
         if (i % 12 != 0) {
             ASSERT_TRUE(r);
@@ -169,7 +165,7 @@ void StressTestFirst() {
 //////////////////////////////////////////////////////////////////////
 
 void StressTestBoth() {
-    Runtime::ThreadPool pool{4};
+    NRuntime::ThreadPool pool{4};
     pool.Start();
 
     size_t iter = 0;
@@ -179,25 +175,25 @@ void StressTestBoth() {
     while (budget) {
         size_t i = iter;
 
-        auto f = Future::Submit(pool, [i] -> Result<int> {
+        auto f = NFuture::Submit(pool, [i] -> Result<int> {
             if (i % 7 == 5) {
-                return ResultError(TimeoutError());
+                return NResult::Failure(TimeoutError());
             } else {
-                return ResultOk(1);
+                return NResult::Ok(1);
             }
         });
 
-        auto g = Future::Submit(pool, [i]() -> Result<int> {
+        auto g = NFuture::Submit(pool, [i]() -> Result<int> {
             if (i % 7 == 6) {
-                return ResultError(TimeoutError());
+                return NResult::Failure(TimeoutError());
             } else {
-                return ResultOk(2);
+                return NResult::Ok(2);
             }
         });
 
-        auto both = Future::BothOk(std::move(f), std::move(g));
+        auto both = NFuture::BothOk(std::move(f), std::move(g));
 
-        auto r = Future::Get(std::move(both));
+        auto r = NFuture::Get(std::move(both));
 
         if (i % 7 < 5) {
             auto [x, y] = *r;

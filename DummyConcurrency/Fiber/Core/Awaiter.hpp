@@ -4,7 +4,7 @@
 
 #include <DummyConcurrency/Utils/Assert.hpp>
 
-namespace DummyConcurrency::Fiber {
+namespace NDummyConcurrency::NFiber {
 
     class IAwaiter {
     public:
@@ -33,4 +33,4 @@ namespace DummyConcurrency::Fiber {
         Handle handle_;
     };
 
-}  // namespace DummyConcurrency::Fiber
+}  // namespace NDummyConcurrency::NFiber

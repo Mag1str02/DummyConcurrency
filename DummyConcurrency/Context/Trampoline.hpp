@@ -1,6 +1,6 @@
 #pragma once
 
-namespace DummyConcurrency::Context {
+namespace NDummyConcurrency::NContext {
 
     // All runnable entities (coroutines, fibers, generators)
     // should implement ITrampoline
@@ -13,4 +13,4 @@ namespace DummyConcurrency::Context {
         ~ITrampoline() = default;
     };
 
-}  // namespace DummyConcurrency::Context
+}  // namespace NDummyConcurrency::NContext

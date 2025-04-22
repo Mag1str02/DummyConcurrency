@@ -2,7 +2,7 @@
 
 #include <DummyConcurrency/Context/StackView.hpp>
 
-namespace DummyConcurrency::Context {
+namespace NDummyConcurrency::NContext {
 
     struct SanitizerContext {
         void Setup(StackView) {
@@ -26,4 +26,4 @@ namespace DummyConcurrency::Context {
         }
     };
 
-}  // namespace DummyConcurrency::Context
+}  // namespace NDummyConcurrency::NContext

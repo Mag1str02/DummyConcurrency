@@ -2,7 +2,7 @@
 
 #include <DummyConcurrency/ImplementationLayer/ImplementationLayer.hpp>
 
-namespace DummyConcurrency::Future::State {
+namespace NDummyConcurrency::NFuture::NState {
 
     namespace {
 
@@ -91,8 +91,8 @@ namespace DummyConcurrency::Future::State {
         bool IsReady() const { return HasProduced(state_.load(), producer_count_); }
 
     private:
-        ImplementationLayer::Atomic<uint32_t> state_ = 0;
-        const uint32_t                        producer_count_;
+        NImplementationLayer::Atomic<uint32_t> state_ = 0;
+        const uint32_t                         producer_count_;
     };
 
-}  // namespace DummyConcurrency::Future::State
+}  // namespace NDummyConcurrency::NFuture::NState

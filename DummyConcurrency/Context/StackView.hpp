@@ -2,11 +2,11 @@
 
 #include <cstddef>
 
-namespace DummyConcurrency::Context {
+namespace NDummyConcurrency::NContext {
 
     struct StackView {
         std::byte* Bottom;
         std::byte* Top;
     };
 
-}  // namespace DummyConcurrency::Context
+}  // namespace NDummyConcurrency::NContext

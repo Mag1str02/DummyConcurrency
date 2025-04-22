@@ -4,7 +4,7 @@
 
 #include <sanitizer/asan_interface.h>
 
-namespace DummyConcurrency::Context {
+namespace NDummyConcurrency::NContext {
 
     struct SanitizerContext {
         void Setup(StackView stack) {
@@ -35,4 +35,4 @@ namespace DummyConcurrency::Context {
         SanitizerContext* from_;
     };
 
-}  // namespace DummyConcurrency::Context
+}  // namespace NDummyConcurrency::NContext

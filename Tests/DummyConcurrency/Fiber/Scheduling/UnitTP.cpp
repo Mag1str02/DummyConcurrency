@@ -7,7 +7,7 @@
 #include <thread>
 
 using namespace std::chrono_literals;  // NOLINT
-using namespace DummyConcurrency;      // NOLINT
+using namespace NDummyConcurrency;      // NOLINT
 
 void ExpectScheduler(ThreadPool& pool) {
     ASSERT_EQ(ThreadPool::Current(), &pool);

@@ -11,7 +11,7 @@
 
 //////////////////////////////////////////////////////////////////////
 
-namespace DummyConcurrency::DataStructures {
+namespace NDummyConcurrency::NDataStructures {
 
     namespace Detail {
 
@@ -54,7 +54,7 @@ namespace DummyConcurrency::DataStructures {
             static_assert(sizeof(State) == sizeof(uint64_t));
 
         private:
-            ImplementationLayer::Atomic<uint64_t> state_ = 0;
+            NImplementationLayer::Atomic<uint64_t> state_ = 0;
             T                                     value_;
         };
     }  // namespace Detail
@@ -220,4 +220,4 @@ namespace DummyConcurrency::DataStructures {
         AtomicStampedPtr<Container> ptr_;
     };
 
-}  // namespace DummyConcurrency::DataStructures
+}  // namespace NDummyConcurrency::NDataStructures

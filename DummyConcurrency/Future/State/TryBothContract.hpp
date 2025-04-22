@@ -1,15 +1,15 @@
 #pragma once
 
-#include "DummyConcurrency/Future/State/ConsumerContract.hpp"
-#include "DummyConcurrency/Future/State/OneAllStateMachine.hpp"
+#include <DummyConcurrency/Future/Future.hpp>
+#include <DummyConcurrency/Future/State/ConsumerContract.hpp>
+#include <DummyConcurrency/Future/State/OneAllStateMachine.hpp>
+#include <DummyConcurrency/Result/Make.hpp>
+#include <DummyConcurrency/Utils/ManualLifetime.hpp>
 
-#include "DummyConcurrency/Future/Result/Make.hpp"
-#include "DummyConcurrency/Utils/ManualLifetime.hpp"
-
-namespace DummyConcurrency::Future::State {
+namespace NDummyConcurrency::NFuture::NState {
 
     template <typename A, typename B>
-    class TryBothContract : public Runtime::ITask, public State::IConsumerContract<Result<std::tuple<A, B>>> {
+    class TryBothContract : public NRuntime::ITask, public NState::IConsumerContract<Result<std::tuple<A, B>>> {
     public:
         static TryBothContract* Create() { return new TryBothContract(); }
 
@@ -50,7 +50,7 @@ namespace DummyConcurrency::Future::State {
             }
         }
 
-        virtual void SetCallback(Callback<Result<std::tuple<A, B>>> callback, Runtime::IScheduler& scheduler) override {
+        virtual void SetCallback(Callback<Result<std::tuple<A, B>>> callback, NRuntime::IScheduler& scheduler) override {
             callback_.Construct(std::move(callback));
             scheduler_ = &scheduler;
             if (state_.Consume() == OneAllStateMachine::Result::Rendezvous) {
@@ -62,7 +62,7 @@ namespace DummyConcurrency::Future::State {
         virtual void Run() noexcept override {
             auto error_result = error_result_.load();
             if (error_result != 0) {
-                (*callback_.Get())(ResultError(error_result == 1 ? value_a_->error() : value_b_->error()));
+                (*callback_.Get())(NResult::Failure(error_result == 1 ? value_a_->error() : value_b_->error()));
             } else {
                 (*callback_.Get())(std::tuple<A, B>(std::move(value_a_->value()), std::move(value_b_->value())));
             }
@@ -79,12 +79,12 @@ namespace DummyConcurrency::Future::State {
     private:
         OneAllStateMachine state_;
 
-        ManualLifetime<Result<A>>             value_a_;
-        ManualLifetime<Result<B>>             value_b_;
-        ImplementationLayer::Atomic<uint32_t> error_result_ = 0;  // kill me...
+        ManualLifetime<Result<A>>              value_a_;
+        ManualLifetime<Result<B>>              value_b_;
+        NImplementationLayer::Atomic<uint32_t> error_result_ = 0;  // kill me...
 
         ManualLifetime<Callback<Result<std::tuple<A, B>>>> callback_;
-        Runtime::IScheduler*                               scheduler_;
+        NRuntime::IScheduler*                              scheduler_;
     };
 
-}  // namespace DummyConcurrency::Future::State
+}  // namespace NDummyConcurrency::NFuture::NState

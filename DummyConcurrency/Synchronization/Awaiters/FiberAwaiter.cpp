@@ -3,12 +3,12 @@
 #include <DummyConcurrency/Fiber/Core/Fiber.hpp>
 #include <DummyConcurrency/ImplementationLayer/ImplementationLayer.hpp>
 
-namespace DummyConcurrency::Synchronization {
+namespace NDummyConcurrency::NSynchronization {
 
-    static thread_local Fiber::Handle gSwitchFiberBuffer;
+    static thread_local NFiber::Handle gSwitchFiberBuffer;
 
     void IFiberAwaiter::Wake() noexcept {
-        if (Fiber::Fiber::Self() != nullptr) {
+        if (NFiber::Fiber::Self() != nullptr) {
             Switch(gSwitchFiberBuffer);
         } else {
             Schedule();
@@ -20,4 +20,4 @@ namespace DummyConcurrency::Synchronization {
         }
     }
 
-}  // namespace DummyConcurrency::Synchronization
+}  // namespace NDummyConcurrency::NSynchronization

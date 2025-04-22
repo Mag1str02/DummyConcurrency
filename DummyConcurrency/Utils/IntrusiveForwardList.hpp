@@ -4,7 +4,7 @@
 
 #include <stddef.h>
 
-namespace DummyConcurrency {
+namespace NDummyConcurrency {
 
     struct IntrusiveForwardListNodeDefaultTag {};
 
@@ -143,4 +143,4 @@ namespace DummyConcurrency {
         size_t size_ = 0;
     };
 
-}  // namespace DummyConcurrency
+}  // namespace NDummyConcurrency

@@ -2,7 +2,7 @@
 
 #include <wheels/test/framework.hpp>
 
-using namespace DummyConcurrency;      // NOLINT
+using namespace NDummyConcurrency;      // NOLINT
 using namespace std::chrono_literals;  // NOLINT
 
 TEST_SUITE(FiberSynchronizationMutex_UnitTP) {

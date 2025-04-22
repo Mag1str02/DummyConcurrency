@@ -6,7 +6,7 @@
 
 static_assert(twist::build::IsolatedSim());
 
-using namespace DummyConcurrency;  // NOLINT
+using namespace NDummyConcurrency;  // NOLINT
 
 TEST_SUITE(FiberScheduling_SyncRL) {
     SIMPLE_TEST(NoSynchronization) {

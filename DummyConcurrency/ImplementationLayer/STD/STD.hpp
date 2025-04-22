@@ -9,14 +9,14 @@
 #include <mutex>
 #include <thread>
 
-namespace DummyConcurrency::ImplementationLayer {
+namespace NDummyConcurrency::NImplementationLayer {
 
     template <typename T> using Atomic = std::atomic<T>;
     using Thread                       = std::thread;
     using Mutex                        = std::mutex;
     using ConditionVariable            = std::condition_variable;
     using SpinWait                     = STD::SpinWait;
-    using Fiber                        = STD::Fiber;
+    using Fiber                        = STD::NFiber;
     using FiberHandle                  = STD::FiberHandle;
     using STD::NewFiber;
     using STD::SwitchToFiber;
@@ -30,4 +30,4 @@ namespace DummyConcurrency::ImplementationLayer {
 
 #define STATIC_THREAD_LOCAL_PTR(type, name) static thread_local type* name = nullptr;
 
-}  // namespace DummyConcurrency::ImplementationLayer
+}  // namespace NDummyConcurrency::NImplementationLayer

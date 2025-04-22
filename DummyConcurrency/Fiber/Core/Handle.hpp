@@ -2,7 +2,7 @@
 
 #include "Forward.hpp"
 
-namespace DummyConcurrency::Fiber {
+namespace NDummyConcurrency::NFiber {
 
     // Opaque non-owning handle to the _suspended_ fiber
 
@@ -43,4 +43,4 @@ namespace DummyConcurrency::Fiber {
         Fiber* fiber_ = nullptr;
     };
 
-}  // namespace DummyConcurrency::Fiber
+}  // namespace NDummyConcurrency::NFiber

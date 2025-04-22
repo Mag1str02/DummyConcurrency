@@ -2,7 +2,7 @@
 
 #include <cassert>
 
-namespace DummyConcurrency::Runtime {
+namespace NDummyConcurrency::NRuntime {
 
     STATIC_THREAD_LOCAL_PTR(ThreadPool, gCurrentThreadPool);
 
@@ -51,4 +51,4 @@ namespace DummyConcurrency::Runtime {
         } while (true);
     }
 
-}  // namespace DummyConcurrency::Runtime
+}  // namespace NDummyConcurrency::Runtime

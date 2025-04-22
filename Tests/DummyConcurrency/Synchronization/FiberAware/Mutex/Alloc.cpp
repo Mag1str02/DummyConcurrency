@@ -13,7 +13,7 @@
 
 static_assert(twist::build::IsolatedSim());
 
-using namespace DummyConcurrency;  // NOLINT
+using namespace NDummyConcurrency;  // NOLINT
 
 TEST_SUITE(FiberSynchronizationMutex_Alloc) {
     TWIST_RANDOMIZE(NoAllocations, 10s) {

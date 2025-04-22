@@ -3,7 +3,7 @@
 #include "DummyConcurrency/Runtime/Scheduler/Scheduler.hpp"
 #include "DummyConcurrency/Runtime/Scheduler/Task.hpp"
 
-namespace DummyConcurrency::Runtime {
+namespace NDummyConcurrency::NRuntime {
 
     // Single-threaded task queue
 
@@ -38,4 +38,4 @@ namespace DummyConcurrency::Runtime {
         IntrusiveForwardList<ITask> queue_;
     };
 
-}  // namespace DummyConcurrency::Runtime
+}  // namespace NDummyConcurrency::Runtime

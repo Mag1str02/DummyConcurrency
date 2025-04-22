@@ -6,7 +6,7 @@
 
 static_assert(twist::build::IsolatedSim());
 
-using namespace DummyConcurrency;  // NOLINT
+using namespace NDummyConcurrency;  // NOLINT
 
 TEST_SUITE(SchedulingRunLoop_Sane) {
     SIMPLE_TEST(NoSynchronization) {

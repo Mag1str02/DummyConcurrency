@@ -4,7 +4,7 @@
 
 #include <span>
 
-namespace DummyConcurrency::ImplementationLayer::STD {
+namespace NDummyConcurrency::NImplementationLayer::STD {
 
     struct Fiber;
     struct FiberHandle;
@@ -31,4 +31,4 @@ namespace DummyConcurrency::ImplementationLayer::STD {
         return handle;
     }
 
-}  // namespace DummyConcurrency::ImplementationLayer::STD
+}  // namespace NDummyConcurrency::NImplementationLayer::STD

@@ -4,9 +4,9 @@
 
 #include <unistd.h>
 
-using namespace DummyConcurrency;
+using namespace NDummyConcurrency;
 
-class TestTask : public Runtime::ITask {
+class TestTask : public NRuntime::ITask {
 public:
     virtual void Run() noexcept override {
         for (uint32_t i = 0; i < 100; ++i) {}

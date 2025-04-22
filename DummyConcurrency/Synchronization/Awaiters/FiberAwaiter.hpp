@@ -4,13 +4,13 @@
 
 #include <DummyConcurrency/Fiber/Core/Awaiter.hpp>
 
-namespace DummyConcurrency::Synchronization {
+namespace NDummyConcurrency::NSynchronization {
 
-    class IFiberAwaiter : public Fiber::IAwaiter, public IAwaiter {
+    class IFiberAwaiter : public NFiber::IAwaiter, public IAwaiter {
     public:
         virtual void Wake() noexcept override final;
 
         void AfterSuspend();
     };
 
-}  // namespace DummyConcurrency::Synchronization
+}  // namespace NDummyConcurrency::Synchronization

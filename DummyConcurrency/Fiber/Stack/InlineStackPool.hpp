@@ -3,7 +3,7 @@
 #include "IStackPool.hpp"
 #include "Size.hpp"
 
-namespace DummyConcurrency::Fiber {
+namespace NDummyConcurrency::NFiber {
 
     template <uint64_t Size = SizeInBytes(StackSize::Medium)>
     IStackPool* InlineStackPool() {
@@ -17,4 +17,4 @@ namespace DummyConcurrency::Fiber {
         return &sPool;
     }
 
-}  // namespace DummyConcurrency::Fiber
+}  // namespace NDummyConcurrency::NFiber

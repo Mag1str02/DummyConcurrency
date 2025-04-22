@@ -2,7 +2,7 @@
 
 #include "Task.hpp"
 
-namespace DummyConcurrency::Runtime {
+namespace NDummyConcurrency::NRuntime {
 
     struct IScheduler {
         virtual ~IScheduler() = default;
@@ -10,4 +10,4 @@ namespace DummyConcurrency::Runtime {
         virtual void Submit(ITask*) = 0;
     };
 
-}  // namespace DummyConcurrency::Runtime
+}  // namespace NDummyConcurrency::Runtime

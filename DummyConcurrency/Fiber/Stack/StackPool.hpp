@@ -7,7 +7,7 @@
 #include <DummyConcurrency/ImplementationLayer/ImplementationLayer.hpp>
 #include <DummyConcurrency/Synchronization/Thread/SpinLock.hpp>
 
-namespace DummyConcurrency::Fiber {
+namespace NDummyConcurrency::NFiber {
 
     class StackPool : public IStackPool, public NonCopyable {
     public:
@@ -29,9 +29,9 @@ namespace DummyConcurrency::Fiber {
     private:
         const uint64_t stack_size_;
 
-        Synchronization::Thread::SpinLock     lock_;
+        NSynchronization::NThread::SpinLock     lock_;
         NewNode*                              stack_of_stack_ = nullptr;  // Hell yeah!
-        ImplementationLayer::Atomic<uint64_t> size_           = 0;
+        NImplementationLayer::Atomic<uint64_t> size_           = 0;
     };
 
-}  // namespace DummyConcurrency::Fiber
+}  // namespace NDummyConcurrency::NFiber

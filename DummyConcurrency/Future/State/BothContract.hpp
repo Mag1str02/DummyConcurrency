@@ -2,13 +2,12 @@
 
 #include "DummyConcurrency/Future/State/ConsumerContract.hpp"
 #include "DummyConcurrency/Future/State/OneAllStateMachine.hpp"
-
 #include "DummyConcurrency/Utils/ManualLifetime.hpp"
 
-namespace DummyConcurrency::Future::State {
+namespace NDummyConcurrency::NFuture::NState {
 
     template <typename A, typename B>
-    class BothContract : public Runtime::ITask, public State::IConsumerContract<std::tuple<A, B>> {
+    class BothContract : public NRuntime::ITask, public NState::IConsumerContract<std::tuple<A, B>> {
     public:
         static BothContract* Create() { return new BothContract(); }
 
@@ -35,7 +34,7 @@ namespace DummyConcurrency::Future::State {
             }
         }
 
-        virtual void SetCallback(Callback<std::tuple<A, B>> callback, Runtime::IScheduler& scheduler) override {
+        virtual void SetCallback(Callback<std::tuple<A, B>> callback, NRuntime::IScheduler& scheduler) override {
             callback_.Construct(std::move(callback));
             scheduler_ = &scheduler;
             if (state_.Consume() == OneAllStateMachine::Result::Rendezvous) {
@@ -64,7 +63,7 @@ namespace DummyConcurrency::Future::State {
         ManualLifetime<B> value_b_;
 
         ManualLifetime<Callback<std::tuple<A, B>>> callback_;
-        Runtime::IScheduler*                       scheduler_;
+        NRuntime::IScheduler*                      scheduler_;
     };
 
-}  // namespace DummyConcurrency::Future::State
+}  // namespace NDummyConcurrency::NFuture::NState

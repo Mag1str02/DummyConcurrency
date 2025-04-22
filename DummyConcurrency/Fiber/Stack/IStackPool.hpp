@@ -4,7 +4,7 @@
 
 #include <utility>
 
-namespace DummyConcurrency::Fiber {
+namespace NDummyConcurrency::NFiber {
     class LeasedStack;
 
     class IStackPool {
@@ -39,4 +39,4 @@ namespace DummyConcurrency::Fiber {
         IStackPool* pool_;
     };
 
-}  // namespace DummyConcurrency::Fiber
+}  // namespace NDummyConcurrency::NFiber

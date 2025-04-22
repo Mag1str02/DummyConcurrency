@@ -6,7 +6,7 @@
 #include <twist/ed/std/atomic.hpp>
 #include <twist/test/assert.hpp>
 
-using namespace DummyConcurrency;  // NOLINT
+using namespace NDummyConcurrency;  // NOLINT
 
 TEST_SUITE(SchedulingThreadPool_Random) {
     TWIST_RANDOMIZE(Group, 5s) {

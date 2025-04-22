@@ -6,7 +6,7 @@
 
 #include "DummyConcurrency/ImplementationLayer/ImplementationLayer.hpp"
 
-namespace DummyConcurrency::Fiber {
+namespace NDummyConcurrency::NFiber {
 
     STATIC_THREAD_LOCAL_PTR(Fiber, gCurrentFiber);
 
@@ -63,4 +63,4 @@ namespace DummyConcurrency::Fiber {
         scheduler_->Submit(this);
     }
 
-}  // namespace DummyConcurrency::Fiber
+}  // namespace NDummyConcurrency::NFiber

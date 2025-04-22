@@ -4,7 +4,7 @@
 #include "Forward.hpp"
 #include "Hint.hpp"
 
-namespace DummyConcurrency::Fiber {
+namespace NDummyConcurrency::NFiber {
 
     class Fiber : public ITask {
     public:
@@ -36,7 +36,7 @@ namespace DummyConcurrency::Fiber {
     Fiber* Fiber::Create(IScheduler& scheduler, F&& body, Hint hint) {
         class Coroutine : public ICoroutine {
         public:
-            explicit Coroutine(F&& body, Context::StackView view) : ICoroutine(view), body_(std::move(body)) {}
+            explicit Coroutine(F&& body, NContext::StackView view) : ICoroutine(view), body_(std::move(body)) {}
             virtual void Body() override { body_(); }
 
         private:
@@ -51,4 +51,4 @@ namespace DummyConcurrency::Fiber {
         return new (fiber_address) Fiber(&scheduler, coroutine, std::move(stack));
     }
 
-}  // namespace DummyConcurrency::Fiber
+}  // namespace NDummyConcurrency::NFiber

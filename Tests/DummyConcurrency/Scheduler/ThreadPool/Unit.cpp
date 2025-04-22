@@ -9,7 +9,7 @@
 #include <thread>
 
 using namespace std::chrono_literals;  // NOLINT
-using namespace DummyConcurrency;      // NOLINT
+using namespace NDummyConcurrency;      // NOLINT
 
 TEST_SUITE(SchedulingThreadPool_Unit) {
     SIMPLE_TEST(WaitTask) {

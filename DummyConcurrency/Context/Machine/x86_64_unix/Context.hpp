@@ -7,7 +7,7 @@ extern "C" {
 #include "Context.h"
 }
 
-namespace DummyConcurrency::Context {
+namespace NDummyConcurrency::NContext {
 
     // Target architecture: x86-64
 
@@ -23,4 +23,4 @@ namespace DummyConcurrency::Context {
         void* StackPointer() const noexcept { return rsp_; }
     };
 
-}  // namespace DummyConcurrency::Context
+}  // namespace NDummyConcurrency::NContext

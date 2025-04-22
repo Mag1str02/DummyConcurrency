@@ -3,7 +3,7 @@
 #include "DummyConcurrency/Fiber/Core/Awaiter.hpp"
 #include "DummyConcurrency/Fiber/Core/Fiber.hpp"
 
-namespace DummyConcurrency::Fiber {
+namespace NDummyConcurrency::NFiber {
 
     struct YieldAwaiter : public IAwaiter {
         virtual void OnSuspend() noexcept override { Schedule(); }
@@ -17,4 +17,4 @@ namespace DummyConcurrency::Fiber {
         current_fiber->Suspend(awaiter);
     }
 
-}  // namespace DummyConcurrency::Fiber
+}  // namespace NDummyConcurrency::NFiber

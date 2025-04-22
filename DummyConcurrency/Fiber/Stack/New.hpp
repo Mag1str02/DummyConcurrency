@@ -5,7 +5,7 @@
 
 #include <cstdint>
 
-namespace DummyConcurrency::Fiber {
+namespace NDummyConcurrency::NFiber {
 
     // NewStack = heap allocation view new char[size]
 
@@ -30,7 +30,7 @@ namespace DummyConcurrency::Fiber {
         void* Bottom() const { return start_; }
         void* Top() const { return start_ + current_size_; }
 
-        Context::StackView View() { return {start_, start_ + current_size_}; }
+        NContext::StackView View() { return {start_, start_ + current_size_}; }
         void               Reset() { current_size_ = size_; }
 
         template <typename T>
@@ -49,4 +49,4 @@ namespace DummyConcurrency::Fiber {
         uint64_t   current_size_;
     };
 
-}  // namespace DummyConcurrency::Fiber
+}  // namespace NDummyConcurrency::NFiber

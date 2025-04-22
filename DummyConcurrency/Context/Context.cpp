@@ -2,7 +2,7 @@
 
 #include <cstdlib>
 
-namespace DummyConcurrency::Context {
+namespace NDummyConcurrency::NContext {
 
     ExecutionContext::ExecutionContext() {}
 
@@ -46,4 +46,4 @@ namespace DummyConcurrency::Context {
         user_trampoline_->Run();
     }
 
-}  // namespace DummyConcurrency::Context
+}  // namespace NDummyConcurrency::NContext

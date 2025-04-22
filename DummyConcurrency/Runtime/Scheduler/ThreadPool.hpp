@@ -1,15 +1,14 @@
 #pragma once
 
-#include "IntrusiveQueue.hpp"
-
-#include "DummyConcurrency/ImplementationLayer/ImplementationLayer.hpp"
-#include "DummyConcurrency/Runtime/Scheduler/Scheduler.hpp"
-#include "DummyConcurrency/Runtime/Scheduler/Task.hpp"
+#include <DummyConcurrency/DataStructures/IntrusiveUnboundedBlockingQueue.hpp>
+#include <DummyConcurrency/ImplementationLayer/ImplementationLayer.hpp>
+#include <DummyConcurrency/Runtime/Scheduler/Scheduler.hpp>
+#include <DummyConcurrency/Runtime/Scheduler/Task.hpp>
 
 #include <vector>
 
 // Fixed-size pool of worker threads
-namespace DummyConcurrency::Runtime {
+namespace NDummyConcurrency::NRuntime {
 
     class ThreadPool : public IScheduler {
     public:
@@ -33,12 +32,13 @@ namespace DummyConcurrency::Runtime {
         void Stop();
 
     private:
+        using Queue = NDataStructures::IntrusiveUnboundedBlockingQueue<ITask>;
         static void Worker(ThreadPool* current_thread_pool);
 
-        IntrusiveUnboundedBlockingQueue<ITask>   task_queue_;
-        std::vector<ImplementationLayer::Thread> workers_;
+        Queue                                    task_queue_;
+        std::vector<NImplementationLayer::Thread> workers_;
         uint32_t                                 workers_amount_;
         bool                                     stopped_ = false;
     };
 
-}  // namespace DummyConcurrency::Runtime
+}  // namespace NDummyConcurrency::NRuntime

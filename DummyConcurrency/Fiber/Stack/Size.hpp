@@ -2,7 +2,7 @@
 
 #include <cstdint>
 
-namespace DummyConcurrency::Fiber {
+namespace NDummyConcurrency::NFiber {
 
     constexpr uint64_t operator""_GB(unsigned long long x) {
         return 1024ULL * 1024ULL * 1024ULL * x;
@@ -30,4 +30,4 @@ namespace DummyConcurrency::Fiber {
         }
     }
 
-}  // namespace DummyConcurrency::Fiber
+}  // namespace NDummyConcurrency::NFiber

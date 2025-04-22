@@ -8,7 +8,7 @@
 
 #include <fmt/core.h>
 
-using namespace DummyConcurrency;  // NOLINT
+using namespace NDummyConcurrency;  // NOLINT
 
 TEST_SUITE(FiberSynchronizationEvent_Stress) {
     TWIST_STRESS_TEST(MessagePassing, 5s) {
@@ -29,7 +29,7 @@ TEST_SUITE(FiberSynchronizationEvent_Stress) {
 
             iter.Add(1);
 
-            Runtime::Submit(scheduler, [&] {
+            NRuntime::Submit(scheduler, [&] {
                 event.Wait();
 
                 int d = data.Read();

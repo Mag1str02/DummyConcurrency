@@ -1,6 +1,6 @@
 #include <DummyConcurrency/Context/Machine/ucontext/Context.hpp>
 
-namespace DummyConcurrency::Context {
+namespace NDummyConcurrency::NContext {
 
     /*
      * Workaround for legacy `ucontext` API:
@@ -63,4 +63,4 @@ namespace DummyConcurrency::Context {
         swapcontext(&context, &target.context);
     }
 
-}  // namespace DummyConcurrency::Context
+}  // namespace NDummyConcurrency::NContext

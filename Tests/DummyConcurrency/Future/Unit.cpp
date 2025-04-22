@@ -1,21 +1,17 @@
 
-#include <DummyConcurrency/Future/Combinators.hpp>
-#include <DummyConcurrency/Future/Future.hpp>
-#include <DummyConcurrency/Future/Make.hpp>
-#include <DummyConcurrency/Future/Terminate.hpp>
 #include <DummyConcurrency/Runtime/Scheduler/RunLoop.hpp>
 #include <DummyConcurrency/Runtime/Scheduler/ThreadPool.hpp>
+#include <DummyConcurrency/Syntax/Syntax.hpp>
 
 #include <wheels/test/framework.hpp>
 #include <wheels/test/util/cpu_timer.hpp>
 
 #include <atomic>
-#include <chrono>
 #include <string>
 #include <thread>
 #include <tuple>
 
-using namespace DummyConcurrency;
+using namespace NDummyConcurrency;
 
 using namespace std::chrono_literals;
 
@@ -40,62 +36,62 @@ struct MoveOnly {
 };
 
 struct NonDefaultConstructible {
-    NonDefaultConstructible(int) {};
+    NonDefaultConstructible(int) {};  // NOLINT
 };
 
 TEST_SUITE(Futures) {
     SIMPLE_TEST(ContractValue) {
-        auto [f, p] = Future::Contract<std::string>();
+        auto [f, p] = NFuture::Contract<std::string>();
 
         std::move(p).Set("Hi");
-        std::string s = Future::Get(std::move(f));
+        std::string s = NFuture::Get(std::move(f));
 
         ASSERT_EQ(s, "Hi");
     }
 
     SIMPLE_TEST(ContractDetach) {
-        auto [f, p] = Future::Contract<int>();
+        auto [f, p] = NFuture::Contract<int>();
 
-        std::move(f) | Future::Detach();
+        std::move(f) | NFuture::Detach();
         std::move(p).Set(1);
     }
 
     SIMPLE_TEST(ContractMoveOnlyValue) {
-        auto [f, p] = Future::Contract<MoveOnly>();
+        auto [f, p] = NFuture::Contract<MoveOnly>();
 
         std::move(p).Set(MoveOnly{});
-        auto v = Future::Get(std::move(f));
+        auto v = NFuture::Get(std::move(f));
 
         WHEELS_UNUSED(v);
     }
 
     SIMPLE_TEST(ContractNonDefaultConstructibleValue) {
-        auto [f, p] = Future::Contract<NonDefaultConstructible>();
+        auto [f, p] = NFuture::Contract<NonDefaultConstructible>();
 
         std::move(p).Set({128});
-        Future::Get(std::move(f));
+        NFuture::Get(std::move(f));
     }
 
     SIMPLE_TEST(Value) {
-        auto f = Future::Value(std::string("Hello"));
-        auto s = Future::Get(std::move(f));
+        auto f = NFuture::Value(std::string("Hello"));
+        auto s = NFuture::Get(std::move(f));
 
         ASSERT_EQ(s, "Hello");
     }
 
     SIMPLE_TEST(Just) {
-        auto j = Future::Just();
-        auto u = Future::Get(std::move(j));
+        auto j = NFuture::Just();
+        auto u = NFuture::Get(std::move(j));
         ASSERT_EQ(u, Unit());
     }
 
     SIMPLE_TEST(SubmitPool) {
-        Runtime::ThreadPool pool{4};
+        NRuntime::ThreadPool pool{4};
         pool.Start();
 
-        auto compute = Future::Submit(pool, [] -> int { return 11; });
+        auto compute = NFuture::Submit(pool, [] -> int { return 11; });
 
-        int v = Future::Get(std::move(compute));
+        int v = NFuture::Get(std::move(compute));
 
         ASSERT_EQ(v, 11);
 
@@ -103,16 +99,16 @@ TEST_SUITE(Futures) {
     }
 
     SIMPLE_TEST(SubmitLoop) {
-        Runtime::RunLoop loop;
+        NRuntime::RunLoop loop;
 
         bool done = false;
 
-        auto f = Future::Submit(loop, [&] {
+        auto f = NFuture::Submit(loop, [&] {
             done = true;
             return Unit();
         });
 
-        std::move(f) | Future::Detach();
+        std::move(f) | NFuture::Detach();
 
         ASSERT_FALSE(done);
 
@@ -122,17 +118,17 @@ TEST_SUITE(Futures) {
     }
 
     SIMPLE_TEST(SubmitPoolWait) {
-        Runtime::ThreadPool pool{4};
+        NRuntime::ThreadPool pool{4};
         pool.Start();
 
-        auto f = Future::Submit(pool, [] {
+        auto f = NFuture::Submit(pool, [] {
             std::this_thread::sleep_for(1s);
             return 11;
         });
 
         wheels::ProcessCPUTimer timer;
 
-        auto v = Future::Get(std::move(f));
+        auto v = NFuture::Get(std::move(f));
 
         ASSERT_TRUE(timer.Spent() < 100ms);
 
@@ -142,27 +138,27 @@ TEST_SUITE(Futures) {
     }
 
     SIMPLE_TEST(Map) {
-        auto f = Future::Value(1) | Future::Map([](int v) { return v + 1; });
+        auto f = NFuture::Value(1) | NFuture::Map([](int v) { return v + 1; });
 
-        auto v = std::move(f) | Future::Get();
+        auto v = std::move(f) | NFuture::Get();
 
         ASSERT_EQ(v, 2);
     }
 
     SIMPLE_TEST(Flatten) {
-        Runtime::RunLoop loop;
+        NRuntime::RunLoop loop;
 
-        auto ff = Future::Submit(loop, [&loop] { return Future::Submit(loop, [] { return 7; }); });
+        auto ff = NFuture::Submit(loop, [&loop] { return NFuture::Submit(loop, [] { return 7; }); });
 
-        Future::Future<int> f = std::move(ff) | Future::Flatten();
+        Future<int> f = std::move(ff) | NFuture::Flatten();
 
         bool ok = false;
 
-        std::move(f) | Future::Map([&ok](int v) -> Unit {
+        std::move(f) | NFuture::Map([&ok](int v) -> Unit {
             ASSERT_EQ(v, 7);
             ok = true;
             return {};
-        }) | Future::Detach();
+        }) | NFuture::Detach();
 
         ASSERT_FALSE(ok);
 
@@ -172,19 +168,19 @@ TEST_SUITE(Futures) {
     }
 
     SIMPLE_TEST(FlatMap) {
-        Runtime::RunLoop loop;
+        NRuntime::RunLoop loop;
 
-        Future::Future<int> f = Future::Submit(loop, [] { return 23; }) |
-                                Future::FlatMap([&](int v) { return Future::Submit(loop, [v] { return v + 5; }); }) |
-                                Future::Map([](int v) { return v + 1; });
+        Future<int> f = NFuture::Submit(loop, [] { return 23; }) |
+                        NFuture::FlatMap([&](int v) { return NFuture::Submit(loop, [v] { return v + 5; }); }) |
+                        NFuture::Map([](int v) { return v + 1; });
 
         bool ok = true;
 
-        std::move(f) | Future::Map([&](int v) {
+        std::move(f) | NFuture::Map([&](int v) {
             ASSERT_EQ(v, 29);
             ok = true;
             return Unit();
-        }) | Future::Detach();
+        }) | NFuture::Detach();
 
         loop.Run();
 
@@ -193,104 +189,104 @@ TEST_SUITE(Futures) {
 
     SIMPLE_TEST(MapOk) {
         {
-            auto f = Future::Ok(1) | Future::MapOk([](int v) { return v + 1; });
+            auto f = NFuture::Ok(1) | NFuture::MapOk([](int v) { return v + 1; });
 
-            auto r = Future::Get(std::move(f));
+            auto r = NFuture::Get(std::move(f));
             ASSERT_TRUE(r);
             ASSERT_EQ(*r, 2);
         }
 
         {
-            auto failure = [] -> Future::TryFuture<int> { return Future::Error(TimeoutError()); };
+            auto failure = [] -> NFuture::TryFuture<int> { return NFuture::Failure(TimeoutError()); };
 
-            auto f = failure() | Future::MapOk([](int) {
+            auto f = failure() | NFuture::MapOk([](int) {
                          FAIL_TEST("Unreachable");
                          return Unit();
                      });
 
-            auto r = Future::Get(std::move(f));
+            auto r = NFuture::Get(std::move(f));
             ASSERT_FALSE(r);
         }
     }
 
     SIMPLE_TEST(AndThen) {
-        auto f = Future::Ok(std::string("ok")) | Future::AndThen([](std::string s) { return Future::Ok(s + "!"); }) |
-                 Future::AndThen([](std::string s) { return Future::Ok(s + "!"); });
+        auto f = NFuture::Ok(std::string("ok")) | NFuture::AndThen([](std::string s) { return NFuture::Ok(s + "!"); }) |
+                 NFuture::AndThen([](std::string s) { return NFuture::Ok(s + "!"); });
 
-        auto r = Future::Get(std::move(f));
+        auto r = NFuture::Get(std::move(f));
 
         ASSERT_TRUE(r);
         ASSERT_EQ(*r, "ok!!");
     }
 
     SIMPLE_TEST(OrElse) {
-        auto failure = [] -> Future::TryFuture<std::string> { return Future::Error(IoError()); };
+        auto failure = [] -> NFuture::TryFuture<std::string> { return NFuture::Failure(IoError()); };
 
-        auto f = failure() | Future::OrElse([](Error e) {
+        auto f = failure() | NFuture::OrElse([](Error e) {
                      ASSERT_EQ(e, IoError());
-                     return Future::Ok(std::string("fallback"));
+                     return NFuture::Ok(std::string("fallback"));
                  });
 
-        auto r = Future::Get(std::move(f));
+        auto r = NFuture::Get(std::move(f));
 
         ASSERT_TRUE(r);
         ASSERT_EQ(*r, "fallback");
     }
 
     SIMPLE_TEST(TryPipeline) {
-        auto [f, p] = Future::Contract<int>();
+        auto [f, p] = NFuture::Contract<int>();
 
-        auto g = std::move(f) | Future::Map([](int v) { return v + 1; }) | Future::Map([](int v) { return v + 2; }) | Future::AsTryFuture() |
-                 Future::OrElse([](Error) {
+        auto g = std::move(f) | NFuture::Map([](int v) { return v + 1; }) | NFuture::Map([](int v) { return v + 2; }) | NFuture::AsTryFuture() |
+                 NFuture::OrElse([](Error) {
                      FAIL_TEST("Unreachable");
-                     return Future::Ok(111);
+                     return NFuture::Ok(111);
                  }) |
-                 Future::AndThen([](int /*v*/) -> Future::TryFuture<int> { return Future::Error(TimeoutError()); }) | Future::MapOk([](int v) {
+                 NFuture::AndThen([](int /*v*/) -> NFuture::TryFuture<int> { return NFuture::Failure(TimeoutError()); }) | NFuture::MapOk([](int v) {
                      FAIL_TEST("Unreachable");
                      return v + 1;
                  }) |
-                 Future::OrElse([](Error) { return Future::Ok(17); }) | Future::MapOk([](int v) { return v + 1; });
+                 NFuture::OrElse([](Error) { return NFuture::Ok(17); }) | NFuture::MapOk([](int v) { return v + 1; });
 
         std::move(p).Set(3);
 
-        auto r = Future::Get(std::move(g));
+        auto r = NFuture::Get(std::move(g));
 
         ASSERT_TRUE(r);
         ASSERT_EQ(*r, 18);
     }
 
     SIMPLE_TEST(Via) {
-        Runtime::RunLoop loop1;
-        Runtime::RunLoop loop2;
+        NRuntime::RunLoop loop1;
+        NRuntime::RunLoop loop2;
 
         size_t steps = 0;
 
-        Future::Just() | Future::Via(loop1) | Future::Map([&](Unit) {
+        NFuture::Just() | NFuture::Via(loop1) | NFuture::Map([&](Unit) {
             ++steps;
             return Unit();
-        }) | Future::Map([](Unit) { return Unit(); }) |
-            Future::Via(loop2) | Future::Map([&](Unit) {
+        }) | NFuture::Map([](Unit) { return Unit(); }) |
+            NFuture::Via(loop2) | NFuture::Map([&](Unit) {
                 ++steps;
                 return Unit();
             }) |
-            Future::Map([&](Unit) {
+            NFuture::Map([&](Unit) {
                 ++steps;
                 return Unit();
             }) |
-            Future::Via(loop1) | Future::Map([&](Unit) {
+            NFuture::Via(loop1) | NFuture::Map([&](Unit) {
                 ++steps;
                 return Unit();
             }) |
-            Future::FlatMap([&](Unit) {
+            NFuture::FlatMap([&](Unit) {
                 ++steps;
-                return Future::Value(1);
+                return NFuture::Value(1);
             }) |
-            Future::Map([&](int v) {
+            NFuture::Map([&](int v) {
                 ASSERT_EQ(v, 1);
                 ++steps;
                 return Unit();
             }) |
-            Future::Detach();
+            NFuture::Detach();
 
         ASSERT_EQ(loop1.Run(), 2);
         ASSERT_EQ(steps, 1);
@@ -301,18 +297,18 @@ TEST_SUITE(Futures) {
     }
 
     SIMPLE_TEST(First1) {
-        auto [f1, p1] = Future::Contract<int>();
-        auto [f2, p2] = Future::Contract<int>();
+        auto [f1, p1] = NFuture::Contract<int>();
+        auto [f2, p2] = NFuture::Contract<int>();
 
-        auto first = Future::First(std::move(f1), std::move(f2));
+        auto first = std::move(f1) || std::move(f2);
 
         bool ok = false;
 
-        std::move(first) | Future::Map([&ok](int v) {
+        std::move(first) | NFuture::Map([&ok](int v) {
             ASSERT_EQ(v, 1);
             ok = true;
             return Unit();
-        }) | Future::Detach();
+        }) | NFuture::Detach();
 
         std::move(p1).Set(1);
 
@@ -322,18 +318,18 @@ TEST_SUITE(Futures) {
     }
 
     SIMPLE_TEST(First2) {
-        auto [f1, p1] = Future::Contract<int>();
-        auto [f2, p2] = Future::Contract<int>();
+        auto [f1, p1] = NFuture::Contract<int>();
+        auto [f2, p2] = NFuture::Contract<int>();
 
-        auto first = Future::First(std::move(f1), std::move(f2));
+        auto first = std::move(f1) || std::move(f2);
 
         bool ok = false;
 
-        std::move(first) | Future::Map([&ok](int v) {
+        std::move(first) | NFuture::Map([&ok](int v) {
             ASSERT_EQ(v, 2);
             ok = true;
             return Unit();
-        }) | Future::Detach();
+        }) | NFuture::Detach();
 
         std::move(p2).Set(2);
 
@@ -343,101 +339,101 @@ TEST_SUITE(Futures) {
     }
 
     SIMPLE_TEST(FirstOk1) {
-        auto [f1, p1] = Future::Contract<Result<int>>();
-        auto [f2, p2] = Future::Contract<Result<int>>();
+        auto [f1, p1] = NFuture::Contract<Result<int>>();
+        auto [f2, p2] = NFuture::Contract<Result<int>>();
 
-        auto first = Future::FirstOk(std::move(f1), std::move(f2));
+        auto first = NFuture::FirstOk(std::move(f1), std::move(f2));
 
         bool ok = false;
 
-        std::move(first) | Future::MapOk([&ok](int v) {
+        std::move(first) | NFuture::MapOk([&ok](int v) {
             ASSERT_EQ(v, 2);
             ok = true;
             return Unit();
-        }) | Future::Detach();
+        }) | NFuture::Detach();
 
-        std::move(p2).Set(ResultOk(2));
+        std::move(p2).Set(NResult::Ok(2));
 
         ASSERT_TRUE(ok);
 
-        std::move(p1).Set(ResultOk(1));
+        std::move(p1).Set(NResult::Ok(1));
     }
 
     SIMPLE_TEST(FirstOk2) {
-        auto [f1, p1] = Future::Contract<Result<int>>();
-        auto [f2, p2] = Future::Contract<Result<int>>();
+        auto [f1, p1] = NFuture::Contract<Result<int>>();
+        auto [f2, p2] = NFuture::Contract<Result<int>>();
 
-        auto first = Future::FirstOk(std::move(f1), std::move(f2));
+        auto first = NFuture::FirstOk(std::move(f1), std::move(f2));
 
         bool ok = false;
 
-        std::move(first) | Future::MapOk([&ok](int v) {
+        std::move(first) | NFuture::MapOk([&ok](int v) {
             ASSERT_EQ(v, 29);
             ok = true;
             return Unit();
-        }) | Future::Detach();
+        }) | NFuture::Detach();
 
-        std::move(p1).Set(ResultError(TimeoutError()));
-        std::move(p2).Set(ResultOk(29));
+        std::move(p1).Set(NResult::Failure(TimeoutError()));
+        std::move(p2).Set(NResult::Ok(29));
 
         ASSERT_TRUE(ok);
     }
 
     SIMPLE_TEST(FirstOk3) {
-        auto [f1, p1] = Future::Contract<Result<int>>();
-        auto [f2, p2] = Future::Contract<Result<int>>();
+        auto [f1, p1] = NFuture::Contract<Result<int>>();
+        auto [f2, p2] = NFuture::Contract<Result<int>>();
 
-        auto first = Future::FirstOk(std::move(f1), std::move(f2));
+        auto first = NFuture::FirstOk(std::move(f1), std::move(f2));
 
         bool ok = false;
 
-        std::move(first) | Future::MapOk([&ok](int v) {
+        std::move(first) | NFuture::MapOk([&ok](int v) {
             ASSERT_EQ(v, 31);
             ok = true;
             return Unit();
-        }) | Future::Detach();
+        }) | NFuture::Detach();
 
-        std::move(p2).Set(ResultError(IoError()));
-        std::move(p1).Set(ResultOk(31));
+        std::move(p2).Set(NResult::Failure(IoError()));
+        std::move(p1).Set(NResult::Ok(31));
 
         ASSERT_TRUE(ok);
     }
 
     SIMPLE_TEST(FirstFailure) {
-        auto [f1, p1] = Future::Contract<Result<int>>();
-        auto [f2, p2] = Future::Contract<Result<int>>();
+        auto [f1, p1] = NFuture::Contract<Result<int>>();
+        auto [f2, p2] = NFuture::Contract<Result<int>>();
 
-        auto first = Future::FirstOk(std::move(f1), std::move(f2));
+        auto first = NFuture::FirstOk(std::move(f1), std::move(f2));
 
         bool fail = false;
 
-        std::move(first) | Future::OrElse([&](Error e) -> Future::TryFuture<int> {
+        std::move(first) | NFuture::OrElse([&](Error e) -> NFuture::TryFuture<int> {
             ASSERT_EQ(e, TimeoutError());
             fail = true;
-            return Future::Error(e);
-        }) | Future::Detach();
+            return NFuture::Failure(e);
+        }) | NFuture::Detach();
 
-        std::move(p2).Set(ResultError(TimeoutError()));
-        std::move(p1).Set(ResultError(TimeoutError()));
+        std::move(p2).Set(NResult::Failure(TimeoutError()));
+        std::move(p1).Set(NResult::Failure(TimeoutError()));
 
         ASSERT_TRUE(fail);
     }
 
     SIMPLE_TEST(Both) {
-        auto [f1, p1] = Future::Contract<int>();
-        auto [f2, p2] = Future::Contract<int>();
+        auto [f1, p1] = NFuture::Contract<int>();
+        auto [f2, p2] = NFuture::Contract<int>();
 
-        auto both = Future::Both(std::move(f1), std::move(f2));
+        auto both = std::move(f1) + std::move(f2);
 
         bool ok = false;
 
-        std::move(both) | Future::Map([&ok](auto tuple) {
+        std::move(both) | NFuture::Map([&ok](auto tuple) {
             auto [x, y] = tuple;
             ASSERT_EQ(x, 1);
             ASSERT_EQ(y, 2);
             ok = true;
             return Unit();
-        }) | Future::Detach();
+        }) | NFuture::Detach();
 
         std::move(p2).Set(2);
         std::move(p1).Set(1);
@@ -446,78 +442,78 @@ TEST_SUITE(Futures) {
     }
 
     SIMPLE_TEST(BothOk) {
-        auto [f1, p1] = Future::Contract<Result<int>>();
-        auto [f2, p2] = Future::Contract<Result<int>>();
+        auto [f1, p1] = NFuture::Contract<Result<int>>();
+        auto [f2, p2] = NFuture::Contract<Result<int>>();
 
-        auto both = Future::BothOk(std::move(f1), std::move(f2));
+        auto both = NFuture::BothOk(std::move(f1), std::move(f2));
 
         bool ok = false;
 
-        std::move(both) | Future::MapOk([&ok](auto tuple) {
+        std::move(both) | NFuture::MapOk([&ok](auto tuple) {
             auto [x, y] = tuple;
             ASSERT_EQ(x, 2);
             ASSERT_EQ(y, 1);
             ok = true;
             return Unit();
-        }) | Future::Detach();
+        }) | NFuture::Detach();
 
-        std::move(p2).Set(ResultOk(1));
-        std::move(p1).Set(ResultOk(2));
+        std::move(p2).Set(NResult::Ok(1));
+        std::move(p1).Set(NResult::Ok(2));
 
         ASSERT_TRUE(ok);
     }
 
     SIMPLE_TEST(BothFailure1) {
-        auto [f1, p1] = Future::Contract<Result<int>>();
-        auto [f2, p2] = Future::Contract<Result<int>>();
+        auto [f1, p1] = NFuture::Contract<Result<int>>();
+        auto [f2, p2] = NFuture::Contract<Result<int>>();
 
-        auto both = Future::BothOk(std::move(f1), std::move(f2));
+        auto both = NFuture::BothOk(std::move(f1), std::move(f2));
 
         bool fail = false;
 
-        std::move(both) | Future::OrElse([&fail](Error e) -> Future::TryFuture<std::tuple<int, int>> {
+        std::move(both) | NFuture::OrElse([&fail](Error e) -> NFuture::TryFuture<std::tuple<int, int>> {
             ASSERT_EQ(e, TimeoutError());
             fail = true;
-            return Future::Error(e);
-        }) | Future::Detach();
+            return NFuture::Failure(e);
+        }) | NFuture::Detach();
 
-        std::move(p1).Set(ResultError(TimeoutError()));
+        std::move(p1).Set(NResult::Failure(TimeoutError()));
 
         ASSERT_TRUE(fail);
 
-        std::move(p2).Set(ResultOk(7));
+        std::move(p2).Set(NResult::Ok(7));
     }
 
     SIMPLE_TEST(BothFailure2) {
-        auto [f1, p1] = Future::Contract<Result<int>>();
-        auto [f2, p2] = Future::Contract<Result<int>>();
+        auto [f1, p1] = NFuture::Contract<Result<int>>();
+        auto [f2, p2] = NFuture::Contract<Result<int>>();
 
-        auto both = Future::BothOk(std::move(f1), std::move(f2));
+        auto both = NFuture::BothOk(std::move(f1), std::move(f2));
 
         bool fail = false;
 
-        std::move(both) | Future::OrElse([&fail](Error e) -> Future::TryFuture<std::tuple<int, int>> {
+        std::move(both) | NFuture::OrElse([&fail](Error e) -> NFuture::TryFuture<std::tuple<int, int>> {
             ASSERT_EQ(e, IoError());
             fail = true;
-            return Future::Error(e);
-        }) | Future::Detach();
+            return NFuture::Failure(e);
+        }) | NFuture::Detach();
 
-        std::move(p2).Set(ResultError(IoError()));
+        std::move(p2).Set(NResult::Failure(IoError()));
 
         ASSERT_TRUE(fail);
 
-        std::move(p1).Set(ResultOk(4));
+        std::move(p1).Set(NResult::Ok(4));
     }
 
     SIMPLE_TEST(BothTypes) {
-        auto [f1, p1] = Future::Contract<std::string>();
-        auto [f2, p2] = Future::Contract<std::tuple<int, int>>();
+        auto [f1, p1] = NFuture::Contract<std::string>();
+        auto [f2, p2] = NFuture::Contract<std::tuple<int, int>>();
 
-        auto both = Future::Both(std::move(f1), std::move(f2));
+        auto both = std::move(f1) + std::move(f2);
 
         bool ok = false;
 
-        std::move(both) | Future::Map([&ok](auto tuple) {
+        std::move(both) | NFuture::Map([&ok](auto tuple) {
             auto [x, y] = tuple;
 
             ASSERT_EQ(x, "3");
@@ -527,7 +523,7 @@ TEST_SUITE(Futures) {
 
             ok = true;
             return Unit();
-        }) | Future::Detach();
+        }) | NFuture::Detach();
 
         std::move(p2).Set({1, 2});
         std::move(p1).Set("3");
@@ -536,22 +532,22 @@ TEST_SUITE(Futures) {
     }
 
     SIMPLE_TEST(DoNotWait1) {
-        Runtime::ThreadPool pool{4};
+        NRuntime::ThreadPool pool{4};
         pool.Start();
 
         std::atomic_bool submit = false;
 
-        auto f = Future::Submit(pool,
-                                [&] {
-                                    std::this_thread::sleep_for(1s);
-                                    submit = true;
-                                    return 11;
-                                }) |
-                 Future::Map([](int v) { return v + 1; });
+        auto f = NFuture::Submit(pool,
+                                 [&] {
+                                     std::this_thread::sleep_for(1s);
+                                     submit = true;
+                                     return 11;
+                                 }) |
+                 NFuture::Map([](int v) { return v + 1; });
 
         ASSERT_FALSE(submit);
 
-        auto v = Future::Get(std::move(f));
+        auto v = NFuture::Get(std::move(f));
 
         ASSERT_TRUE(submit);
         ASSERT_EQ(v, 12);
@@ -560,22 +556,22 @@ TEST_SUITE(Futures) {
     }
 
     SIMPLE_TEST(DoNotWait2) {
-        Runtime::ThreadPool pool{4};
+        NRuntime::ThreadPool pool{4};
         pool.Start();
 
         std::atomic_bool submit = false;
 
-        auto f = Future::Submit(pool,
-                                [&] {
-                                    std::this_thread::sleep_for(1s);
-                                    submit = true;
-                                    return 31;
-                                }) |
-                 Future::FlatMap([&](int v) { return Future::Submit(pool, [v] { return v + 1; }); });
+        auto f = NFuture::Submit(pool,
+                                 [&] {
+                                     std::this_thread::sleep_for(1s);
+                                     submit = true;
+                                     return 31;
+                                 }) |
+                 NFuture::FlatMap([&](int v) { return NFuture::Submit(pool, [v] { return v + 1; }); });
 
         ASSERT_FALSE(submit);
 
-        auto v = Future::Get(std::move(f));
+        auto v = NFuture::Get(std::move(f));
 
         ASSERT_TRUE(submit);
         ASSERT_EQ(v, 32);
@@ -584,14 +580,14 @@ TEST_SUITE(Futures) {
     }
 
     SIMPLE_TEST(Inline1) {
-        Runtime::RunLoop loop;
+        NRuntime::RunLoop loop;
 
         bool ok = false;
 
-        Future::Just() | Future::Via(loop) | Future::Map([&](Unit) {
+        NFuture::Just() | NFuture::Via(loop) | NFuture::Map([&](Unit) {
             ok = true;
             return Unit();
-        }) | Future::Detach();
+        }) | NFuture::Detach();
 
         size_t tasks = loop.Run();
         ASSERT_TRUE(ok);
@@ -599,30 +595,30 @@ TEST_SUITE(Futures) {
     }
 
     SIMPLE_TEST(Inline2) {
-        Runtime::RunLoop loop;
+        NRuntime::RunLoop loop;
 
-        auto v = Future::Get(Future::Value(1) | Future::Via(loop));
+        auto v = NFuture::Get(NFuture::Value(1) | NFuture::Via(loop));
 
         ASSERT_EQ(v, 1);
     }
 
     SIMPLE_TEST(Inline3) {
-        Runtime::RunLoop loop;
+        NRuntime::RunLoop loop;
 
         bool flat_map = false;
         bool map1     = false;
         bool map2     = false;
 
-        Future::Just() | Future::Via(loop) | Future::FlatMap([&](Unit) {
+        NFuture::Just() | NFuture::Via(loop) | NFuture::FlatMap([&](Unit) {
             flat_map = true;
-            return Future::Value(Unit());
-        }) | Future::Map([&](Unit u) {
+            return NFuture::Value(Unit());
+        }) | NFuture::Map([&](Unit u) {
             map1 = true;
             return u;
-        }) | Future::Map([&](Unit u) {
+        }) | NFuture::Map([&](Unit u) {
             map2 = true;
             return u;
-        }) | Future::Detach();
+        }) | NFuture::Detach();
 
         ASSERT_TRUE(loop.RunNext());
         ASSERT_TRUE(flat_map);
@@ -637,32 +633,32 @@ TEST_SUITE(Futures) {
     }
 
     SIMPLE_TEST(Inline4) {
-        Runtime::RunLoop loop;
+        NRuntime::RunLoop loop;
 
-        Future::Submit(loop, [&] { return Future::Submit(loop, [] { return 19; }); }) | Future::Flatten() | Future::Detach();
+        NFuture::Submit(loop, [&] { return NFuture::Submit(loop, [] { return 19; }); }) | NFuture::Flatten() | NFuture::Detach();
 
         size_t tasks = loop.Run();
         ASSERT_EQ(tasks, 2);
     }
 
     SIMPLE_TEST(Inline5) {
-        Runtime::RunLoop loop;
+        NRuntime::RunLoop loop;
 
-        auto [f1, p1] = Future::Contract<Result<int>>();
-        auto [f2, p2] = Future::Contract<Result<int>>();
+        auto [f1, p1] = NFuture::Contract<Result<int>>();
+        auto [f2, p2] = NFuture::Contract<Result<int>>();
 
-        auto first = Future::FirstOk(std::move(f1) | Future::Via(loop), std::move(f2) | Future::Via(loop));
+        auto first = NFuture::FirstOk(std::move(f1) | NFuture::Via(loop), std::move(f2) | NFuture::Via(loop));
 
         bool ok = false;
 
-        std::move(first) | Future::MapOk([&ok](int v) {
+        std::move(first) | NFuture::MapOk([&ok](int v) {
             ASSERT_EQ(v, 31);
             ok = true;
             return Unit();
-        }) | Future::Detach();
+        }) | NFuture::Detach();
 
-        std::move(p2).Set(ResultError(IoError()));
-        std::move(p1).Set(ResultOk(31));
+        std::move(p2).Set(NResult::Failure(IoError()));
+        std::move(p1).Set(NResult::Ok(31));
 
         size_t tasks = loop.Run();
         ASSERT_EQ(tasks, 0);

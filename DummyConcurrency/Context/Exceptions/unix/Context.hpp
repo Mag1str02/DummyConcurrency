@@ -1,6 +1,6 @@
 #pragma once
 
-namespace DummyConcurrency::Context {
+namespace NDummyConcurrency::NContext {
 
     // https://refspecs.linuxfoundation.org/abi-eh-1.22.html
 
@@ -12,4 +12,4 @@ namespace DummyConcurrency::Context {
         void* buffer_[2] = {0, 0};
     };
 
-}  // namespace DummyConcurrency::Context
+}  // namespace NDummyConcurrency::NContext

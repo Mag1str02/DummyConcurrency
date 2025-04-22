@@ -4,7 +4,7 @@
 
 #include <utility>
 
-namespace DummyConcurrency {
+namespace NDummyConcurrency {
 
     // Storage for value of type T with manual lifetime management
 

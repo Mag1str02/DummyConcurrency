@@ -2,7 +2,7 @@
 
 #include <wheels/test/framework.hpp>
 
-using namespace DummyConcurrency;  // NOLINT
+using namespace NDummyConcurrency;  // NOLINT
 
 struct Widget {
     Widget(int v) : data(v) {}

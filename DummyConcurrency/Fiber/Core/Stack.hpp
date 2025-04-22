@@ -2,8 +2,8 @@
 
 #include <DummyConcurrency/Fiber/Stack/New.hpp>
 
-namespace DummyConcurrency::Fiber {
+namespace NDummyConcurrency::NFiber {
 
-    using Stack = Fiber::NewStack;
+    using Stack = NFiber::NewStack;
 
-}  // namespace DummyConcurrency::Fiber
+}  // namespace NDummyConcurrency::NFiber

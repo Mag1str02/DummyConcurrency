@@ -7,7 +7,7 @@
 // Treiber unbounded lock-free stack
 // https://en.wikipedia.org/wiki/Treiber_stack
 
-namespace DummyConcurrency::DataStructures {
+namespace NDummyConcurrency::NDataStructures {
 
     template <typename T>
     class LockFreeStack {
@@ -43,4 +43,4 @@ namespace DummyConcurrency::DataStructures {
         AtomicSharedPtr<Node> top_;
     };
 
-}  // namespace DummyConcurrency::DataStructures
+}  // namespace NDummyConcurrency::NDataStructures

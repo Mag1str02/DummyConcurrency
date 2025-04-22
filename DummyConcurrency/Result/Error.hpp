@@ -2,7 +2,7 @@
 
 #include <system_error>
 
-namespace DummyConcurrency {
+namespace NDummyConcurrency::NResult {
 
     using Error = std::error_code;
 

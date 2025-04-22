@@ -13,7 +13,7 @@ namespace __cxxabiv1 {  // NOLINT
 
 }  // namespace __cxxabiv1
 
-namespace DummyConcurrency::Context {
+namespace NDummyConcurrency::NContext {
 
     void ExceptionsContext::SwitchTo(ExceptionsContext& target) {
         static constexpr size_t kSize = sizeof(ExceptionsContext);
@@ -23,4 +23,4 @@ namespace DummyConcurrency::Context {
         memcpy(eh, target.buffer_, kSize);
     }
 
-}  // namespace DummyConcurrency::Context
+}  // namespace NDummyConcurrency::NContext

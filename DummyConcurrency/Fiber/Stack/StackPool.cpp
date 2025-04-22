@@ -1,6 +1,6 @@
 #include "StackPool.hpp"
 
-namespace DummyConcurrency::Fiber {
+namespace NDummyConcurrency::NFiber {
 
     StackPool::StackPool(StackSize size) : stack_size_(SizeInBytes(size)) {}
 
@@ -41,4 +41,4 @@ namespace DummyConcurrency::Fiber {
     }
 
     StackPool::NewNode::NewNode(NewStack&& stack) : Stack(std::move(stack)) {}
-}  // namespace DummyConcurrency::Fiber
+}  // namespace NDummyConcurrency::NFiber

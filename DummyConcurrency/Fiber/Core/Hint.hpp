@@ -2,10 +2,10 @@
 
 #include <DummyConcurrency/Fiber/Stack/InlineStackPool.hpp>
 
-namespace DummyConcurrency::Fiber {
+namespace NDummyConcurrency::NFiber {
 
     struct Hint {
         IStackPool* Pool = InlineStackPool();
     };
 
-}  // namespace DummyConcurrency::Fiber
+}  // namespace NDummyConcurrency::NFiber

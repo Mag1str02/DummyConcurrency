@@ -1,6 +1,6 @@
 #include <DummyConcurrency/Context/Machine/x86_64_unix/Context.hpp>
 
-namespace DummyConcurrency::Context {
+namespace NDummyConcurrency::NContext {
 
     // https://eli.thegreenplace.net/2011/09/06/stack-frame-layout-on-x86-64/
     static void MachineContextTrampoline(void*, void*, void*, void*, void*, void*, void* arg7) {
@@ -12,4 +12,4 @@ namespace DummyConcurrency::Context {
         rsp_ = SetupMachineContext((void*)stack.Top, (void*)MachineContextTrampoline, (void*)trampoline);
     }
 
-}  // namespace DummyConcurrency::Context
+}  // namespace NDummyConcurrency::NContext

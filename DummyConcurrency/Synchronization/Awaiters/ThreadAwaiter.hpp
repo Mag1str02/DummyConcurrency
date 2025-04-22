@@ -4,7 +4,7 @@
 
 #include <DummyConcurrency/Synchronization/Thread/Event.hpp>
 
-namespace DummyConcurrency::Synchronization {
+namespace NDummyConcurrency::NSynchronization {
 
     class ThreadAwaiter : public IAwaiter {
     public:
@@ -12,7 +12,7 @@ namespace DummyConcurrency::Synchronization {
         void         Wait() noexcept { event_.Wait(); };
 
     private:
-        Thread::Event event_;
+        NThread::Event event_;
     };
 
-}  // namespace DummyConcurrency::Synchronization
+}  // namespace NDummyConcurrency::Synchronization

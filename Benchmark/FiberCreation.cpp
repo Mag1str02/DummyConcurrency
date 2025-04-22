@@ -4,11 +4,11 @@
 
 #include <unistd.h>
 
-using namespace DummyConcurrency;
+using namespace NDummyConcurrency;
 
 constexpr uint32_t kFibersToCreate = 50'000'000;
 
-StackPool gPool(Fiber::StackSize::Medium);
+StackPool gPool(NFiber::StackSize::Medium);
 
 void Body(RunLoop& loop, uint32_t& counter) {
     Go(loop,

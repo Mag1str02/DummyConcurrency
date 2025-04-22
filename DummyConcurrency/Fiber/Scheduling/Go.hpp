@@ -2,7 +2,7 @@
 
 #include "DummyConcurrency/Fiber/Core/Fiber.hpp"
 
-namespace DummyConcurrency::Fiber {
+namespace NDummyConcurrency::NFiber {
 
     template <typename F> void Go(IScheduler& scheduler, F&& body, Hint hint = {}) {
         Fiber* fiber = Fiber::Create(scheduler, std::move(body), hint);
@@ -17,4 +17,4 @@ namespace DummyConcurrency::Fiber {
         fiber->Schedule();
     }
 
-}  // namespace DummyConcurrency::Fiber
+}  // namespace NDummyConcurrency::NFiber

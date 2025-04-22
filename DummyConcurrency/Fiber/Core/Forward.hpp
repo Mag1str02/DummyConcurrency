@@ -3,7 +3,7 @@
 #include "DummyConcurrency/Runtime/Scheduler/Scheduler.hpp"
 #include "DummyConcurrency/Runtime/Scheduler/Task.hpp"
 
-namespace DummyConcurrency::Fiber {
+namespace NDummyConcurrency::NFiber {
 
     class ICoroutine;
     template <typename F> class Coroutine;
@@ -11,7 +11,7 @@ namespace DummyConcurrency::Fiber {
     class Fiber;
     class IAwaiter;
 
-    using Runtime::IScheduler;
-    using Runtime::ITask;
+    using NRuntime::IScheduler;
+    using NRuntime::ITask;
 
-}  // namespace DummyConcurrency::Fiber
+}  // namespace NDummyConcurrency::NFiber

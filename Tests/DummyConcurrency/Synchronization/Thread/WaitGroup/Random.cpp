@@ -10,7 +10,7 @@
 #include <array>
 #include <vector>
 
-using namespace DummyConcurrency;  // NOLINT
+using namespace NDummyConcurrency;  // NOLINT
 
 TEST_SUITE(ThreadSynchronizationWaitGroup_Random) {
     TWIST_RANDOMIZE(Jobs, 5s) {

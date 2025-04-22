@@ -5,7 +5,7 @@
 #include <atomic>
 #include <cstdint>
 
-namespace DummyConcurrency::ImplementationLayer::STD {
+namespace NDummyConcurrency::NImplementationLayer::STD {
 
     struct WakeKey {
         std::atomic<uint32_t>* Location;
@@ -24,4 +24,4 @@ namespace DummyConcurrency::ImplementationLayer::STD {
         WakeByAddressAll(key.Location);
     }
 
-}  // namespace DummyConcurrency::ImplementationLayer::STD
+}  // namespace NDummyConcurrency::NImplementationLayer::STD

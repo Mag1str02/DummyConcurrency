@@ -4,7 +4,7 @@
 
 #include <DummyConcurrency/Utils/Assert.hpp>
 
-namespace DummyConcurrency::Fiber {
+namespace NDummyConcurrency::NFiber {
 
     Fiber* Handle::Release() {
         DC_ASSERT(IsValid(), "Invalid fiber handle");
@@ -23,4 +23,4 @@ namespace DummyConcurrency::Fiber {
         current->SwitchTo(*Release());
     }
 
-}  // namespace DummyConcurrency::Fiber
+}  // namespace NDummyConcurrency::NFiber

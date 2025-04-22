@@ -5,7 +5,7 @@
 #include <twist/assist/shared.hpp>
 #include <twist/test/assert.hpp>
 
-using namespace DummyConcurrency;  // NOLINT
+using namespace NDummyConcurrency;  // NOLINT
 
 TEST_SUITE(FiberSynchronizationEvent_Random) {
     TWIST_RANDOMIZE(MessagePassing, 10s) {
@@ -40,7 +40,7 @@ TEST_SUITE(FiberSynchronizationEvent_Random) {
 
             test.Add(1);
 
-            Runtime::Submit(scheduler, [&] {
+            NRuntime::Submit(scheduler, [&] {
                 event.Wait();
 
                 int d = data.Read();

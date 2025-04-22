@@ -3,7 +3,7 @@
 #include <DummyConcurrency/Context/StackView.hpp>
 #include <DummyConcurrency/Context/Trampoline.hpp>
 
-namespace DummyConcurrency::Context {
+namespace NDummyConcurrency::NContext {
 
     struct MachineContext {
         MachineContext();
@@ -16,4 +16,4 @@ namespace DummyConcurrency::Context {
         void* StackPointer() const noexcept;
     };
 
-}  // namespace DummyConcurrency::Context
+}  // namespace NDummyConcurrency::NContext

@@ -17,7 +17,7 @@
 static_assert(twist::build::IsolatedSim());
 
 using TestMessage = twist::test::Message<uint64_t>;
-using namespace DummyConcurrency;  // NOLINT
+using namespace NDummyConcurrency;  // NOLINT
 
 TEST_SUITE(RandomizeLockFreeStack) {
     TWIST_RANDOMIZE(Chan, 10s) {

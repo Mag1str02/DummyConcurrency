@@ -6,7 +6,7 @@
 #include <DummyConcurrency/Fiber/Core/Fiber.hpp>
 #include <DummyConcurrency/Fiber/Scheduling/Suspend.hpp>
 
-namespace DummyConcurrency::Synchronization {
+namespace NDummyConcurrency::NSynchronization {
 
     template <typename F>
     void DoAwait(F&& function) {
@@ -23,9 +23,9 @@ namespace DummyConcurrency::Synchronization {
             F function_;
         };
 
-        if (Fiber::Fiber::Self()) {
+        if (NFiber::Fiber::Self()) {
             FiberAwaiter awaiter(std::move(function));
-            Fiber::Suspend(awaiter);
+            NFiber::Suspend(awaiter);
             awaiter.AfterSuspend();
         } else {
             ThreadAwaiter awaiter;
@@ -35,4 +35,4 @@ namespace DummyConcurrency::Synchronization {
         }
     }
 
-}  // namespace DummyConcurrency::Synchronization
+}  // namespace NDummyConcurrency::NSynchronization

@@ -2,7 +2,7 @@
 
 #include "DummyConcurrency/Synchronization/Awaiters/DoAwait.hpp"
 
-namespace DummyConcurrency::Synchronization::FiberAware {
+namespace NDummyConcurrency::NSynchronization::NFiberAware {
 
     void Mutex::Lock() {
         IAwaiter* expected = kUnlocked;
@@ -67,4 +67,4 @@ namespace DummyConcurrency::Synchronization::FiberAware {
         Unlock();
     }
 
-}  // namespace DummyConcurrency::Synchronization::FiberAware
+}  // namespace NDummyConcurrency::NSynchronization::FiberAware

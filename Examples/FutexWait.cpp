@@ -1,8 +1,10 @@
 
 #include "DummyConcurrency/DummyConcurrency.hpp"
 
+#include <thread>
+
 using namespace std::chrono_literals;
-using namespace DummyConcurrency;
+using namespace NDummyConcurrency;
 
 int main() {
     ThreadPool pool(16);

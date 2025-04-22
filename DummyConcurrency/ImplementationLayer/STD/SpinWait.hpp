@@ -2,7 +2,7 @@
 
 #include <thread>
 
-namespace DummyConcurrency::ImplementationLayer::STD {
+namespace NDummyConcurrency::NImplementationLayer::STD {
 
     class SpinWait {
     private:
@@ -41,4 +41,4 @@ namespace DummyConcurrency::ImplementationLayer::STD {
         size_t count_ = 0;
     };
 
-}  // namespace DummyConcurrency::ImplementationLayer::STD
+}  // namespace NDummyConcurrency::NImplementationLayer::STD

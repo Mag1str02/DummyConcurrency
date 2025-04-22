@@ -2,8 +2,8 @@
 
 #include "DummyConcurrency/Fiber/Core/Awaiter.hpp"
 
-namespace DummyConcurrency::Fiber {
+namespace NDummyConcurrency::NFiber {
 
     void Suspend(IAwaiter& awaiter);
 
-}  // namespace DummyConcurrency::Fiber
+}  // namespace NDummyConcurrency::NFiber

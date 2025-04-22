@@ -2,8 +2,8 @@
 
 #include <DummyConcurrency/Runtime/Scheduler/Scheduler.hpp>
 
-namespace DummyConcurrency::Runtime {
+namespace NDummyConcurrency::NRuntime {
 
     IScheduler& Inline();
 
-}  // namespace DummyConcurrency::Runtime
+}  // namespace NDummyConcurrency::Runtime

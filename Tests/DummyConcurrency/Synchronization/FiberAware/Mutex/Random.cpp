@@ -7,7 +7,7 @@
 #include <twist/test/plate.hpp>
 #include <wheels/test/framework.hpp>
 
-using namespace DummyConcurrency;  // NOLINT
+using namespace NDummyConcurrency;  // NOLINT
 
 TEST_SUITE(FiberSynchronizationMutex_Random) {
     TWIST_RANDOMIZE(Lock, 5s) {

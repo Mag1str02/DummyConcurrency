@@ -1,9 +1,9 @@
 #include "IStackPool.hpp"
 
-namespace DummyConcurrency::Fiber {
+namespace NDummyConcurrency::NFiber {
 
     LeasedStack IStackPool::GetStack() {
         return LeasedStack(AllocateStack(), this);
     };
 
-}  // namespace DummyConcurrency::Fiber
+}  // namespace NDummyConcurrency::NFiber

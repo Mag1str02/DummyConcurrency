@@ -2,7 +2,7 @@
 
 #include <DummyConcurrency/ImplementationLayer/ImplementationLayer.hpp>
 
-namespace DummyConcurrency::Future {
+namespace NDummyConcurrency::NFuture {
 
     class RendezvousStateMachine {
     public:
@@ -18,7 +18,7 @@ namespace DummyConcurrency::Future {
             Rendezvous = Consumed | Produced,
         };
 
-        ImplementationLayer::Atomic<uint32_t> state_{Init};
+        NImplementationLayer::Atomic<uint32_t> state_{Init};
     };
 
-}  // namespace DummyConcurrency::Future
+}  // namespace NDummyConcurrency::NFuture

@@ -7,7 +7,7 @@
 #include <atomic>
 #include <cstdint>
 
-namespace DummyConcurrency::ImplementationLayer::STD {
+namespace NDummyConcurrency::NImplementationLayer::STD {
 
     struct WakeKey {
         std::atomic<uint32_t>* Location;
@@ -30,4 +30,4 @@ namespace DummyConcurrency::ImplementationLayer::STD {
         return __futex((uint32_t*)key.Location, FUTEX_WAKE_PRIVATE, INT32_MAX, nullptr, nullptr, 0);
     }
 
-}  // namespace DummyConcurrency::ImplementationLayer::STD
+}  // namespace NDummyConcurrency::NImplementationLayer::STD

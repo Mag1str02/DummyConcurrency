@@ -1,6 +1,6 @@
 #pragma once
 
-namespace DummyConcurrency {
+namespace NDummyConcurrency {
 
     struct NonCopyable {
         NonCopyable()                                    = default;
@@ -13,4 +13,4 @@ namespace DummyConcurrency {
         NonMovable& operator=(NonMovable&& other) = delete;
     };
 
-}  // namespace DummyConcurrency
+}  // namespace NDummyConcurrency

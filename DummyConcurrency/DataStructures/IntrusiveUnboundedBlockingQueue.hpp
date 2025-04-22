@@ -3,7 +3,7 @@
 #include "DummyConcurrency/ImplementationLayer/ImplementationLayer.hpp"
 #include "DummyConcurrency/Utils/IntrusiveForwardList.hpp"
 
-namespace DummyConcurrency {
+namespace NDummyConcurrency::NDataStructures {
 
     // Unbounded blocking multi-producers/multi-consumers (MPMC) queue
     template <typename T>
@@ -34,10 +34,10 @@ namespace DummyConcurrency {
 
     private:
         IntrusiveForwardList<T>                queue_;
-        ImplementationLayer::Mutex             mutex_;
-        ImplementationLayer::ConditionVariable pop_wait_;
+        NImplementationLayer::Mutex             mutex_;
+        NImplementationLayer::ConditionVariable pop_wait_;
 
         bool closed_ = false;
     };
 
-}  // namespace DummyConcurrency
+}  // namespace NDummyConcurrency::NDataStructures

@@ -2,7 +2,7 @@
 
 #include "DummyConcurrency/Utils/IntrusiveForwardList.hpp"
 
-namespace DummyConcurrency::Runtime {
+namespace NDummyConcurrency::NRuntime {
 
     struct ITask : IntrusiveForwardListNode<ITask> {
         virtual ~ITask() = default;
@@ -10,4 +10,4 @@ namespace DummyConcurrency::Runtime {
         virtual void Run() noexcept = 0;
     };
 
-}  // namespace DummyConcurrency::Runtime
+}  // namespace NDummyConcurrency::Runtime

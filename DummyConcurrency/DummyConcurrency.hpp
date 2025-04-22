@@ -15,30 +15,30 @@
 #include "DummyConcurrency/Synchronization/Thread/SpinLock.hpp"       // IWYU pragma: export
 #include "DummyConcurrency/Synchronization/Thread/WaitGroup.hpp"      // IWYU pragma: export
 
-namespace DummyConcurrency {
+namespace NDummyConcurrency {
 
-    using Fiber::StackPool;
-    using Runtime::RunLoop;
-    using Runtime::ThreadPool;
+    using NFiber::StackPool;
+    using NRuntime::RunLoop;
+    using NRuntime::ThreadPool;
 
-    using FMutex     = Synchronization::FiberAware::Mutex;
-    using FEvent     = Synchronization::FiberAware::Event;
-    using FWaitGroup = Synchronization::FiberAware::WaitGroup;
+    using FMutex     = NSynchronization::NFiberAware::Mutex;
+    using FEvent     = NSynchronization::NFiberAware::Event;
+    using FWaitGroup = NSynchronization::NFiberAware::WaitGroup;
 
-    using TSpinLock  = Synchronization::Thread::SpinLock;
-    using TWaitGroup = Synchronization::Thread::WaitGroup;
-    using TEvent     = Synchronization::Thread::Event;
+    using TSpinLock  = NSynchronization::NThread::SpinLock;
+    using TWaitGroup = NSynchronization::NThread::WaitGroup;
+    using TEvent     = NSynchronization::NThread::Event;
 
     template <typename T>
-    using AtomicSharedPtr = DataStructures::AtomicSharedPtr<T>;
+    using AtomicSharedPtr = NDataStructures::AtomicSharedPtr<T>;
     template <typename T>
-    using SharedPtr = DataStructures::SharedPtr<T>;
+    using SharedPtr = NDataStructures::SharedPtr<T>;
     template <typename T>
-    using LockFreeStack = DataStructures::LockFreeStack<T>;
-    using DataStructures::MakeShared;
+    using LockFreeStack = NDataStructures::LockFreeStack<T>;
+    using NDataStructures::MakeShared;
 
-    using Fiber::Go;
-    using Fiber::Yield;
-    using Runtime::Submit;
+    using NFiber::Go;
+    using NFiber::Yield;
+    using NRuntime::Submit;
 
 }  // namespace DummyConcurrency

@@ -4,7 +4,7 @@
 
 #include <string>
 
-using namespace DummyConcurrency;  // NOLINT
+using namespace NDummyConcurrency;  // NOLINT
 
 TEST_SUITE(LockFreeStack) {
     SIMPLE_TEST(JustWorks) {

@@ -5,7 +5,7 @@
 
 #include <ucontext.h>
 
-namespace DummyConcurrency::Context {
+namespace NDummyConcurrency::NContext {
 
     struct MachineContext {
         ucontext_t context;
@@ -20,4 +20,4 @@ namespace DummyConcurrency::Context {
         void* StackPointer() const noexcept;
     };
 
-}  // namespace DummyConcurrency::Context
+}  // namespace NDummyConcurrency::NContext

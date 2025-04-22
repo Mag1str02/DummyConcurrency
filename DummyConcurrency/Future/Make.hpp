@@ -1,17 +1,17 @@
 #pragma once
 
 #include <DummyConcurrency/Future/Future.hpp>
-#include <DummyConcurrency/Future/Result/Make.hpp>
-#include <DummyConcurrency/Future/Result/Traits.hpp>
 #include <DummyConcurrency/Future/State/Contract.hpp>
+#include <DummyConcurrency/Result/Make.hpp>
+#include <DummyConcurrency/Result/Traits.hpp>
 
-namespace DummyConcurrency::Future {
+namespace NDummyConcurrency::NFuture {
 
     template <typename T>
     Future<T> Ready(T value) {
-        auto* contract = State::ContractState<T>::Create();
+        auto* contract = NState::ContractState<T>::Create();
         contract->SetValue(std::move(value));
-        return Future<T>(contract, Runtime::Inline());
+        return Future<T>(contract, NRuntime::Inline());
     }
 
     template <typename T>
@@ -21,7 +21,7 @@ namespace DummyConcurrency::Future {
 
     template <typename T>
     Future<T> Value(T v) {
-        static_assert(!::DummyConcurrency::Traits::IsResult<T>, "Expected plain value");
+        static_assert(!NResult::NTraits::IsResult<T>, "Expected plain value");
         return Ready(std::move(v));
     }
 
@@ -29,21 +29,23 @@ namespace DummyConcurrency::Future {
         return Value(Unit());
     }
 
+    namespace NDetail {
+        struct [[nodiscard]] Failure {
+            Error e;  // NOLINT
+
+            template <typename T>
+            operator TryFuture<T>() const {  // NOLINT
+                return Ready<Result<T>>(NResult::Failure(e));
+            }
+        };
+    }  // namespace NDetail
+
     template <typename T>
     TryFuture<T> Ok(T value) {
-        return Ready(ResultOk(std::move(value)));
+        return Ready(NResult::Ok(std::move(value)));
     }
-    struct [[nodiscard]] Failure {
-        Error e;  // NOLINT
-
-        template <typename T>
-        operator TryFuture<T>() const {  // NOLINT
-            return Ready<Result<T>>(ResultError(e));
-        }
-    };
-
-    inline auto Error(Error e) {
-        return Failure{e};
+    inline auto Failure(Error e) {
+        return NDetail::Failure{e};
     }
 
     /*
@@ -58,7 +60,7 @@ namespace DummyConcurrency::Future {
     template <typename T>
     class Promise {
     public:
-        using State = State::ContractState<T>;
+        using State = NState::ContractState<T>;
 
         explicit Promise(State* state) : state_(state) {}
 
@@ -87,17 +89,17 @@ namespace DummyConcurrency::Future {
 
     template <typename T>
     std::tuple<Future<T>, Promise<T>> Contract() {
-        auto* state = State::ContractState<T>::Create();
-        return {Future<T>(state, Runtime::Inline()), Promise<T>(state)};
+        auto* state = NState::ContractState<T>::Create();
+        return {Future<T>(state, NRuntime::Inline()), Promise<T>(state)};
     }
 
     template <typename F>
-    Future<std::invoke_result_t<F>> Submit(Runtime::IScheduler& scheduler, F function) {
-        using Value                           = std::invoke_result_t<F>;
-        State::ContractState<Value>* contract = State::ContractState<Value>::Create();
-        ::DummyConcurrency::Runtime::Submit(scheduler, [contract, func = std::move(function)]() { contract->SetValue(func()); });
+    Future<std::invoke_result_t<F>> Submit(NRuntime::IScheduler& scheduler, F function) {
+        using Value                            = std::invoke_result_t<F>;
+        NState::ContractState<Value>* contract = NState::ContractState<Value>::Create();
+        ::NDummyConcurrency::NRuntime::Submit(scheduler, [contract, func = std::move(function)]() { contract->SetValue(func()); });
 
-        return Future<Value>(contract, Runtime::Inline());
+        return Future<Value>(contract, NRuntime::Inline());
     }
 
-}  // namespace DummyConcurrency::Future
+}  // namespace NDummyConcurrency::NFuture

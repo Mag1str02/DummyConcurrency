@@ -2,17 +2,17 @@
 
 #include "Result.hpp"
 
-namespace DummyConcurrency {
+namespace NDummyConcurrency::NResult {
 
     template <typename T>
-    Result<T> ResultOk(T value) {
+    Result<T> Ok(T value) {
         return {std::move(value)};
     }
-    Status ResultOk() {
+    Status Ok() {
         return {Unit{}};
     }
-    inline auto ResultError(Error error) {
+    inline auto Failure(Error error) {
         return std::unexpected(error);
     }
 
-}  // namespace DummyConcurrency
+}  // namespace NDummyConcurrency::NResult

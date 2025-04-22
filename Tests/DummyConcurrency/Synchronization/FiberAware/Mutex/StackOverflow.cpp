@@ -7,7 +7,7 @@
 
 #include <fmt/core.h>
 
-using namespace DummyConcurrency;      // NOLINT
+using namespace NDummyConcurrency;      // NOLINT
 using namespace std::chrono_literals;  // NOLINT
 
 TEST_SUITE(FiberSynchronizationMutex_StackOverflow) {
@@ -40,7 +40,7 @@ TEST_SUITE(FiberSynchronizationMutex_StackOverflow) {
 
                    wg.Done();
                },
-               {.Pool = Fiber::InlineStackPool<kSmallStackSize>()});
+               {.Pool = NFiber::InlineStackPool<kSmallStackSize>()});
         }
 
         wg.Wait();

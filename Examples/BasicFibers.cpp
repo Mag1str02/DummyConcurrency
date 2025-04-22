@@ -4,15 +4,15 @@
 #include <format>
 
 using namespace std::chrono_literals;
-using namespace DummyConcurrency;
+using namespace NDummyConcurrency;
 
 int main() {
-    Runtime::RunLoop loop;
-    Fiber::Go(loop, []() {
+    NRuntime::RunLoop loop;
+    NFiber::Go(loop, []() {
         std::cout << "Hello from fiber 1: " << std::this_thread::get_id() << std::endl;
-        Fiber::Yield();
+        NFiber::Yield();
         std::cout << "Hello from fiber 3: " << std::this_thread::get_id() << std::endl;
-        Fiber::Yield();
+        NFiber::Yield();
         std::cout << "Hello from fiber 5: " << std::this_thread::get_id() << std::endl;
     });
 
