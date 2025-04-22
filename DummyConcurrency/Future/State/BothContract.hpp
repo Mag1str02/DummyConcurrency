@@ -43,6 +43,8 @@ namespace DummyConcurrency::Future::State {
             }
         }
 
+        virtual bool IsReady() const override { return state_.IsReady(); }
+
         virtual void Run() noexcept override {
             (*callback_.Get())(std::tuple<A, B>(value_a_.Move(), value_b_.Move()));
             if (state_.Finish() == OneAllStateMachine::Result::Completed) {
@@ -62,7 +64,7 @@ namespace DummyConcurrency::Future::State {
         ManualLifetime<B> value_b_;
 
         ManualLifetime<Callback<std::tuple<A, B>>> callback_;
-        Runtime::IScheduler*                     scheduler_;
+        Runtime::IScheduler*                       scheduler_;
     };
 
 }  // namespace DummyConcurrency::Future::State

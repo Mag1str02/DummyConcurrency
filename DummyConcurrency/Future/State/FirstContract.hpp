@@ -31,6 +31,7 @@ namespace DummyConcurrency::Future::State {
                 SubmitContract();
             }
         }
+        virtual bool IsReady() const override { return state_.IsReady(); }
 
         virtual void Run() noexcept override {
             T* value = value_.load();
@@ -64,7 +65,7 @@ namespace DummyConcurrency::Future::State {
         OneAllStateMachine          state_;
         twist::ed::std::atomic<T*>  value_ = nullptr;
         ManualLifetime<Callback<T>> callback_;
-        Runtime::IScheduler*      scheduler_;
+        Runtime::IScheduler*        scheduler_;
     };
 
 }  // namespace DummyConcurrency::Future::State

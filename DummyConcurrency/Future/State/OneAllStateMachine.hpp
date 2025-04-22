@@ -88,10 +88,11 @@ namespace DummyConcurrency::Future::State {
             }
             return Result::Finishing;
         }
+        bool IsReady() const { return HasProduced(state_.load(), producer_count_); }
 
     private:
         ImplementationLayer::Atomic<uint32_t> state_ = 0;
-        uint32_t                              producer_count_;
+        const uint32_t                        producer_count_;
     };
 
 }  // namespace DummyConcurrency::Future::State

@@ -30,14 +30,16 @@ namespace DummyConcurrency::Future {
             state_ = nullptr;
         }
 
+        bool IsReady() const { return state_->IsReady(); }
+
         Runtime::IScheduler& GetScheduler() const { return *scheduler_; }
-        void                   SetScheduler(Runtime::IScheduler& scheduler) {
+        void                 SetScheduler(Runtime::IScheduler& scheduler) {
             DC_ASSERT(state_ != nullptr, "Future was already consumed");
             scheduler_ = &scheduler;
         }
 
     private:
-        State*                 state_     = nullptr;
+        State*               state_     = nullptr;
         Runtime::IScheduler* scheduler_ = nullptr;
     };
 
