@@ -6,19 +6,19 @@ namespace DummyConcurrency::Fiber {
 
     NewStack StackPool::AllocateStack() {
         std::unique_lock guard(lock_);
-        if (stack_of_stack_ != nullptr) {
+        if (stack_of_stack_ == nullptr) {
             guard.unlock();
+            size_.fetch_add(1);
             return NewStack::Allocate(stack_size_);
         }
         NewStack stack  = std::move(stack_of_stack_->Stack);
         stack_of_stack_ = stack_of_stack_->Next;
-        size_.fetch_add(1);
         return stack;
     }
     void StackPool::FreeStack(NewStack&& stack) {
         stack.Reset();
-        NewNode* node = stack.Allocate<NewNode>(std::move(stack));  // This is very risky but should work
-        size_.fetch_add(1);
+        void*    node_addr = stack.PreAllocate<NewNode>();
+        NewNode* node      = new (node_addr) NewNode(std::move(stack));
 
         std::unique_lock guard(lock_);
         node->Next      = stack_of_stack_;
@@ -26,6 +26,7 @@ namespace DummyConcurrency::Fiber {
     }
     void StackPool::Clear() {
         std::unique_lock guard(lock_);
+        size_.store(0);
         while (stack_of_stack_ != nullptr) {
             NewNode* next = stack_of_stack_->Next;
             stack_of_stack_->Stack.~NewStack();

@@ -2,21 +2,22 @@
 
 #include <DummyConcurrency/DummyConcurrency.hpp>
 
-#include <functional>
-#include <thread>
-
 #include <unistd.h>
 
 using namespace DummyConcurrency;
 
-constexpr uint32_t kFibersToCreate = 100'000'000;
+constexpr uint32_t kFibersToCreate = 10'000'000;
+
+StackPool pool(Fiber::StackSize::Medium);
 
 void Body(RunLoop& loop, uint32_t& counter) {
-    Go(loop, [&]() {
-        if (++counter < kFibersToCreate) {
-            Body(loop, counter);
-        }
-    });
+    Go(loop,
+       [&]() {
+           if (++counter < kFibersToCreate) {
+               Body(loop, counter);
+           }
+       },
+       {.Pool = &pool});
 }
 
 int main() {
@@ -33,4 +34,5 @@ int main() {
 
     std::println("Created {} fibers in {} seconds", kFibersToCreate, tm.GetDuration());
     std::println("Spending {} ns per fibers", tm.GetDuration() / kFibersToCreate * 1'000'000'000);
+    std::println("Pool size {} ", pool.Size());
 }

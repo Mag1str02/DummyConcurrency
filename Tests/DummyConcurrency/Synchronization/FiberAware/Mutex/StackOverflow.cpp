@@ -40,7 +40,7 @@ TEST_SUITE(FiberSynchronizationMutex_StackOverflow) {
 
                    wg.Done();
                },
-               {.StackeSize = kSmallStackSize});
+               {.Pool = Fiber::InlineStackPool<kSmallStackSize>()});
         }
 
         wg.Wait();
