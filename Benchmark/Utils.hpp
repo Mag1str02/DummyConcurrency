@@ -16,7 +16,7 @@ private:
 };
 
 class BenchTimeBudget {
-    using Clock = std::chrono::steady_clock;
+    using Clock = std::chrono::high_resolution_clock;
     using Units = Clock::duration;
 
 public:

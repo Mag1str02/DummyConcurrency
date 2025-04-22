@@ -8,7 +8,7 @@ using namespace DummyConcurrency;
 
 constexpr uint32_t kFibersToCreate = 50'000'000;
 
-StackPool pool(Fiber::StackSize::Medium);
+StackPool gPool(Fiber::StackSize::Medium);
 
 void Body(RunLoop& loop, uint32_t& counter) {
     Go(loop,
@@ -17,7 +17,7 @@ void Body(RunLoop& loop, uint32_t& counter) {
                Body(loop, counter);
            }
        },
-       {.Pool = &pool});
+       {.Pool = &gPool});
 }
 
 int main() {
@@ -34,5 +34,5 @@ int main() {
 
     std::println("Created {} fibers in {} seconds", kFibersToCreate, tm.GetDuration());
     std::println("Spending {} ns per fibers", tm.GetDuration() / kFibersToCreate * 1'000'000'000);
-    std::println("Pool size {} ", pool.Size());
+    std::println("Pool size {} ", gPool.Size());
 }

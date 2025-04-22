@@ -13,27 +13,29 @@ int main() {
     std::getchar();
 
     uint32_t   thread_count = std::thread::hardware_concurrency();
-    ThreadPool tp(2);
-    FMutex     mutex;
+    ThreadPool tp(8);
+    FMutex mutex;
     TWaitGroup wg;
     uint32_t   counter = 0;
 
-    BenchTimeBudget budget(10s);
+    constexpr uint64_t kSectionsPerThread = 1'000'000;
 
     wg.Add(thread_count);
     for (uint32_t i = 0; i < thread_count; ++i) {
         Go(tp, [&]() {
-            while (budget) {
-                mutex.Lock();
+            for (uint64_t i = 0; i < kSectionsPerThread; ++i) {
+                mutex.lock();
                 ++counter;
-                mutex.Unlock();
+                mutex.unlock();
             }
             wg.Done();
         });
     }
-    std::cout << "Starting benchmark..." << std::endl;
+    std::println("Starting benchmark...");
+    Timer t;
     tp.Start();
     wg.Wait();
     tp.Stop();
-    std::cout << "Critical section amount: " << counter << std::endl;
+    std::println("Critical section amount {}", thread_count * kSectionsPerThread);
+    std::println("Avg time per section {} ns", t.GetDuration() / (thread_count * kSectionsPerThread) * 1'000'000'000);
 }

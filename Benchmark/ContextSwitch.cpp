@@ -2,8 +2,6 @@
 
 #include <DummyConcurrency/DummyConcurrency.hpp>
 
-#include <thread>
-
 #include <unistd.h>
 
 using namespace DummyConcurrency;
@@ -12,15 +10,18 @@ int main() {
     std::cerr << getpid() << std::endl;
     std::getchar();
 
+    constexpr uint64_t kYieldAmount = 100'000'000;
+
     RunLoop loop;
     Go(loop, [&]() {
-        for (uint32_t i = 0; i < 100'000'000; ++i) {
+        for (uint32_t i = 0; i < kYieldAmount; ++i) {
             Yield();
         }
     });
 
-    std::cout << "Starting benchmark..." << std::endl;
+    std::println("Starting benchmark...");
     Timer timer;
     loop.Run();
-    std::cout << "Time passed: " << timer.GetDuration() << std::endl;
+    std::println("Performed {} context switches", kYieldAmount * 2);
+    std::println("Avg time per switch {} ns", timer.GetDuration() / (kYieldAmount * 2) * 1'000'000'000);
 }
