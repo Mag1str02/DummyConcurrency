@@ -50,8 +50,8 @@ namespace DummyConcurrency::Context {
         getcontext(&context);
 
         context.uc_link           = 0;
-        context.uc_stack.ss_sp    = stack.data();
-        context.uc_stack.ss_size  = stack.size();
+        context.uc_stack.ss_sp    = stack.Bottom;
+        context.uc_stack.ss_size  = size_t(stack.Top - stack.Bottom);
         context.uc_stack.ss_flags = 0;
 
         Pointer t{.addr = trampoline};

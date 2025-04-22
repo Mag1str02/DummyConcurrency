@@ -5,14 +5,15 @@ namespace DummyConcurrency::Fiber {
     StackPool::StackPool(StackSize size) : stack_size_(SizeInBytes(size)) {}
 
     NewStack StackPool::AllocateStack() {
-        std::unique_lock guard(lock_);
+        lock_.Lock();
         if (stack_of_stack_ == nullptr) {
-            guard.unlock();
+            lock_.Unlock();
             size_.fetch_add(1);
             return NewStack::Allocate(stack_size_);
         }
         NewStack stack  = std::move(stack_of_stack_->Stack);
         stack_of_stack_ = stack_of_stack_->Next;
+        lock_.Unlock();
         return stack;
     }
     void StackPool::FreeStack(NewStack&& stack) {
@@ -20,18 +21,20 @@ namespace DummyConcurrency::Fiber {
         void*    node_addr = stack.PreAllocate<NewNode>();
         NewNode* node      = new (node_addr) NewNode(std::move(stack));
 
-        std::unique_lock guard(lock_);
+        lock_.Lock();
         node->Next      = stack_of_stack_;
         stack_of_stack_ = node;
+        lock_.Unlock();
     }
     void StackPool::Clear() {
-        std::unique_lock guard(lock_);
+        lock_.Lock();
         size_.store(0);
         while (stack_of_stack_ != nullptr) {
             NewNode* next = stack_of_stack_->Next;
             stack_of_stack_->Stack.~NewStack();
             stack_of_stack_ = next;
         }
+        lock_.Unlock();
     }
     uint64_t StackPool::Size() const {
         return size_.load();

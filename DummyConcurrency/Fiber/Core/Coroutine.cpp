@@ -2,11 +2,10 @@
 
 namespace DummyConcurrency::Fiber {
 
-
     ICoroutine::ICoroutine(Context::StackView view) {
         coro_context_.Setup(view, this);
         caller_context_ = nullptr;
-        ImplementationLayer::NewFiber(&impl_fiber_, view);
+        ImplementationLayer::NewFiber(&impl_fiber_, {view.Bottom, size_t(view.Top - view.Bottom)});
     }
 
     void ICoroutine::SwitchTo(ICoroutine& other) {

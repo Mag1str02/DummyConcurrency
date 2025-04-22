@@ -8,7 +8,7 @@ namespace DummyConcurrency::Context {
     }
 
     void MachineContext::Setup(StackView stack, ITrampoline* trampoline) {
-        rsp_ = SetupMachineContext((void*)&stack.back(), (void*)MachineContextTrampoline, (void*)trampoline);
+        rsp_ = SetupMachineContext((void*)stack.Top, (void*)MachineContextTrampoline, (void*)trampoline);
     }
 
     void MachineContext::SwitchTo(MachineContext& target) {

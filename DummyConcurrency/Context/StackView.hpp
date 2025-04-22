@@ -1,9 +1,12 @@
 #pragma once
 
-#include <span>
+#include <cstddef>
 
 namespace DummyConcurrency::Context {
 
-    using StackView = std::span<std::byte>;
+    struct StackView {
+        std::byte* Bottom;
+        std::byte* Top;
+    };
 
 }  // namespace DummyConcurrency::Context

@@ -6,7 +6,7 @@
 
 using namespace DummyConcurrency;
 
-constexpr uint32_t kFibersToCreate = 10'000'000;
+constexpr uint32_t kFibersToCreate = 50'000'000;
 
 StackPool pool(Fiber::StackSize::Medium);
 
