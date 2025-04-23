@@ -282,10 +282,22 @@ TEST_SUITE(FiberScheduling_UnitTP) {
         pool2.Stop();
     }
 
-    SIMPLE_TEST(YieldWhileException) {
+    SIMPLE_TEST(Exception) {
         RunLoop loop;
 
         Go(loop, [&] {
+            try {
+                throw std::exception();
+            } catch (const std::exception& ex) {
+            }
+        });
+        loop.Run();
+    }
+
+    SIMPLE_TEST(YieldWhileException) {
+        ThreadPool thread_pool(1);
+
+        Go(thread_pool, [&] {
             try {
                 wheels::Defer defer([]() { Yield(); });
                 throw std::runtime_error("Some1");
@@ -293,16 +305,31 @@ TEST_SUITE(FiberScheduling_UnitTP) {
                 ASSERT_TRUE(std::string(ex.what()) == "Some1");
             }
         });
+        thread_pool.Start();
+        thread_pool.Stop();
+    }
 
-        loop.RunAtMost(1);
+    SIMPLE_TEST(YieldWhile2Exception) {
+        ThreadPool thread_pool(1);
 
-        try {
-            wheels::Defer defer([&]() { loop.Run(); });
-            throw std::runtime_error("Some2");
-        } catch (const std::exception& ex) {
-            ASSERT_TRUE(std::string(ex.what()) == "Some2");
-        }
+        Go(thread_pool, [&] {
+            try {
+                wheels::Defer defer([]() { Yield(); });
+                throw std::runtime_error("Some1");
+            } catch (const std::exception& ex) {
+                ASSERT_TRUE(std::string(ex.what()) == "Some1");
+            }
+        });
+        Go(thread_pool, [&] {
+            try {
+                wheels::Defer defer([]() { Yield(); });
+                throw std::runtime_error("Some2");
+            } catch (const std::exception& ex) {
+                ASSERT_TRUE(std::string(ex.what()) == "Some2");
+            }
+        });
 
-        ASSERT_TRUE(loop.IsEmpty());
+        thread_pool.Start();
+        thread_pool.Stop();
     }
 }

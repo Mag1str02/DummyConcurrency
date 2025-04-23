@@ -6,6 +6,8 @@ namespace NDummyConcurrency::NContext {
 
     class ExceptionsContext {
     public:
+        static constexpr bool IsSwitchAllowed() { return true; }
+
         void SwitchTo(ExceptionsContext& target);
 
     private:
