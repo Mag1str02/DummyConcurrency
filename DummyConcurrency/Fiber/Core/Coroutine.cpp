@@ -1,5 +1,7 @@
 #include "Coroutine.hpp"
 
+#include <DummyConcurrency/Utils/Assert.hpp>
+
 namespace NDummyConcurrency::NFiber {
 
     ICoroutine::ICoroutine(NContext::StackView view) {

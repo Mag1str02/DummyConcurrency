@@ -1,5 +1,6 @@
 #include <DummyConcurrency/DummyConcurrency.hpp>
 
+#include <wheels/core/defer.hpp>
 #include <wheels/core/stop_watch.hpp>
 #include <wheels/test/framework.hpp>
 
@@ -7,7 +8,7 @@
 #include <thread>
 
 using namespace std::chrono_literals;  // NOLINT
-using namespace NDummyConcurrency;      // NOLINT
+using namespace NDummyConcurrency;     // NOLINT
 
 void ExpectScheduler(ThreadPool& pool) {
     ASSERT_EQ(ThreadPool::Current(), &pool);
@@ -279,5 +280,29 @@ TEST_SUITE(FiberScheduling_UnitTP) {
 
         pool1.Stop();
         pool2.Stop();
+    }
+
+    SIMPLE_TEST(YieldWhileException) {
+        RunLoop loop;
+
+        Go(loop, [&] {
+            try {
+                wheels::Defer defer([]() { Yield(); });
+                throw std::runtime_error("Some1");
+            } catch (const std::exception& ex) {
+                ASSERT_TRUE(std::string(ex.what()) == "Some1");
+            }
+        });
+
+        loop.RunAtMost(1);
+
+        try {
+            wheels::Defer defer([&]() { loop.Run(); });
+            throw std::runtime_error("Some2");
+        } catch (const std::exception& ex) {
+            ASSERT_TRUE(std::string(ex.what()) == "Some2");
+        }
+
+        ASSERT_TRUE(loop.IsEmpty());
     }
 }
