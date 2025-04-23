@@ -287,8 +287,9 @@ TEST_SUITE(FiberScheduling_UnitTP) {
 
         Go(loop, [&] {
             try {
-                throw std::exception();
+                throw std::runtime_error("Some text");
             } catch (const std::exception& ex) {
+                ASSERT_TRUE(std::string(ex.what()) == "Some text");
             }
         });
         loop.Run();
@@ -297,6 +298,8 @@ TEST_SUITE(FiberScheduling_UnitTP) {
     SIMPLE_TEST(YieldWhileException) {
         ThreadPool thread_pool(1);
 
+        TWaitGroup wg;
+        wg.Add(1);
         Go(thread_pool, [&] {
             try {
                 wheels::Defer defer([]() { Yield(); });
@@ -304,14 +307,18 @@ TEST_SUITE(FiberScheduling_UnitTP) {
             } catch (const std::exception& ex) {
                 ASSERT_TRUE(std::string(ex.what()) == "Some1");
             }
+            wg.Done();
         });
         thread_pool.Start();
+        wg.Wait();
         thread_pool.Stop();
     }
 
     SIMPLE_TEST(YieldWhile2Exception) {
         ThreadPool thread_pool(1);
 
+        TWaitGroup wg;
+        wg.Add(2);
         Go(thread_pool, [&] {
             try {
                 wheels::Defer defer([]() { Yield(); });
@@ -319,6 +326,7 @@ TEST_SUITE(FiberScheduling_UnitTP) {
             } catch (const std::exception& ex) {
                 ASSERT_TRUE(std::string(ex.what()) == "Some1");
             }
+            wg.Done();
         });
         Go(thread_pool, [&] {
             try {
@@ -327,9 +335,11 @@ TEST_SUITE(FiberScheduling_UnitTP) {
             } catch (const std::exception& ex) {
                 ASSERT_TRUE(std::string(ex.what()) == "Some2");
             }
+            wg.Done();
         });
 
         thread_pool.Start();
+        wg.Wait();
         thread_pool.Stop();
     }
 }

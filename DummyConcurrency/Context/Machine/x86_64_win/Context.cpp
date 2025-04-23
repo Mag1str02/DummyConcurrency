@@ -9,7 +9,7 @@ namespace NDummyConcurrency::NContext {
     }
 
     void MachineContext::Setup(StackView stack, ITrampoline* trampoline) {
-        rsp_ = SetupMachineContext((void*)stack.Top, (void*)MachineContextTrampoline, (void*)trampoline);
+        rsp_ = SetupMachineContext((void*)stack.Top, (void*)stack.Bottom, (void*)MachineContextTrampoline, (void*)trampoline);
     }
 
 }  // namespace NDummyConcurrency::NContext

@@ -7,96 +7,101 @@
 
 SetupMachineContext:
     # Arguments
-    # 1) %rcx - bottom of the stack
-    # 2) %rdx - trampoline
-    # 3) %R8 - arg
+    # 1) %rcx - top of the stack
+    # 2) %rdx - bottom of the stack
+    # 3) %R8 - trampoline
+    # 4) %R9 - trampoline arg
 
     # Switch to stack
     movq %rsp, %r11 # tmp := rsp
-    movq %rcx, %rsp # rsp := rdi
+    movq %rcx, %rsp # rsp := rcx
 
     # Just to be safe
     subq $64, %rsp
 
     # trampoline stack must be 16-byte aligned
     andq $-16, %rsp
-    addq $8, %rsp
 
     # 5-th argument for trampoline
-    movq %r8, 40(%rsp)
+    movq %r9, 48(%rsp)
 
     # Prepare for context switch
-
-    # 1) Return address for SwitchMachineContext
-    pushq %rdx
-
-    # 2) Callee-saved registers
-    pushq $0 # r15
-    pushq $0 # r14
-    pushq $0 # r13
-    pushq $0 # r12
-    pushq $0 # rbx
-    pushq $0 # rbp
-    pushq $0 # rdi
-    pushq $0 # rsi
-    
-    subq $160, %rsp // 16 * 10 bytes for xmm6-xmm15
-    movups %xmm6, 16*0(%rsp)
-    movups %xmm7, 16*1(%rsp)
-    movups %xmm8, 16*2(%rsp)
-    movups %xmm9, 16*3(%rsp)
-    movups %xmm10, 16*4(%rsp)
-    movups %xmm11, 16*5(%rsp)
-    movups %xmm12, 16*6(%rsp)
-    movups %xmm13, 16*7(%rsp)
-    movups %xmm14, 16*8(%rsp)
-    movups %xmm15, 16*9(%rsp)
+    subq $0x120, %rsp
+    movq %r8, 0x00(%rsp) # Return address for SwitchMachineContext
+    stmxcsr  0x08(%rsp) /* MMX control- and status-word */
+    fnstcw   0x0C(%rsp) /* x87 control-word */
+    # 2) Callee-saved registers without default values
+    # 0x10 r15
+    # 0x18 r14
+    # 0x20 r13
+    # 0x28 r12
+    # 0x30 rbx
+    # 0x38 rbp
+    # 0x40 rdi
+    # 0x48 rsi
+    # 0x50 %xmm6
+    # 0x60 %xmm7
+    # 0x70 %xmm8
+    # 0x80 %xmm9
+    # 0x90 %xmm10
+    # 0xA0 %xmm11
+    # 0xB0 %xmm12
+    # 0xC0 %xmm13
+    # 0xD0 %xmm14
+    # 0xE0 %xmm15
+    # 3) NT_TIB exception stuff
+    movq $0, 0x100(%rsp) # Fiber Local Storage, we dont care about it
+    movq %rdx, 0x108(%rsp) # Bottom of stack allocation
+    movq %rdx, 0x110(%rsp) # Bottom of available stack
+    movq %rcx, 0x118(%rsp) # Top of usable stack
 
     # Return value for SetupMachineContext
     movq %rsp, %rax
-
     # Restore callstack
     movq %r11, %rsp # rsp := tmp
 
     retq
 
 
-# SwitchMachineContext(from_rsp, to_rsp)
-
 SwitchMachineContext:
-    # SwitchMachineContext frame created on top of the current stack
+    movq (%rsp), %rax # Save return address
 
-    # 1. Save current execution context to 'from'
+    subq $0x120, %rsp
+    movq %rax, 0x00(%rsp) # Return address for SwitchMachineContext
+    stmxcsr  0x08(%rsp) /* save MMX control- and status-word */
+    fnstcw   0x0C(%rsp) /* save x87 control-word */
+    # 2) Callee-saved registers default values
+    movq %r15,  0x10(%rsp)
+    movq %r14,  0x18(%rsp)
+    movq %r13,  0x20(%rsp)
+    movq %r12,  0x28(%rsp)
+    movq %rbx,  0x30(%rsp)
+    movq %rbp,  0x38(%rsp)
+    movq %rdi,  0x40(%rsp)
+    movq %rsi,  0x48(%rsp)
+    movups %xmm6, 0x50(%rsp)
+    movups %xmm7, 0x60(%rsp)
+    movups %xmm8, 0x70(%rsp)
+    movups %xmm9, 0x80(%rsp)
+    movups %xmm10, 0x90(%rsp)
+    movups %xmm11, 0xA0(%rsp)
+    movups %xmm12, 0xB0(%rsp)
+    movups %xmm13, 0xC0(%rsp)
+    movups %xmm14, 0xD0(%rsp)
+    movups %xmm15, 0xE0(%rsp)
+    # 3) exception stuff
 
-    # 1.1 Save callee-saved registers on top of the current stack
-
-    # https://stackoverflow.com/questions/18024672/what-registers-are-preserved-through-a-linux-x86-64-function-call
-    # https://uclibc.org/docs/psABI-x86_64.pdf
-
-    pushq %r15
-    pushq %r14
-    pushq %r13
-    pushq %r12
-
-    pushq %rbx
-    pushq %rbp
-    pushq %rdi
-    pushq %rsi
+    /* Save NT_TIB */
+    movq  %gs:(0x30), %r10
+    movq  0x20(%r10), %r11
+    movq  %r11, 0x100(%rsp)
+    movq  0x1478(%r10), %r11
+    movq  %r11, 0x108(%rsp)
+    movq  0x10(%r10), %r11
+    movq  %r11, 0x110(%rsp)
+    movq  0x08(%r10), %r11
+    movq  %r11, 0x118(%rsp)
     
-    subq $160, %rsp // 16 * 10 bytes for xmm6-xmm15
-    movups %xmm6, 16*0(%rsp)
-    movups %xmm7, 16*1(%rsp)
-    movups %xmm8, 16*2(%rsp)
-    movups %xmm9, 16*3(%rsp)
-    movups %xmm10, 16*4(%rsp)
-    movups %xmm11, 16*5(%rsp)
-    movups %xmm12, 16*6(%rsp)
-    movups %xmm13, 16*7(%rsp)
-    movups %xmm14, 16*8(%rsp)
-    movups %xmm15, 16*9(%rsp)
-
-    # Switch stacks
-
     # 1.2 Save current stack pointer to 'from' MachineContext
     movq %rsp, (%rcx) # from_rsp := rsp
 
@@ -104,32 +109,43 @@ SwitchMachineContext:
 
     # 2.1 Set stack pointer to target stack
     movq (%rdx), %rsp # rsp := to_rsp
-
     # 2.2 Restore and pop registers saved on target stack
+    movq 0x00(%rsp), %rax
+    ldmxcsr 0x08(%rsp) /* save MMX control- and status-word */
+    fldcw   0x0C(%rsp) /* save x87 control-word */
 
-    movups 16*0(%rsp), %xmm6
-    movups 16*1(%rsp), %xmm7
-    movups 16*2(%rsp), %xmm8
-    movups 16*3(%rsp), %xmm9
-    movups 16*4(%rsp), %xmm10
-    movups 16*5(%rsp), %xmm11
-    movups 16*6(%rsp), %xmm12
-    movups 16*7(%rsp), %xmm13
-    movups 16*8(%rsp), %xmm14
-    movups 16*9(%rsp), %xmm15
-    
-    addq $160, %rsp // 16 * 10 bytes for xmm6-xmm15
+    movq 0x10(%rsp), %r15  
+    movq 0x18(%rsp), %r14  
+    movq 0x20(%rsp), %r13  
+    movq 0x28(%rsp), %r12  
+    movq 0x30(%rsp), %rbx  
+    movq 0x38(%rsp), %rbp  
+    movq 0x40(%rsp), %rdi  
+    movq 0x48(%rsp), %rsi  
+    movups 0x50(%rsp), %xmm6 
+    movups 0x60(%rsp), %xmm7 
+    movups 0x70(%rsp), %xmm8 
+    movups 0x80(%rsp), %xmm9 
+    movups 0x90(%rsp), %xmm10 
+    movups 0xA0(%rsp), %xmm11 
+    movups 0xB0(%rsp), %xmm12 
+    movups 0xC0(%rsp), %xmm13 
+    movups 0xD0(%rsp), %xmm14 
+    movups 0xE0(%rsp), %xmm15
 
-    popq %rsi
-    popq %rdi
-    popq %rbp
-    popq %rbx
+    /* Restore NT_TIB */
+    movq  %gs:(0x30), %r10
+    movq  0x100(%rsp), %r11
+    movq  %r11, 0x20(%r10)
+    movq  0x108(%rsp), %r11
+    movq  %r11, 0x1478(%r10)
+    movq  0x110(%rsp), %r11
+    movq  %r11, 0x10(%r10)
+    movq  0x118(%rsp), %r11
+    movq  %r11, 0x08(%r10)
 
-    popq %r12
-    popq %r13
-    popq %r14
-    popq %r15
+    addq $0x120, %rsp // 16 * 10 bytes for xmm6-xmm15
 
-    # Pop current SwitchMachineContext frame from target stack
+    movq %rax, (%rsp)
 
     retq
