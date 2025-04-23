@@ -25,7 +25,7 @@ namespace NDummyConcurrency::NSynchronization {
 
         if (NFiber::Fiber::Self()) {
             FiberAwaiter awaiter(std::move(function));
-            if (symetric_context_switch) {
+            if (symetric_context_switch && NFiber::Fiber::ContextSwitchAwailable()) {
                 awaiter.EnableSymmetricContextSwitch();
             }
             NFiber::Suspend(awaiter);
