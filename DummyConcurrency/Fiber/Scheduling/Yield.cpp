@@ -12,6 +12,9 @@ namespace NDummyConcurrency::NFiber {
     void Yield() {
         Fiber* current_fiber = Fiber::Self();
         DC_ASSERT(current_fiber != nullptr, "fiber::Yield must be called from fiber");
+        if (!Fiber::ContextSwitchAwailable()) {
+            return;
+        }
 
         YieldAwaiter awaiter;
         current_fiber->Suspend(awaiter);

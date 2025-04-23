@@ -26,6 +26,10 @@ namespace NDummyConcurrency::NFiber {
         return gCurrentFiber;
     }
 
+    bool Fiber::ContextSwitchAwailable() {
+        return gCurrentFiber != nullptr && NContext::ExceptionsContext::IsSwitchAllowed();
+    }
+
     IScheduler& Fiber::GetScheduler() const {
         return *scheduler_;
     }

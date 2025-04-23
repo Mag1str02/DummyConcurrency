@@ -11,6 +11,7 @@ namespace NDummyConcurrency::NFiber {
         template <typename F>
         static Fiber* Create(IScheduler& schedule, F&& body, Hint hint);
         static Fiber* Self();
+        static bool   ContextSwitchAwailable();
 
     public:
         virtual void Run() noexcept;
