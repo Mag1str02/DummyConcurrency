@@ -9,19 +9,21 @@ namespace NDummyConcurrency::NSynchronization::NFiberAware {
         if (head_.compare_exchange_strong(expected, kLocked)) {
             return;
         }
-        DoAwait([this](IAwaiter* current_awaiter) {
-            IAwaiter* expected = head_.load();
-            IAwaiter* new_state;
-            do {
-                new_state             = kLocked;
-                current_awaiter->Next = kUnlocked;
-                if (expected != kUnlocked) {
-                    new_state             = current_awaiter;
-                    current_awaiter->Next = expected;
-                }
-            } while (!head_.compare_exchange_weak(expected, new_state));
-            return new_state == current_awaiter;
-        });
+        DoAwait(
+            [this](IAwaiter* current_awaiter) {
+                IAwaiter* expected = head_.load();
+                IAwaiter* new_state;
+                do {
+                    new_state             = kLocked;
+                    current_awaiter->Next = kUnlocked;
+                    if (expected != kUnlocked) {
+                        new_state             = current_awaiter;
+                        current_awaiter->Next = expected;
+                    }
+                } while (!head_.compare_exchange_weak(expected, new_state));
+                return new_state == current_awaiter;
+            },
+            true);
     }
 
     bool Mutex::TryLock() {
@@ -67,4 +69,4 @@ namespace NDummyConcurrency::NSynchronization::NFiberAware {
         Unlock();
     }
 
-}  // namespace NDummyConcurrency::NSynchronization::FiberAware
+}  // namespace NDummyConcurrency::NSynchronization::NFiberAware

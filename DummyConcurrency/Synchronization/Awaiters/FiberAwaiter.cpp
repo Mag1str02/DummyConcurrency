@@ -8,7 +8,7 @@ namespace NDummyConcurrency::NSynchronization {
     static thread_local NFiber::Handle gSwitchFiberBuffer;
 
     void IFiberAwaiter::Wake() noexcept {
-        if (NFiber::Fiber::Self() != nullptr) {
+        if (symmetric_switch_ && NFiber::Fiber::Self() != nullptr) {
             Switch(gSwitchFiberBuffer);
         } else {
             Schedule();
@@ -18,6 +18,9 @@ namespace NDummyConcurrency::NSynchronization {
         if (gSwitchFiberBuffer.IsValid()) {
             gSwitchFiberBuffer.Schedule();
         }
+    }
+    void IFiberAwaiter::EnableSymmetricContextSwitch() {
+        symmetric_switch_ = true;
     }
 
 }  // namespace NDummyConcurrency::NSynchronization

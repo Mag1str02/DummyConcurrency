@@ -11,6 +11,10 @@ namespace NDummyConcurrency::NSynchronization {
         virtual void Wake() noexcept override final;
 
         void AfterSuspend();
+        void EnableSymmetricContextSwitch();
+
+    private:
+        bool symmetric_switch_ = false;
     };
 
-}  // namespace NDummyConcurrency::Synchronization
+}  // namespace NDummyConcurrency::NSynchronization

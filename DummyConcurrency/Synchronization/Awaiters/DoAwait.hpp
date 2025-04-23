@@ -9,7 +9,7 @@
 namespace NDummyConcurrency::NSynchronization {
 
     template <typename F>
-    void DoAwait(F&& function) {
+    void DoAwait(F&& function, bool symetric_context_switch = false) {
         class FiberAwaiter : public IFiberAwaiter {
         public:
             explicit FiberAwaiter(F&& function) : function_(std::move(function)) {}
@@ -25,6 +25,9 @@ namespace NDummyConcurrency::NSynchronization {
 
         if (NFiber::Fiber::Self()) {
             FiberAwaiter awaiter(std::move(function));
+            if (symetric_context_switch) {
+                awaiter.EnableSymmetricContextSwitch();
+            }
             NFiber::Suspend(awaiter);
             awaiter.AfterSuspend();
         } else {
