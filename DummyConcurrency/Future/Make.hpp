@@ -11,7 +11,7 @@ namespace NDummyConcurrency::NFuture {
     Future<T> Ready(T value) {
         auto* contract = NState::ContractState<T>::Create();
         contract->SetValue(std::move(value));
-        return Future<T>(contract, NRuntime::Inline());
+        return Future<T>(contract, NRuntime::InlineScheduler());
     }
 
     template <typename T>
@@ -82,7 +82,7 @@ namespace NDummyConcurrency::NFuture {
     template <typename T>
     std::tuple<Future<T>, Promise<T>> Contract() {
         auto* state = NState::ContractState<T>::Create();
-        return {Future<T>(state, NRuntime::Inline()), Promise<T>(state)};
+        return {Future<T>(state, NRuntime::InlineScheduler()), Promise<T>(state)};
     }
 
     template <typename F>
@@ -91,7 +91,7 @@ namespace NDummyConcurrency::NFuture {
         NState::ContractState<Value>* contract = NState::ContractState<Value>::Create();
         ::NDummyConcurrency::NRuntime::Submit(scheduler, [contract, func = std::move(function)]() { contract->SetValue(func()); });
 
-        return Future<Value>(contract, NRuntime::Inline());
+        return Future<Value>(contract, NRuntime::InlineScheduler());
     }
 
 }  // namespace NDummyConcurrency::NFuture

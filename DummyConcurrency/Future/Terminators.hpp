@@ -16,14 +16,14 @@ namespace NDummyConcurrency::NFuture {
                 value_container.Construct(std::move(value));
                 event.Fire();
             },
-            NRuntime::Inline());
+            NRuntime::InlineScheduler());
         event.Wait();
         return value_container.Move();
     }
 
     template <typename T>
     void Detach(Future<T> future) {
-        std::move(future).Consume([](auto...) {}, NRuntime::Inline());
+        std::move(future).Consume([](auto...) {}, NRuntime::InlineScheduler());
     }
 
 }  // namespace NDummyConcurrency::NFuture

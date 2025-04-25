@@ -22,7 +22,7 @@ namespace NDummyConcurrency::NFuture::NCombinators {
             [contract, func = std::move(user)](Result<T>&& result) {
                 if (result) {
                     func(std::move(result.value()))
-                        .Consume([contract](Result<Detail::InvokeResult<T, F>> result) { contract->SetValue(result); }, NRuntime::Inline());
+                        .Consume([contract](Result<Detail::InvokeResult<T, F>> result) { contract->SetValue(result); }, NRuntime::InlineScheduler());
                 } else {
                     contract->SetValue(NResult::Failure(result.error()));
                 }

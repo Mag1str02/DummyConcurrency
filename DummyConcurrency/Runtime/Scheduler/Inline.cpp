@@ -7,7 +7,7 @@ namespace NDummyConcurrency::NRuntime {
         virtual void Submit(ITask* task) override { task->Run(); }
     };
 
-    IScheduler& Inline() {
+    IScheduler& InlineScheduler() {
         static class Inline sInstance;
         return sInstance;
     }

@@ -12,6 +12,7 @@ set(DummyConcurrencySources
     Fiber/Stack/StackPool.cpp
     Fiber/Stack/StackProvider.cpp
 
+    Runtime/Invoker/Inline.cpp
     Runtime/Scheduler/Inline.cpp
     Runtime/Scheduler/ThreadPool.cpp
     Runtime/Scheduler/RunLoop.cpp

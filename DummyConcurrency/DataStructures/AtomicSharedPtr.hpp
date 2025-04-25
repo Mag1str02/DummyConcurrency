@@ -5,7 +5,6 @@
 #include <DummyConcurrency/Utils/StampedPtr.hpp>
 #include <DummyConcurrency/Utils/Traits.hpp>
 
-#include <cassert>
 #include <cstdlib>  // std::abort
 #include <print>
 

@@ -1,13 +1,25 @@
 #include "ThreadPool.hpp"
 
-#include <cassert>
+#include <DummyConcurrency/Runtime/Invoker/Inline.hpp>
 
 namespace NDummyConcurrency::NRuntime {
 
     STATIC_THREAD_LOCAL_PTR(ThreadPool, gCurrentThreadPool);
 
-    ThreadPool::ThreadPool(size_t thread) : workers_amount_(thread) {
+    ThreadPool::ThreadPool(size_t thread) : invoker_(&InlineInvoker()), workers_amount_(thread) {
         DC_ASSERT(workers_amount_ > 0, "ThreadPool size cannot be zero");
+    }
+
+    ThreadPool::~ThreadPool() {
+        DC_ASSERT(stopped_, "Thread pool was destructed before calling stop");
+    }
+
+    void ThreadPool::Submit(ITask* task) {
+        DC_ASSERT(!stopped_, "Thread pool is stopped");
+        task_queue_.Push(std::move(task));
+    }
+    ThreadPool* ThreadPool::Current() {
+        return gCurrentThreadPool;
     }
 
     void ThreadPool::Start() {
@@ -15,20 +27,6 @@ namespace NDummyConcurrency::NRuntime {
             workers_.emplace_back(Worker, this);
         }
     }
-
-    ThreadPool::~ThreadPool() {
-        assert(stopped_);
-    }
-
-    void ThreadPool::Submit(ITask* task) {
-        assert(!stopped_);
-        task_queue_.Push(std::move(task));
-    }
-
-    ThreadPool* ThreadPool::Current() {
-        return gCurrentThreadPool;
-    }
-
     void ThreadPool::Stop() {
         DC_ASSERT(!workers_.empty(), "ThreadPool stopped before it was started");
         stopped_ = true;
@@ -37,18 +35,18 @@ namespace NDummyConcurrency::NRuntime {
             thread.join();
         }
     }
+    void ThreadPool::SetInvoker(IInvoker* invoker) {
+        DC_ASSERT(workers_.empty(), "Cannot set invoker after thread pool start");
+        invoker_ = invoker;
+    }
 
     void ThreadPool::Worker(ThreadPool* current_thread_pool) {
         gCurrentThreadPool = current_thread_pool;
 
-        do {
-            auto* current_task = Current()->task_queue_.Pop();
-            if (current_task != nullptr) {
-                current_task->Run();
-            } else {
-                break;
-            }
-        } while (true);
+        current_thread_pool->invoker_->Invoke(current_thread_pool);
+    }
+    ITask* ThreadPool::GetNextTask() noexcept {
+        return Current()->task_queue_.Pop();
     }
 
-}  // namespace NDummyConcurrency::Runtime
+}  // namespace NDummyConcurrency::NRuntime

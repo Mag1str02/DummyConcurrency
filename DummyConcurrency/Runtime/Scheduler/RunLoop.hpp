@@ -1,41 +1,35 @@
 #pragma once
 
+#include "DummyConcurrency/Runtime/Invoker/Invoker.hpp"
 #include "DummyConcurrency/Runtime/Scheduler/Scheduler.hpp"
 #include "DummyConcurrency/Runtime/Scheduler/Task.hpp"
+#include "DummyConcurrency/Utils/Traits.hpp"
 
 namespace NDummyConcurrency::NRuntime {
 
-    // Single-threaded task queue
-
-    class RunLoop : public IScheduler {
+    // Single-threaded task queue, non thread safe
+    class RunLoop : public IScheduler, public NonCopyable, public NonMovable, private ITaskProvider {
     public:
-        RunLoop() = default;
+        RunLoop();
 
-        // Non-copyable
-        RunLoop(const RunLoop&)            = delete;
-        RunLoop& operator=(const RunLoop&) = delete;
+        virtual void Submit(ITask* task) override;
 
-        // Non-movable
-        RunLoop(RunLoop&&)            = delete;
-        RunLoop& operator=(RunLoop&&) = delete;
-
-        // task::IScheduler
-        void Submit(ITask* task) override;
-
-        // Run tasks
-
+        void   SetInvoker(IInvoker* invoker);
         size_t RunAtMost(size_t limit);
-
-        bool RunNext() { return RunAtMost(1) == 1; }
-
         size_t Run();
+        bool   RunNext();
 
-        bool IsEmpty() const { return queue_.IsEmpty(); }
+        bool IsEmpty() const;
+        bool NonEmpty() const;
 
-        bool NonEmpty() const { return !IsEmpty(); }
+    private:
+        virtual ITask* GetNextTask() noexcept override;
 
     private:
         IntrusiveForwardList<ITask> queue_;
+        IInvoker*                   invoker_;
+        size_t                      current_run_limit_  = 0;
+        size_t                      current_task_count_ = 0;
     };
 
-}  // namespace NDummyConcurrency::Runtime
+}  // namespace NDummyConcurrency::NRuntime

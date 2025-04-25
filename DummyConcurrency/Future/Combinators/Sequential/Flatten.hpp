@@ -11,9 +11,9 @@ namespace NDummyConcurrency::NFuture::NCombinators {
         auto* contract = NState::ContractState<T>::Create();
         std::move(future).Consume(
             [contract](Future<T> value) {
-                std::move(value).Consume([contract](T value) { contract->SetValue(std::move(value)); }, NRuntime::Inline());
+                std::move(value).Consume([contract](T value) { contract->SetValue(std::move(value)); }, NRuntime::InlineScheduler());
             },
-            NRuntime::Inline());
+            NRuntime::InlineScheduler());
         return Future<T>(contract, future.GetScheduler());
     }
 
@@ -23,12 +23,12 @@ namespace NDummyConcurrency::NFuture::NCombinators {
         std::move(future).Consume(
             [contract](Result<Future<T>>&& value) {
                 if (value.has_value()) {
-                    std::move(value.value()).Consume([contract](T&& result) { contract->SetValue(std::move(result)); }, NRuntime::Inline());
+                    std::move(value.value()).Consume([contract](T&& result) { contract->SetValue(std::move(result)); }, NRuntime::InlineScheduler());
                 } else {
                     contract->SetValue(std::unexpected(value.error()));
                 }
             },
-            NRuntime::Inline());
+            NRuntime::InlineScheduler());
         return TryFuture<T>(contract, future.GetScheduler());
     }
 

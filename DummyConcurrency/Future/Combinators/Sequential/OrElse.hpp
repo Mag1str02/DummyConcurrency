@@ -16,7 +16,7 @@ namespace NDummyConcurrency::NFuture::NCombinators {
                 if (result) {
                     contract->SetValue(std::move(result));
                 } else {
-                    user(result.error()).Consume([contract](Result<T>&& result) { contract->SetValue(std::move(result)); }, NRuntime::Inline());
+                    user(result.error()).Consume([contract](Result<T>&& result) { contract->SetValue(std::move(result)); }, NRuntime::InlineScheduler());
                 }
             },
             future.GetScheduler());
