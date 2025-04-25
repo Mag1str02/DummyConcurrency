@@ -8,7 +8,7 @@ namespace NDummyConcurrency::NFuture::NCombinators {
 
     template <typename T, typename F>
     TryFuture<T> OrElse(TryFuture<T>&& future, F&& user)
-        requires CFutureConsumer<F, T>
+        requires CFutureConsumer<F, Error>
     {
         auto* contract = NState::ContractState<Result<T>>::Create();
         std::move(future).Consume(
