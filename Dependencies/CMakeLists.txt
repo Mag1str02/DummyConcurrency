@@ -14,7 +14,7 @@ if(DC_DEVELOPER_MODE)
   FetchContent_Declare(
     twist_all
     GIT_REPOSITORY https://github.com/Mag1str02/Twist
-    GIT_TAG bf473b6d9b45114558d345bbf73248d0c1a20fd1)
+    GIT_TAG 52530af6649fc7b9d612e8c8843fcfabe64a43a7)
   FetchContent_MakeAvailable(twist_all)
 endif()
 

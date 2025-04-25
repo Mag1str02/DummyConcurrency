@@ -33,7 +33,7 @@ TEST_SUITE(FiberSynchronizationWaitGroup_Random) {
 
                     Go([&, i] {
                         for (size_t j = 0; j < 3; ++j) {
-                            Yield();
+                            NFiber::Yield();
                         }
 
                         flags[i].Write(true);
@@ -83,7 +83,7 @@ TEST_SUITE(FiberSynchronizationWaitGroup_Random) {
 
                     Go([&, i] {
                         for (size_t k = 0; k < 3; ++k) {
-                            Yield();
+                            NFiber::Yield();
                         }
 
                         flags[i].Write(true);
@@ -96,7 +96,7 @@ TEST_SUITE(FiberSynchronizationWaitGroup_Random) {
 
                     Go([&] {
                         for (size_t k = 0; k < 3; ++k) {
-                            Yield();
+                            NFiber::Yield();
                         }
 
                         work.Wait();

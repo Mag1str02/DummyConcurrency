@@ -52,7 +52,7 @@ TEST_SUITE(FiberSynchronizationMutex_Unit) {
             });
 
             while (!join) {
-                Yield();
+                NFiber::Yield();
             }
 
             mutex.Unlock();
@@ -111,7 +111,7 @@ TEST_SUITE(FiberSynchronizationMutex_Unit) {
                     std::lock_guard guard(mutex);
 
                     ++cs;
-                    Yield();
+                    NFiber::Yield();
                 }
             });
         }
@@ -163,7 +163,7 @@ TEST_SUITE(FiberSynchronizationMutex_Unit) {
             mutex.Lock();
 
             for (size_t i = 0; i < 1024; ++i) {
-                Yield();
+                NFiber::Yield();
             }
 
             mutex.Unlock();

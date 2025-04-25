@@ -37,7 +37,7 @@ TEST_SUITE(FiberSynchronizationWaitGroup_Stress) {
 
                     Go([&] {
                         for (size_t j = 0; j < 7; ++j) {
-                            Yield();
+                            NFiber::Yield();
                         }
                         work.fetch_add(1);
                         wg.Done();

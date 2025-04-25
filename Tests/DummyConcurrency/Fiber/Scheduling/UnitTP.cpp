@@ -111,7 +111,7 @@ TEST_SUITE(FiberScheduling_UnitTP) {
 
         wg.Add(1);
         Go(pool, [&] {
-            Yield();
+            NFiber::Yield();
 
             ExpectScheduler(pool);
 
@@ -136,7 +136,7 @@ TEST_SUITE(FiberScheduling_UnitTP) {
             Go([&] { child = true; });
 
             while (!child) {
-                Yield();
+                NFiber::Yield();
             }
 
             wg.Done();
@@ -161,7 +161,7 @@ TEST_SUITE(FiberScheduling_UnitTP) {
 
         Go(loop, [&] {
             for (size_t i = 0; i < kYields; ++i) {
-                Yield();
+                NFiber::Yield();
                 ++yields;
             }
 
@@ -190,14 +190,14 @@ TEST_SUITE(FiberScheduling_UnitTP) {
 
         Go(loop, [&] {
             while (!start) {
-                Yield();
+                NFiber::Yield();
             }
 
             for (size_t i = 0; i < kRounds; ++i) {
                 ASSERT_TRUE(turn == 0)
                 turn ^= 1;
 
-                Yield();
+                NFiber::Yield();
             }
 
             wg.Done();
@@ -206,14 +206,14 @@ TEST_SUITE(FiberScheduling_UnitTP) {
         Go(loop, [&] {
             {
                 start = true;
-                Yield();
+                NFiber::Yield();
             }
 
             for (size_t j = 0; j < kRounds; ++j) {
                 ASSERT_TRUE(turn == 1);
                 turn ^= 1;
 
-                Yield();
+                NFiber::Yield();
             }
 
             wg.Done();
@@ -238,7 +238,7 @@ TEST_SUITE(FiberScheduling_UnitTP) {
 
             Go(pool, [&] {
                 for (size_t j = 0; j < kYields; ++j) {
-                    Yield();
+                    NFiber::Yield();
                 }
                 wg.Done();
             });
@@ -262,7 +262,7 @@ TEST_SUITE(FiberScheduling_UnitTP) {
 
         Go(pool1, [&] {
             for (size_t i = 0; i < 2; ++i) {
-                Yield();
+                NFiber::Yield();
                 ExpectScheduler(pool1);
             }
             wg.Done();
@@ -270,7 +270,7 @@ TEST_SUITE(FiberScheduling_UnitTP) {
 
         Go(pool2, [&] {
             for (size_t j = 0; j < 3; ++j) {
-                Yield();
+                NFiber::Yield();
                 ExpectScheduler(pool2);
             }
             wg.Done();
@@ -302,7 +302,7 @@ TEST_SUITE(FiberScheduling_UnitTP) {
         wg.Add(1);
         Go(thread_pool, [&] {
             try {
-                wheels::Defer defer([]() { Yield(); });
+                wheels::Defer defer([]() { NFiber::Yield(); });
                 throw std::runtime_error("Some1");
             } catch (const std::exception& ex) {
                 ASSERT_TRUE(std::string(ex.what()) == "Some1");
@@ -321,7 +321,7 @@ TEST_SUITE(FiberScheduling_UnitTP) {
         wg.Add(2);
         Go(thread_pool, [&] {
             try {
-                wheels::Defer defer([]() { Yield(); });
+                wheels::Defer defer([]() { NFiber::Yield(); });
                 throw std::runtime_error("Some1");
             } catch (const std::exception& ex) {
                 ASSERT_TRUE(std::string(ex.what()) == "Some1");
@@ -330,7 +330,7 @@ TEST_SUITE(FiberScheduling_UnitTP) {
         });
         Go(thread_pool, [&] {
             try {
-                wheels::Defer defer([]() { Yield(); });
+                wheels::Defer defer([]() { NFiber::Yield(); });
                 throw std::runtime_error("Some2");
             } catch (const std::exception& ex) {
                 ASSERT_TRUE(std::string(ex.what()) == "Some2");

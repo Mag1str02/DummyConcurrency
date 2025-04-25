@@ -19,7 +19,7 @@ TEST_SUITE(FiberScheduling_SyncRL) {
             for (size_t i = 0; i < 11; ++i) {
                 Go(loop, [] {
                     for (size_t i = 0; i < 27; ++i) {
-                        Yield();
+                        NFiber::Yield();
                     }
                 });
             }

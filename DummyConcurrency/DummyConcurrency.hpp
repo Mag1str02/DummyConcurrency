@@ -41,7 +41,6 @@ namespace NDummyConcurrency {
     using NDataStructures::MakeShared;
 
     using NFiber::Go;
-    using NFiber::Yield;
     using NRuntime::Submit;
 
 }  // namespace NDummyConcurrency

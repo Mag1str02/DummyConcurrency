@@ -43,7 +43,7 @@ TEST_SUITE(FiberScheduling_UnitRL) {
     SIMPLE_TEST(Yield) {
         RunLoop loop;
 
-        Go(loop, [] { Yield(); });
+        Go(loop, [] { NFiber::Yield(); });
 
         ASSERT_EQ(loop.Run(), 2);
     }
@@ -57,7 +57,7 @@ TEST_SUITE(FiberScheduling_UnitRL) {
             for (size_t i = 0; i < 3; ++i) {
                 ASSERT_EQ(turn, 0);
                 turn ^= 1;
-                Yield();
+                NFiber::Yield();
             }
         });
 
@@ -65,7 +65,7 @@ TEST_SUITE(FiberScheduling_UnitRL) {
             for (size_t j = 0; j < 3; ++j) {
                 ASSERT_EQ(turn, 1);
                 turn ^= 1;
-                Yield();
+                NFiber::Yield();
             }
         });
 
@@ -81,7 +81,7 @@ TEST_SUITE(FiberScheduling_UnitRL) {
         for (size_t i = 0; i < kFibers; ++i) {
             Go(loop, [] {
                 for (size_t k = 0; k < kYields; ++k) {
-                    Yield();
+                    NFiber::Yield();
                 }
             });
         }

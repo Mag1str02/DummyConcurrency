@@ -1,6 +1,6 @@
 #include <DummyConcurrency/DummyConcurrency.hpp>
 
-#include <wheels/core/stop_watch.hpp>
+// #include <wheels/core/stop_watch.hpp>
 #include <wheels/test/framework.hpp>
 #include <wheels/test/util/cpu_timer.hpp>
 
@@ -21,11 +21,12 @@ TEST_SUITE(SchedulingFiberInvoker_Unit) {
         for (uint64_t i = 0; i < kUserAmount; ++i) {
             NRuntime::Submit(loop, []() {
                 for (size_t i = 0; i < 100; ++i) {
-                    Yield();
+                    NFiber::Yield();
                 }
             });
         }
         loop.Run();
+        ASSERT_TRUE(loop.IsEmpty());
 
         std::println("Pool size: {}", pool.Size());
         std::println("Pool leased amount: {}", pool.LeasedAmount());
@@ -33,6 +34,7 @@ TEST_SUITE(SchedulingFiberInvoker_Unit) {
         ASSERT_EQ(kUserAmount + 1, pool.Size());
         ASSERT_EQ(0, pool.LeasedAmount());
     }
+
     SIMPLE_TEST(ThreadPool) {
         constexpr uint64_t kUserAmount = 5;
         StackPool          pool;
@@ -46,7 +48,7 @@ TEST_SUITE(SchedulingFiberInvoker_Unit) {
         for (uint64_t i = 0; i < kUserAmount; ++i) {
             NRuntime::Submit(thread_pool, [&]() {
                 for (size_t i = 0; i < 10000; ++i) {
-                    Yield();
+                    NFiber::Yield();
                 }
                 wg.Done();
             });
