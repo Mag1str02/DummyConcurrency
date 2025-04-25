@@ -4,6 +4,6 @@
 
 namespace NDummyConcurrency::NRuntime {
 
-    IScheduler& Inline();
+    IScheduler& InlineScheduler();
 
 }  // namespace NDummyConcurrency::Runtime

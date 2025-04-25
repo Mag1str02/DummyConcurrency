@@ -42,14 +42,16 @@ namespace NDummyConcurrency::NFiber {
     }
 
     void Fiber::Run() noexcept {
-        suspend_awaiter_ = nullptr;
+        Fiber* initial   = gCurrentFiber;
         gCurrentFiber    = this;
+        suspend_awaiter_ = nullptr;
 
         coroutine_->Resume();
 
         // It is possible to other fiber to leave from resume
         Fiber* returned_fiber = gCurrentFiber;
-        gCurrentFiber         = nullptr;
+        gCurrentFiber         = initial;
+        DC_ASSERT(returned_fiber != nullptr, "Impossible");
         if (returned_fiber->coroutine_->IsCompleted()) {
             returned_fiber->Destroy();
         } else {

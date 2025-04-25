@@ -342,4 +342,12 @@ TEST_SUITE(FiberScheduling_UnitTP) {
         wg.Wait();
         thread_pool.Stop();
     }
+
+    SIMPLE_TEST(FiberFromFiber) {
+        NRuntime::RunLoop loop;
+
+        TWaitGroup wg;
+        Go(loop, [&] { Go([&] { wg.Done(); }); });
+        loop.Run();
+    }
 }

@@ -4,8 +4,6 @@
 #include <DummyConcurrency/Result/Result.hpp>
 #include <DummyConcurrency/Utils/Traits.hpp>
 
-#include <cassert>
-
 namespace NDummyConcurrency::NFuture {
 
     template <typename T>

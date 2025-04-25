@@ -236,16 +236,21 @@ TEST_SUITE(Futures) {
     SIMPLE_TEST(TryPipeline) {
         auto [f, p] = NFuture::Contract<int>();
 
-        auto g = std::move(f) | NFuture::Map([](int v) { return v + 1; }) | NFuture::Map([](int v) { return v + 2; }) | NFuture::AsTryFuture() |
+        auto g = std::move(f) |                               //
+                 NFuture::Map([](int v) { return v + 1; }) |  //
+                 NFuture::Map([](int v) { return v + 2; }) |  //
+                 NFuture::AsTryFuture() |                     //
                  NFuture::OrElse([](Error) {
                      FAIL_TEST("Unreachable");
                      return NFuture::Ok(111);
-                 }) |
-                 NFuture::AndThen([](int /*v*/) -> NFuture::TryFuture<int> { return NFuture::Failure(TimeoutError()); }) | NFuture::MapOk([](int v) {
+                 }) |  //
+                 NFuture::AndThen([](int /*v*/) -> NFuture::TryFuture<int> { return NFuture::Failure(TimeoutError()); }) |
+                 NFuture::MapOk([](int v) {
                      FAIL_TEST("Unreachable");
                      return v + 1;
-                 }) |
-                 NFuture::OrElse([](Error) { return NFuture::Ok(17); }) | NFuture::MapOk([](int v) { return v + 1; });
+                 }) |  //
+                 NFuture::OrElse([](Error) { return NFuture::Ok(17); }) |
+                 NFuture::MapOk([](int v) { return v + 1; });
 
         std::move(p).Set(3);
 

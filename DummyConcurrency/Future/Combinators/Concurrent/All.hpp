@@ -15,9 +15,9 @@ namespace NDummyConcurrency::NFuture::NCombinators {
         static_assert(!::NDummyConcurrency::NResult::Traits<B>::IsResult);
 
         auto* contract = NState::BothContract<A, B>::Create();
-        std::move(a).Consume([contract](A value) { contract->SetValueA(std::move(value)); }, NRuntime::Inline());
-        std::move(b).Consume([contract](B value) { contract->SetValueB(std::move(value)); }, NRuntime::Inline());
-        return Future<std::tuple<A, B>>(contract, NRuntime::Inline());
+        std::move(a).Consume([contract](A value) { contract->SetValueA(std::move(value)); }, NRuntime::InlineScheduler());
+        std::move(b).Consume([contract](B value) { contract->SetValueB(std::move(value)); }, NRuntime::InlineScheduler());
+        return Future<std::tuple<A, B>>(contract, NRuntime::InlineScheduler());
     }
 
 }  // namespace NDummyConcurrency::NFuture::NCombinators

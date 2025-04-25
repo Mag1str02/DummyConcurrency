@@ -47,6 +47,7 @@ namespace NDummyConcurrency::NFuture::NState {
         void SubmitContract() { scheduler_->Submit(this); }
 
         void SetValuePtr(T value) {
+            // This should burn in hell
             T* ptr = value_.load();
             if (ptr != nullptr) {
                 return;
