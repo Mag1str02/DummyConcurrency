@@ -16,8 +16,8 @@ namespace NDummyConcurrency::NFiber {
     public:
         virtual void Run() noexcept;
 
-        void Suspend(IAwaiter& awaiter);
         void Schedule();
+        void Suspend(IAwaiter& awaiter);
         void SwitchTo(Fiber& other);
 
         IScheduler& GetScheduler() const;

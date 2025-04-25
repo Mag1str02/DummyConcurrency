@@ -11,8 +11,8 @@ namespace NDummyConcurrency::NFuture::NCombinators {
 
     template <typename A, typename B>
     auto Both(Future<A> a, Future<B> b) {
-        static_assert(!::NDummyConcurrency::NResult::NTraits::IsResult<A>);
-        static_assert(!::NDummyConcurrency::NResult::NTraits::IsResult<B>);
+        static_assert(!::NDummyConcurrency::NResult::Traits<A>::IsResult);
+        static_assert(!::NDummyConcurrency::NResult::Traits<B>::IsResult);
 
         auto* contract = NState::BothContract<A, B>::Create();
         std::move(a).Consume([contract](A value) { contract->SetValueA(std::move(value)); }, NRuntime::Inline());

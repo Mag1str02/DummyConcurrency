@@ -12,7 +12,7 @@ namespace NDummyConcurrency::NFuture::NCombinators {
         return std::move(f);  // Identity
     }
 
-    template <typename T, std::enable_if_t<!::NDummyConcurrency::NResult::NTraits::IsResult<T>, bool> = true>
+    template <typename T, std::enable_if_t<!::NDummyConcurrency::NResult::Traits<T>::IsResult, bool> = true>
     TryFuture<T> AsTryFuture(Future<T>&& f) {
         return Map(std::move(f), [](T&& v) { return NResult::Ok(std::move(v)); });
     }

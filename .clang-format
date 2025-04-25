@@ -9,29 +9,32 @@ AllowShortIfStatementsOnASingleLine: true
 AllowShortLoopsOnASingleLine: true
 KeepEmptyLinesAtTheStartOfBlocks: false
 SortIncludes: CaseSensitive
-AllowShortCaseLabelsOnASingleLine : true
+AllowShortCaseLabelsOnASingleLine: true
 SpaceBeforeCtorInitializerColon: true
 BreakConstructorInitializers: AfterColon
 AlignAfterOpenBracket: Align
+AlignOperands: Align
 BraceWrapping:
-  AfterClass:            false
+  AfterClass: false
   AfterControlStatement: Never
-  AfterEnum:             false
-  AfterFunction:         false
-  AfterNamespace:        false
-  AfterStruct:           false
-  AfterUnion:            false
-  BeforeCatch:           false
-  BeforeElse:            false
-  BeforeLambdaBody:      false
-  BeforeWhile:           false
-  SplitEmptyFunction:    false
-  SplitEmptyRecord:      false 
-  SplitEmptyNamespace:   false 
+  AfterEnum: false
+  AfterFunction: false
+  AfterNamespace: false
+  AfterStruct: false
+  AfterUnion: false
+  BeforeCatch: false
+  BeforeElse: false
+  BeforeLambdaBody: false
+  BeforeWhile: false
+  SplitEmptyFunction: false
+  SplitEmptyRecord: false
+  SplitEmptyNamespace: false
 BreakBeforeBraces: Custom
 NamespaceIndentation: All
 BinPackArguments: false
 BinPackParameters: false
+ExperimentalAutoDetectBinPacking: true
+AlignTrailingComments: true
 ReferenceAlignment: Left
 AlwaysBreakTemplateDeclarations: MultiLine
 AlignArrayOfStructures: Right

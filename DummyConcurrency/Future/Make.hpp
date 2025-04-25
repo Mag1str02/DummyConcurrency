@@ -20,8 +20,9 @@ namespace NDummyConcurrency::NFuture {
     }
 
     template <typename T>
-    Future<T> Value(T v) {
-        static_assert(!NResult::NTraits::IsResult<T>, "Expected plain value");
+    Future<T> Value(T v)
+        requires NResult::CNotResult<T>
+    {
         return Ready(std::move(v));
     }
 
@@ -47,15 +48,6 @@ namespace NDummyConcurrency::NFuture {
     inline auto Failure(Error e) {
         return NDetail::Failure{e};
     }
-
-    /*
-     * Usage:
-     *
-     * future::TryFuture<int> Attempt() {
-     *   return future::Err(TimeoutError());
-     * }
-     *
-     */
 
     template <typename T>
     class Promise {

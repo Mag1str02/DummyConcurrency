@@ -17,6 +17,13 @@ namespace NDummyConcurrency::NFuture {
     using NCombinators::BothOk;
     using NCombinators::FirstOk;
 
+    namespace Detail {
+        template <typename F, typename T>
+        concept CAndThen = requires(F&& f, T&& t) {
+            { f(std::move(t)) } -> CTryFuture;
+        };
+    }  // namespace Detail
+
     namespace NPipes {
         template <typename F>
         class [[nodiscard]] AndThen : public NonCopyable {
@@ -24,7 +31,9 @@ namespace NDummyConcurrency::NFuture {
             explicit AndThen(F&& u) : user_(std::move(u)) {}
 
             template <typename T>
-            auto Pipe(TryFuture<T>&& future) {
+            auto Pipe(TryFuture<T>&& future)
+                requires Detail::CAndThen<F, T>
+            {
                 return NCombinators::AndThen(std::move(future), std::move(user_));
             }
 
@@ -109,6 +118,10 @@ namespace NDummyConcurrency::NFuture {
 
         struct [[nodiscard]] Flatten {
             template <typename T>
+            Future<T> Pipe(TryFuture<Future<T>>&& future) {
+                return NCombinators::Flatten(std::move(future));
+            }
+            template <typename T>
             Future<T> Pipe(Future<Future<T>>&& future) {
                 return NCombinators::Flatten(std::move(future));
             }
@@ -130,11 +143,6 @@ namespace NDummyConcurrency::NFuture {
 
     }  // namespace NPipes
 
-    // TryFuture<T> -> (T -> TryFuture<U>) -> TryFuture<U>
-    template <typename F>
-    auto AndThen(F&& user) {
-        return NPipes::AndThen(std::move(user));
-    }
     // Future<T> -> (T -> U) -> Future<U>
     template <typename F>
     auto Map(F&& user) {
@@ -144,6 +152,11 @@ namespace NDummyConcurrency::NFuture {
     template <typename F>
     auto FlatMap(F&& user) {
         return NPipes::FlatMap(std::move(user));
+    }
+    // TryFuture<T> -> (T -> TryFuture<U>) -> TryFuture<U>
+    template <typename F>
+    auto AndThen(F&& user) {
+        return NPipes::AndThen(std::move(user));
     }
     // TryFuture<T> -> (T -> U) -> TryFuture<U>
     template <typename F>
@@ -161,11 +174,11 @@ namespace NDummyConcurrency::NFuture {
      *    T' = U for T = Result<U>
      *    T' = T otherwise
      */
-    auto AsTryFuture() {
+    inline auto AsTryFuture() {
         return NPipes::AsTryFuture();
     }
     // Future<Future<T>> -> Future<T>
-    auto Flatten() {
+    inline auto Flatten() {
         return NPipes::Flatten();
     }
     // Future<T> -> Scheduler -> Future<T>

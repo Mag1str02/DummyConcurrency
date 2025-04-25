@@ -8,7 +8,7 @@ namespace NDummyConcurrency::NResult {
     Result<T> Ok(T value) {
         return {std::move(value)};
     }
-    Status Ok() {
+    inline Status Ok() {
         return {Unit{}};
     }
     inline auto Failure(Error error) {

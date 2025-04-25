@@ -10,11 +10,11 @@ namespace NDummyConcurrency::NFuture {
 
     template <typename T>
     using Result = NResult::Result<T>;
+    using NResult::Error;
     using NResult::Status;
     using NResult::Unit;
-    using NResult::Error;
 
-    template <typename T>
+    template <std::move_constructible T>
     class [[nodiscard]] Future : public NonCopyable {
     public:
         using State     = NState::IConsumerContract<T>;
@@ -49,22 +49,7 @@ namespace NDummyConcurrency::NFuture {
         NRuntime::IScheduler* scheduler_ = nullptr;
     };
 
-    template <typename T>
+    template <std::move_constructible T>
     using TryFuture = Future<Result<T>>;
-
-    namespace NTraits {
-        namespace Detail {
-            template <typename T>
-            struct ValueOf;
-
-            template <typename T>
-            struct ValueOf<Future<T>> {
-                using Type = T;
-            };
-        }  // namespace Detail
-
-        template <typename Future>
-        using ValueOf = typename Detail::ValueOf<Future>::Type;
-    }  // namespace Traits
 
 }  // namespace NDummyConcurrency::NFuture

@@ -6,7 +6,7 @@
 namespace NDummyConcurrency::NResult::NCombinators {
 
     template <typename T, typename F>
-    Result<NTraits::ValueOf<std::invoke_result_t<F, T>>> AndThen(Result<T>&& result, F&& user) {
+    Result<typename Traits<std::invoke_result_t<F, T>>::ValueType> AndThen(Result<T>&& result, F&& user) {
         return std::move(result).and_then(user);
     }
     template <typename T, typename F>

@@ -10,7 +10,7 @@ namespace NDummyConcurrency::NFuture {
     template <typename T>
     T Get(Future<T> future) {
         NSynchronization::NFiberAware::Event event;
-        ManualLifetime<T>                  value_container;
+        ManualLifetime<T>                    value_container;
         std::move(future).Consume(
             [&event, &value_container](T value) {
                 value_container.Construct(std::move(value));

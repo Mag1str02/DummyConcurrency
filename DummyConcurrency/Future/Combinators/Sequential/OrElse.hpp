@@ -2,11 +2,14 @@
 
 #include <DummyConcurrency/Future/Future.hpp>
 #include <DummyConcurrency/Future/State/Contract.hpp>
+#include <DummyConcurrency/Future/Traits.hpp>
 
 namespace NDummyConcurrency::NFuture::NCombinators {
 
     template <typename T, typename F>
-    TryFuture<T> OrElse(TryFuture<T>&& future, F&& user) {
+    TryFuture<T> OrElse(TryFuture<T>&& future, F&& user)
+        requires CFutureConsumer<F, T>
+    {
         auto* contract = NState::ContractState<Result<T>>::Create();
         std::move(future).Consume(
             [contract, user = std::move(user)](Result<T>&& result) {
@@ -19,6 +22,5 @@ namespace NDummyConcurrency::NFuture::NCombinators {
             future.GetScheduler());
         return TryFuture<T>(contract, future.GetScheduler());
     }
-
 
 }  // namespace NDummyConcurrency::NFuture::NCombinators

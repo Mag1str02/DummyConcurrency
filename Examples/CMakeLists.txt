@@ -4,6 +4,7 @@ macro(add_example EXAMPLE_NAME)
 endmacro(add_example)
 
 add_example(BasicFibers)
+add_example(BasicFuture)
 add_example(FiberAwareSynchornization)
 add_example(FutexWait)
 add_example(ThreadPool)

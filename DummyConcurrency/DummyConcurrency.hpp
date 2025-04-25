@@ -14,6 +14,7 @@
 #include "DummyConcurrency/Synchronization/Thread/Event.hpp"          // IWYU pragma: export
 #include "DummyConcurrency/Synchronization/Thread/SpinLock.hpp"       // IWYU pragma: export
 #include "DummyConcurrency/Synchronization/Thread/WaitGroup.hpp"      // IWYU pragma: export
+#include "DummyConcurrency/Syntax/Syntax.hpp"                         // IWYU pragma: export
 
 namespace NDummyConcurrency {
 
@@ -41,4 +42,4 @@ namespace NDummyConcurrency {
     using NFiber::Yield;
     using NRuntime::Submit;
 
-}  // namespace DummyConcurrency
+}  // namespace NDummyConcurrency

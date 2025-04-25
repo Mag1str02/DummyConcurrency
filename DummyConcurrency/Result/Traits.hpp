@@ -2,30 +2,21 @@
 
 #include "Result.hpp"
 
-namespace NDummyConcurrency::NResult::NTraits {
-
-    namespace Detail {
-
-        template <typename T>
-        struct ResultTraits {
-            static constexpr bool IsResult = false;  // NOLINT
-        };
-
-        template <typename T>
-        struct ResultTraits<Result<T>> {
-            static constexpr bool IsResult = true;  // NOLINT
-            using Type                     = T;
-        };
-
-    }  // namespace Detail
+namespace NDummyConcurrency::NResult {
 
     template <typename T>
-    static constexpr bool IsResult = Detail::ResultTraits<T>::IsResult;  // NOLINT
+    struct Traits {
+        static constexpr bool IsResult = false;  // NOLINT
+    };
+    template <typename T>
+    struct Traits<Result<T>> {
+        static constexpr bool IsResult = true;  // NOLINT
+        using ValueType                = T;
+    };
 
     template <typename T>
-    concept CResult = IsResult<T>;
+    concept CResult = Traits<T>::IsResult;
+    template <typename T>
+    concept CNotResult = !Traits<T>::IsResult;
 
-    template <CResult Result>
-    using ValueOf = typename Detail::ResultTraits<Result>::Type;
-
-}  // namespace NDummyConcurrency::NResult::NTraits
+}  // namespace NDummyConcurrency::NResult
