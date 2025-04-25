@@ -17,7 +17,7 @@ void Body(RunLoop& loop, uint32_t& counter) {
                Body(loop, counter);
            }
        },
-       {.Pool = &gPool});
+       {.StackProvider = &gPool});
 }
 
 int main() {

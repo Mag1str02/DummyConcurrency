@@ -12,8 +12,7 @@ namespace NDummyConcurrency::NRuntime {
 
     class IInvoker {
     public:
-        virtual ~IInvoker() = default;
-        // Return false if task provider has no task, true otherwise
+        virtual ~IInvoker()                                   = default;
         virtual void Invoke(ITaskProvider* provider) noexcept = 0;
     };
 

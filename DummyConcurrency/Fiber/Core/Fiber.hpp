@@ -44,7 +44,7 @@ namespace NDummyConcurrency::NFiber {
             F body_;
         };
 
-        LeasedStack stack = hint.Pool->GetStack();
+        LeasedStack stack = hint.StackProvider->GetStack();
 
         void*      coroutine_address = stack->PreAllocate<Coroutine>();
         void*      fiber_address     = stack->PreAllocate<Fiber>();

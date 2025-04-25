@@ -11,7 +11,8 @@ namespace NDummyConcurrency::NFiber {
 
     class StackPool : public IStackProvider, public NonCopyable {
     public:
-        explicit StackPool(StackSize size);
+        explicit StackPool(StackSize size, uint64_t preallocate_count = 0);
+        ~StackPool();
 
         virtual NewStack AllocateStack();
         virtual void     FreeStack(NewStack&& stack);

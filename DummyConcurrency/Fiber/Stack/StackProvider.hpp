@@ -9,6 +9,7 @@ namespace NDummyConcurrency::NFiber {
 
     class IStackProvider {
     public:
+        virtual ~IStackProvider() = default;
         LeasedStack GetStack();
 
     protected:

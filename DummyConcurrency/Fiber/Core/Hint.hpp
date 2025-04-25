@@ -5,7 +5,7 @@
 namespace NDummyConcurrency::NFiber {
 
     struct Hint {
-        IStackProvider* Pool = InlineStackPool();
+        IStackProvider* StackProvider = InlineStackPool();
     };
 
 }  // namespace NDummyConcurrency::NFiber

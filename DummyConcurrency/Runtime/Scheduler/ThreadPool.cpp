@@ -1,5 +1,8 @@
 #include "ThreadPool.hpp"
 
+#include <DummyConcurrency/Fiber/Stack/InlineStackPool.hpp>
+#include <DummyConcurrency/Fiber/Stack/StackPool.hpp>
+#include <DummyConcurrency/Runtime/Invoker/FiberInvoker.hpp>
 #include <DummyConcurrency/Runtime/Invoker/Inline.hpp>
 
 namespace NDummyConcurrency::NRuntime {
@@ -46,7 +49,7 @@ namespace NDummyConcurrency::NRuntime {
         current_thread_pool->invoker_->Invoke(current_thread_pool);
     }
     ITask* ThreadPool::GetNextTask() noexcept {
-        return Current()->task_queue_.Pop();
+        return task_queue_.Pop();
     }
 
 }  // namespace NDummyConcurrency::NRuntime

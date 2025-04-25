@@ -1,8 +1,25 @@
 #include "StackPool.hpp"
 
+#include <vector>
+
 namespace NDummyConcurrency::NFiber {
 
-    StackPool::StackPool(StackSize size) : stack_size_(SizeInBytes(size)) {}
+    StackPool::StackPool(StackSize size, uint64_t preallocate_count) : stack_size_(SizeInBytes(size)) {
+        if (preallocate_count == 0) {
+            return;
+        }
+        std::vector<NewStack> stacks;
+        stacks.reserve(preallocate_count);
+        for (uint64_t i = 0; i < preallocate_count; ++i) {
+            stacks.emplace_back(AllocateStack());
+        }
+        for (auto& stack : stacks) {
+            FreeStack(std::move(stack));
+        }
+    }
+    StackPool::~StackPool() {
+        Clear();
+    }
 
     NewStack StackPool::AllocateStack() {
         lock_.Lock();
