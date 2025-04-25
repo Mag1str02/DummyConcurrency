@@ -1,15 +1,15 @@
 #pragma once
 
-#include "IStackPool.hpp"
 #include "New.hpp"
 #include "Size.hpp"
+#include "StackProvider.hpp"
 
 #include <DummyConcurrency/ImplementationLayer/ImplementationLayer.hpp>
 #include <DummyConcurrency/Synchronization/Thread/SpinLock.hpp>
 
 namespace NDummyConcurrency::NFiber {
 
-    class StackPool : public IStackPool, public NonCopyable {
+    class StackPool : public IStackProvider, public NonCopyable {
     public:
         explicit StackPool(StackSize size);
 
@@ -29,8 +29,8 @@ namespace NDummyConcurrency::NFiber {
     private:
         const uint64_t stack_size_;
 
-        NSynchronization::NThread::SpinLock     lock_;
-        NewNode*                              stack_of_stack_ = nullptr;  // Hell yeah!
+        NSynchronization::NThread::SpinLock    lock_;
+        NewNode*                               stack_of_stack_ = nullptr;  // Hell yeah!
         NImplementationLayer::Atomic<uint64_t> size_           = 0;
     };
 

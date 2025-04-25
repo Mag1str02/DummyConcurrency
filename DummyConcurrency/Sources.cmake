@@ -9,8 +9,8 @@ set(DummyConcurrencySources
     Fiber/Core/Handle.cpp
     Fiber/Scheduling/Yield.cpp
     Fiber/Scheduling/Suspend.cpp
-    Fiber/Stack/IStackPool.cpp
     Fiber/Stack/StackPool.cpp
+    Fiber/Stack/StackProvider.cpp
 
     Runtime/Scheduler/Inline.cpp
     Runtime/Scheduler/ThreadPool.cpp

@@ -1,13 +1,13 @@
 #pragma once
 
-#include "IStackPool.hpp"
 #include "Size.hpp"
+#include "StackProvider.hpp"
 
 namespace NDummyConcurrency::NFiber {
 
     template <uint64_t Size = SizeInBytes(StackSize::Medium)>
-    IStackPool* InlineStackPool() {
-        class InlineStackPool : public IStackPool {
+    IStackProvider* InlineStackPool() {
+        class InlineStackPool : public IStackProvider {
         public:
             virtual NewStack AllocateStack() { return NewStack::Allocate(Size); }
             virtual void     FreeStack(NewStack&& stack) { NewStack dump_stack(std::move(stack)); }

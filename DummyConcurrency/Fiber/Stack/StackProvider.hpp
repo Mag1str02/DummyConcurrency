@@ -7,7 +7,7 @@
 namespace NDummyConcurrency::NFiber {
     class LeasedStack;
 
-    class IStackPool {
+    class IStackProvider {
     public:
         LeasedStack GetStack();
 
@@ -31,12 +31,12 @@ namespace NDummyConcurrency::NFiber {
         }
 
     private:
-        friend class IStackPool;
-        explicit LeasedStack(NewStack&& stack, IStackPool* pool) : stack_(std::move(stack)), pool_(pool) {}
+        friend class IStackProvider;
+        explicit LeasedStack(NewStack&& stack, IStackProvider* pool) : stack_(std::move(stack)), pool_(pool) {}
 
     private:
-        NewStack    stack_;
-        IStackPool* pool_;
+        NewStack        stack_;
+        IStackProvider* pool_;
     };
 
 }  // namespace NDummyConcurrency::NFiber

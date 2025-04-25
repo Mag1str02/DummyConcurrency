@@ -1,8 +1,8 @@
-#include "IStackPool.hpp"
+#include "StackProvider.hpp"
 
 namespace NDummyConcurrency::NFiber {
 
-    LeasedStack IStackPool::GetStack() {
+    LeasedStack IStackProvider::GetStack() {
         return LeasedStack(AllocateStack(), this);
     };
 
