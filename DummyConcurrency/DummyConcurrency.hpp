@@ -5,6 +5,7 @@
 #include "DummyConcurrency/Fiber/Scheduling/Go.hpp"                   // IWYU pragma: export
 #include "DummyConcurrency/Fiber/Scheduling/Yield.hpp"                // IWYU pragma: export
 #include "DummyConcurrency/Fiber/Stack/StackPool.hpp"                 // IWYU pragma: export
+#include "DummyConcurrency/Runtime/Invoker/FiberInvoker.hpp"          // IWYU pragma: export
 #include "DummyConcurrency/Runtime/Scheduler/RunLoop.hpp"             // IWYU pragma: export
 #include "DummyConcurrency/Runtime/Scheduler/Submit.hpp"              // IWYU pragma: export
 #include "DummyConcurrency/Runtime/Scheduler/ThreadPool.hpp"          // IWYU pragma: export
@@ -19,6 +20,7 @@
 namespace NDummyConcurrency {
 
     using NFiber::StackPool;
+    using NRuntime::FiberInvoker;
     using NRuntime::RunLoop;
     using NRuntime::ThreadPool;
 

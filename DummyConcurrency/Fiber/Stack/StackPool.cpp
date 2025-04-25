@@ -26,6 +26,7 @@ namespace NDummyConcurrency::NFiber {
         if (stack_of_stack_ == nullptr) {
             lock_.Unlock();
             size_.fetch_add(1);
+            leased_amount_.fetch_add(1);
             return NewStack::Allocate(stack_size_);
         }
         NewStack stack  = std::move(stack_of_stack_->Stack);
@@ -42,10 +43,12 @@ namespace NDummyConcurrency::NFiber {
         node->Next      = stack_of_stack_;
         stack_of_stack_ = node;
         lock_.Unlock();
+        leased_amount_.fetch_sub(1);
     }
     void StackPool::Clear() {
         lock_.Lock();
         size_.store(0);
+        leased_amount_.store(0);
         while (stack_of_stack_ != nullptr) {
             NewNode* next = stack_of_stack_->Next;
             stack_of_stack_->Stack.~NewStack();
@@ -55,6 +58,9 @@ namespace NDummyConcurrency::NFiber {
     }
     uint64_t StackPool::Size() const {
         return size_.load();
+    }
+    uint64_t StackPool::LeasedAmount() const {
+        return leased_amount_.load();
     }
 
     StackPool::NewNode::NewNode(NewStack&& stack) : Stack(std::move(stack)) {}
