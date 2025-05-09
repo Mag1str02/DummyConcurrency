@@ -16,7 +16,7 @@ namespace NDummyConcurrency::NImplementationLayer {
     using Mutex                        = std::mutex;
     using ConditionVariable            = std::condition_variable;
     using SpinWait                     = STD::SpinWait;
-    using Fiber                        = STD::NFiber;
+    using Fiber                        = STD::Fiber;
     using FiberHandle                  = STD::FiberHandle;
     using STD::NewFiber;
     using STD::SwitchToFiber;
