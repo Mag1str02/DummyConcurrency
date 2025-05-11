@@ -15,7 +15,7 @@ int main() {
     RunLoop loop;
     Go(loop, [&]() {
         for (uint32_t i = 0; i < kYieldAmount; ++i) {
-            Yield();
+            NFiber::Yield();
         }
     });
 

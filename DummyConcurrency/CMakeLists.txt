@@ -23,3 +23,8 @@ if(DC_DEVELOPER_MODE)
     PUBLIC ${twist_SOURCE_DIR}/source)
   target_compile_definitions(DummyConcurrency PUBLIC DC_IMPLEMENTATION_LAYER_TWIST)
 endif()
+
+target_compile_definitions(DummyConcurrency PUBLIC -DUNIX=${UNIX})
+target_compile_definitions(DummyConcurrency PUBLIC -DAPPLE=${APPLE})
+target_compile_definitions(DummyConcurrency PUBLIC -DLINUX=${LINUX})
+target_compile_definitions(DummyConcurrency PUBLIC -DWINDOWS=${WINDOWS})

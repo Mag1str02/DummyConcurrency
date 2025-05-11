@@ -16,8 +16,4 @@ if(WIN32)
     set(WINDOWS true)
 endif()
 
-add_definitions(-DUNIX=${UNIX})
-add_definitions(-DAPPLE=${APPLE})
-add_definitions(-DLINUX=${LINUX})
-add_definitions(-DWINDOWS=${WINDOWS})
 
