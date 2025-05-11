@@ -35,7 +35,7 @@ namespace NDummyConcurrency::NRuntime {
         Queue                                     task_queue_;
         std::vector<NImplementationLayer::Thread> workers_;
         uint32_t                                  workers_amount_;
-        bool                                      stopped_ = false;
+        NImplementationLayer::Atomic<bool>        stopped_ = false;
     };
 
 }  // namespace NDummyConcurrency::NRuntime

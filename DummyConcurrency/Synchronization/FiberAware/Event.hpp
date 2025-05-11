@@ -17,4 +17,4 @@ namespace NDummyConcurrency::NSynchronization::NFiberAware {
 
         NImplementationLayer::Atomic<IAwaiter*> queue_head_ = kNotFired;
     };
-}  // namespace NDummyConcurrency::NSynchronization::FiberAware
+}  // namespace NDummyConcurrency::NSynchronization::NFiberAware

@@ -16,7 +16,7 @@ namespace NDummyConcurrency::NSynchronization::NFiberAware {
                     return false;
                 }
                 current_awaiter->Next = expected_head;
-            } while (!queue_head_.compare_exchange_strong(expected_head, current_awaiter));
+            } while (!queue_head_.compare_exchange_weak(expected_head, current_awaiter));
             return true;
         });
     }

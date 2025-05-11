@@ -11,6 +11,7 @@ namespace NDummyConcurrency::NDataStructures {
     public:
         void Push(T* value) {
             std::lock_guard guard(mutex_);
+            DC_ASSERT(!closed_, "Queue already cloused");
             queue_.PushBack(value);
             pop_wait_.notify_one();
         }

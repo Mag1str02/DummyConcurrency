@@ -9,7 +9,7 @@ namespace NDummyConcurrency::NSynchronization::NThread {
     }
 
     void Event::Wait() {
-        if (state_.load() == 0) {
+        while (state_.load() == 0) {
             NImplementationLayer::Futex::Wait(state_, 0);
         }
     }
