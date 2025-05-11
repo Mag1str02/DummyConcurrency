@@ -63,7 +63,7 @@ namespace NDummyConcurrency::NFuture::NState {
 
     private:
         OneAllStateMachine          state_;
-        twist::ed::std::atomic<T*>  value_ = nullptr;
+        NImplementationLayer::Atomic<T*>  value_ = nullptr;
         ManualLifetime<Callback<T>> callback_;
         NRuntime::IScheduler*       scheduler_;
     };

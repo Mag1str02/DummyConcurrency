@@ -54,10 +54,11 @@ namespace NDummyConcurrency {
             DC_ASSERT(contructed_, "Object is not created");
             return reinterpret_cast<const T*>(&storage_);
         }
+        bool Constructed() const { return contructed_; }
 
     private:
         alignas(T) std::byte storage_[sizeof(T)];
         bool contructed_ = false;
     };
 
-}  // namespace DummyConcurrency
+}  // namespace NDummyConcurrency
