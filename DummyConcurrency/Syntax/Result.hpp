@@ -3,7 +3,7 @@
 #include <DummyConcurrency/Result/Combinators.hpp>
 #include <DummyConcurrency/Utils/Traits.hpp>
 
-namespace NDummyConcurrency::NResult {
+namespace NDummyConcurrency::NResult::NSyntax {
 
     namespace NPipes {
 

@@ -12,7 +12,7 @@
 #include <DummyConcurrency/Future/Combinators/Sequential/Via.hpp>
 #include <DummyConcurrency/Future/Terminators.hpp>
 
-namespace NDummyConcurrency::NFuture {
+namespace NDummyConcurrency::NFuture::NSyntax {
 
     using NCombinators::BothOk;
     using NCombinators::FirstOk;
