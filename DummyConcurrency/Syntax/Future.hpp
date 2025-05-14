@@ -10,6 +10,7 @@
 #include <DummyConcurrency/Future/Combinators/Sequential/MapOk.hpp>
 #include <DummyConcurrency/Future/Combinators/Sequential/OrElse.hpp>
 #include <DummyConcurrency/Future/Combinators/Sequential/Via.hpp>
+#include <DummyConcurrency/Future/CopyFuture.hpp>
 #include <DummyConcurrency/Future/Terminators.hpp>
 
 namespace NDummyConcurrency::NFuture::NSyntax {
@@ -141,6 +142,13 @@ namespace NDummyConcurrency::NFuture::NSyntax {
             }
         };
 
+        struct [[nodiscard]] Copy {
+            template <typename T>
+            CopyFuture<T> Pipe(Future<T> future) {
+                return CopyFuture<T>(std::move(future));
+            }
+        };
+
     }  // namespace NPipes
 
     // Future<T> -> (T -> U) -> Future<U>
@@ -185,6 +193,9 @@ namespace NDummyConcurrency::NFuture::NSyntax {
     inline auto Via(NRuntime::IScheduler& scheduler) {
         return NPipes::Via(scheduler);
     }
+    inline auto Copy() {
+        return NPipes::Copy();
+    }
 
     // Future<T> -> T
     inline auto Get() {
@@ -195,4 +206,4 @@ namespace NDummyConcurrency::NFuture::NSyntax {
         return NPipes::Detach{};
     }
 
-}  // namespace NDummyConcurrency::NFuture
+}  // namespace NDummyConcurrency::NFuture::NSyntax
