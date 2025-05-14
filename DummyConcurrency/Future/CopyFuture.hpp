@@ -18,27 +18,30 @@ namespace NDummyConcurrency::NFuture {
         };
 
     public:
+        CopyFuture() = default;
         explicit CopyFuture(Future<T>&& source) : state_(std::make_shared<State>()) {
             std::move(source).Consume([state = state_](T&& value) {
-                std::lock_guard guard(state->Lock());
-                state->Value.Construct(std::move(value));
+                std::lock_guard guard(state->Lock);
                 for (auto&& promise : state->Consumers) {
-                    std::move(promise).SetValue(promise);
+                    std::move(promise).Set(value);
                 }
+                state->Value.Construct(std::move(value));
                 state->Consumers.clear();
             }, NRuntime::InlineScheduler());
         }
 
-        operator Future<T>() {  // NOLINT
-            std::lock_guard guard(state_->Lock());
-            if (state_->Value.IsConstructed()) {
-                return Ready(*state_->Value);
-            } else {
-                auto [future, promise] = Contract<T>();
-                state_->Consumers.emplace_back(std::move(promise));
-                return future;
+        Future<T> Copy() {
+            DC_ASSERT(state_, "Invalid copy future");
+            std::lock_guard guard(state_->Lock);
+            if (state_->Value.Constructed()) {
+                return Ready(*(state_->Value.Get()));
             }
+            auto [future, promise] = Contract<T>();
+            state_->Consumers.emplace_back(std::move(promise));
+            return std::move(future);
         }
+
+        operator Future<T>() { return Copy(); }  // NOLINT
 
     private:
         std::shared_ptr<State> state_;
