@@ -9,7 +9,7 @@ namespace NDummyConcurrency::NRuntime {
 
     STATIC_THREAD_LOCAL_PTR(ThreadPool, gCurrentThreadPool);
 
-    ThreadPool::ThreadPool(size_t thread) : invoker_(&InlineInvoker()), workers_amount_(thread) {
+    ThreadPool::ThreadPool(IThreadFactory* factory, size_t thread) : thread_factory_(factory), invoker_(&InlineInvoker()), workers_amount_(thread) {
         DC_ASSERT(workers_amount_ > 0, "ThreadPool size cannot be zero");
     }
 
@@ -27,7 +27,7 @@ namespace NDummyConcurrency::NRuntime {
 
     void ThreadPool::Start() {
         for (uint32_t i = 0; i < workers_amount_; ++i) {
-            workers_.emplace_back(Worker, this);
+            workers_.emplace_back(thread_factory_->LaunchThread([this]() { Worker(this); }));
         }
     }
     void ThreadPool::Stop() {

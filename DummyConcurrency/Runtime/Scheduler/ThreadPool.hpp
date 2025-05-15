@@ -1,5 +1,7 @@
 #pragma once
 
+#include "ThreadFactory.hpp"
+
 #include <DummyConcurrency/DataStructures/IntrusiveUnboundedBlockingQueue.hpp>
 #include <DummyConcurrency/ImplementationLayer/ImplementationLayer.hpp>
 #include <DummyConcurrency/Runtime/Invoker/Invoker.hpp>
@@ -14,7 +16,7 @@ namespace NDummyConcurrency::NRuntime {
 
     class ThreadPool : public IScheduler, public NonCopyable, public NonMovable, private ITaskProvider {
     public:
-        explicit ThreadPool(size_t threads);
+        explicit ThreadPool(IThreadFactory* factory, size_t threads);
         ~ThreadPool();
 
         virtual void       Submit(ITask* task) override;
@@ -31,6 +33,7 @@ namespace NDummyConcurrency::NRuntime {
         virtual ITask* GetNextTask() noexcept override;
 
     private:
+        IThreadFactory*                           thread_factory_;
         IInvoker*                                 invoker_;
         Queue                                     task_queue_;
         std::vector<NImplementationLayer::Thread> workers_;
