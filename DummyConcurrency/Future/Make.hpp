@@ -1,5 +1,6 @@
 #pragma once
 
+#include <DummyConcurrency/Fiber/Scheduling/Go.hpp>
 #include <DummyConcurrency/Future/Future.hpp>
 #include <DummyConcurrency/Future/State/Contract.hpp>
 #include <DummyConcurrency/Result/Make.hpp>
@@ -93,5 +94,11 @@ namespace NDummyConcurrency::NFuture {
 
         return Future<Value>(contract, NRuntime::InlineScheduler());
     }
-
+    template <typename F>
+    Future<std::invoke_result_t<F>> Go(NRuntime::IScheduler& scheduler, F function, NFiber::Hint = {}) {
+        using Value                            = std::invoke_result_t<F>;
+        NState::ContractState<Value>* contract = NState::ContractState<Value>::Create();
+        NFiber::Go(scheduler, [contract, func = std::move(function)]() { contract->SetValue(func()); });
+        return Future<Value>(contract, NRuntime::InlineScheduler());
+    }
 }  // namespace NDummyConcurrency::NFuture
