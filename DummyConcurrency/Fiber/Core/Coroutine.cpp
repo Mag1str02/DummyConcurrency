@@ -42,6 +42,10 @@ namespace NDummyConcurrency::NFiber {
         return completed_;
     }
 
+    NImplementationLayer::Fiber* ICoroutine::GetFiber() {
+        return &impl_fiber_;
+    }
+
     void ICoroutine::Run() noexcept {
         try {
             Body();

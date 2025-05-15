@@ -49,6 +49,7 @@ namespace NDummyConcurrency::NFiber {
         void*      coroutine_address = stack->PreAllocate<Coroutine>();
         void*      fiber_address     = stack->PreAllocate<Fiber>();
         Coroutine* coroutine         = new (coroutine_address) Coroutine(std::move(body), stack->View());
+        coroutine->GetFiber()->SetName(hint.Name, hint.Group);
         return new (fiber_address) Fiber(&scheduler, coroutine, std::move(stack));
     }
 

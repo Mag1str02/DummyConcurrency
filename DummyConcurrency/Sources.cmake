@@ -26,4 +26,6 @@ set(DummyConcurrencySources
     Synchronization/Thread/Event.cpp
     Synchronization/Thread/WaitGroup.cpp
     Synchronization/Thread/SpinLock.cpp
+
+    ImplementationLayer/DummyEngine/Fiber.cpp
 )

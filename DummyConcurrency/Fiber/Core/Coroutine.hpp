@@ -21,6 +21,8 @@ namespace NDummyConcurrency::NFiber {
         void Suspend();
         bool IsCompleted() const;
 
+        NImplementationLayer::Fiber* GetFiber();
+
     private:
         bool completed_ = false;
 
