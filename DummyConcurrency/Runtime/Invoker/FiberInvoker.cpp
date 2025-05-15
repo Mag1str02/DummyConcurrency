@@ -23,13 +23,15 @@ namespace NDummyConcurrency::NRuntime {
         }
     }  // namespace
 
-    FiberInvoker::FiberInvoker(NFiber::IStackProvider* stack_provider, IScheduler* scheduler) :
-        stack_provider_(stack_provider), scheduler_(scheduler) {}
+    FiberInvoker::FiberInvoker(IFiberHintProvider* hint_provider, IScheduler* scheduler) : hint_provider_(hint_provider), scheduler_(scheduler) {}
 
     void FiberInvoker::Invoke(ITaskProvider* task_provider) noexcept {
         do {
-            NFiber::Fiber* fiber =
-                NFiber::Fiber::Create(*scheduler_, [task_provider]() { FiberBody(task_provider); }, {.StackProvider = stack_provider_});
+            auto           hint  = hint_provider_->GetHint();
+            NFiber::Fiber* fiber = NFiber::Fiber::Create(*scheduler_, [task_provider, hint, hinter = hint_provider_]() {
+                FiberBody(task_provider);
+                hinter->ReturnHint(hint);
+            }, hint);
             gCurrentFiberInvoker = fiber;
             fiber->Run();
         } while (gCurrentFiberInvoker != nullptr);
