@@ -134,6 +134,16 @@ namespace NDummyConcurrency::NFuture::NSyntax {
                 return NFuture::Get(std::move(future));
             }
         };
+        struct [[nodiscard]] GetOk {
+            template <typename T>
+            T Pipe(TryFuture<T>&& future) {
+                auto result = NFuture::Get(std::move(future));
+                if (!result.has_value()) {
+                    throw std::runtime_error("Result is not ok");
+                }
+                return std::move(result.value());
+            }
+        };
 
         struct [[nodiscard]] Detach {
             template <typename T>
@@ -200,6 +210,10 @@ namespace NDummyConcurrency::NFuture::NSyntax {
     // Future<T> -> T
     inline auto Get() {
         return NPipes::Get{};
+    }
+    // TryFuture<T> -> T
+    inline auto GetOk() {
+        return NPipes::GetOk{};
     }
     // Future<T> -> (straight to hell)
     inline auto Detach() {

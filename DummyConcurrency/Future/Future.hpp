@@ -18,6 +18,8 @@ namespace NDummyConcurrency::NFuture {
         using State     = NState::IConsumerContract<T>;
         using ValueType = T;
 
+        Future() = default;
+
         explicit Future(State* state, NRuntime::IScheduler& scheduler) : state_(state), scheduler_(&scheduler) {}
 
         Future(Future&& other) : state_(other.state_), scheduler_(other.scheduler_) {
