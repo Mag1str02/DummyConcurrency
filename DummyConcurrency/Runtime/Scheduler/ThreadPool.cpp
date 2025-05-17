@@ -18,6 +18,7 @@ namespace NDummyConcurrency::NRuntime {
     }
 
     void ThreadPool::Submit(ITask* task) {
+        DC_PROFILE_SCOPE();
         DC_ASSERT(!stopped_, "Thread pool is stopped");
         task_queue_.Push(std::move(task));
     }
@@ -26,11 +27,13 @@ namespace NDummyConcurrency::NRuntime {
     }
 
     void ThreadPool::Start() {
+        DC_PROFILE_SCOPE();
         for (uint32_t i = 0; i < workers_amount_; ++i) {
             workers_.emplace_back(thread_factory_->LaunchThread([this]() { Worker(this); }));
         }
     }
     void ThreadPool::Stop() {
+        DC_PROFILE_SCOPE();
         DC_ASSERT(!workers_.empty(), "ThreadPool stopped before it was started");
         stopped_ = true;
         task_queue_.Close();
@@ -49,6 +52,7 @@ namespace NDummyConcurrency::NRuntime {
         current_thread_pool->invoker_->Invoke(current_thread_pool);
     }
     ITask* ThreadPool::GetNextTask() noexcept {
+        DC_PROFILE_SCOPE();
         return task_queue_.Pop();
     }
 

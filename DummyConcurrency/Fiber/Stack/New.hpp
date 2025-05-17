@@ -1,6 +1,7 @@
 #pragma once
 
 #include <DummyConcurrency/Context/StackView.hpp>
+#include <DummyConcurrency/ImplementationLayer/ImplementationLayer.hpp>
 #include <DummyConcurrency/Utils/Traits.hpp>
 
 #include <cstdint>
@@ -12,15 +13,14 @@ namespace NDummyConcurrency::NFiber {
     class NewStack : public NonCopyable {
     public:
         static NewStack Allocate(uint64_t at_least) {
+            DC_PROFILE_SCOPE();
             size_t size = at_least;
             return NewStack{new std::byte[size], size};
         }
 
         NewStack()                           = delete;
         NewStack& operator=(NewStack&& that) = delete;
-        NewStack(NewStack&& that) : start_(that.start_), size_(that.size_), current_size_(that.current_size_) {
-            that.start_        = nullptr;
-        }
+        NewStack(NewStack&& that) : start_(that.start_), size_(that.size_), current_size_(that.current_size_) { that.start_ = nullptr; }
         ~NewStack() {
             if (start_ != nullptr) {
                 delete[] start_;
@@ -31,7 +31,7 @@ namespace NDummyConcurrency::NFiber {
         void* Top() const { return start_ + current_size_; }
 
         NContext::StackView View() { return {start_, start_ + current_size_}; }
-        void               Reset() { current_size_ = size_; }
+        void                Reset() { current_size_ = size_; }
 
         template <typename T>
         void* PreAllocate() {

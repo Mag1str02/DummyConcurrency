@@ -5,12 +5,14 @@
 namespace NDummyConcurrency::NFiber {
 
     ICoroutine::ICoroutine(NContext::StackView view) {
+        DC_PROFILE_SCOPE();
         coro_context_.Setup(view, this);
         caller_context_ = nullptr;
         NImplementationLayer::NewFiber(&impl_fiber_, {view.Bottom, size_t(view.Top - view.Bottom)});
     }
 
     void ICoroutine::SwitchTo(ICoroutine& other) {
+        DC_PROFILE_SCOPE();
         if (this == &other) {
             return;
         }
@@ -23,6 +25,7 @@ namespace NDummyConcurrency::NFiber {
     }
 
     void ICoroutine::Resume() {
+        DC_PROFILE_SCOPE();
         NContext::ExecutionContext        caller_context;
         NImplementationLayer::FiberHandle impl_caller_fiber;
 
@@ -34,6 +37,7 @@ namespace NDummyConcurrency::NFiber {
     }
 
     void ICoroutine::Suspend() {
+        DC_PROFILE_SCOPE();
         NImplementationLayer::SwitchToFiber(*impl_caller_fiber_);
         coro_context_.SwitchTo(*caller_context_);
     }
@@ -48,6 +52,7 @@ namespace NDummyConcurrency::NFiber {
 
     void ICoroutine::Run() noexcept {
         try {
+            DC_PROFILE_SCOPE();
             Body();
         } catch (const std::exception& exception) {
             auto msg = std::format("Exceptions are forbidden in coroutins: '{}'", exception.what());

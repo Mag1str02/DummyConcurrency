@@ -14,6 +14,7 @@ namespace NDummyConcurrency::NFiber {
         scheduler_(scheduler), coroutine_(coroutine), stack_(std::move(stack)) {}
 
     void Fiber::Destroy() {
+        DC_PROFILE_SCOPE();
         Fiber*      fiber     = this;
         ICoroutine* coroutine = coroutine_;
         LeasedStack stack     = std::move(stack_);
@@ -35,6 +36,7 @@ namespace NDummyConcurrency::NFiber {
     }
 
     void Fiber::Suspend(IAwaiter& awaiter) {
+        DC_PROFILE_SCOPE();
         DC_ASSERT(gCurrentFiber == this, "Suspend can only be called on active fiber");
 
         suspend_awaiter_ = &awaiter;
@@ -42,6 +44,7 @@ namespace NDummyConcurrency::NFiber {
     }
 
     void Fiber::Run() noexcept {
+        DC_PROFILE_SCOPE();
         Fiber* initial   = gCurrentFiber;
         gCurrentFiber    = this;
         suspend_awaiter_ = nullptr;
@@ -60,12 +63,14 @@ namespace NDummyConcurrency::NFiber {
     }
 
     void Fiber::SwitchTo(Fiber& other) {
+        DC_PROFILE_SCOPE();
         DC_ASSERT(gCurrentFiber == this, "SwitchTo can only be called on active fiber");
 
         gCurrentFiber = &other;
         coroutine_->SwitchTo(*other.coroutine_);
     }
     void Fiber::Schedule() {
+        DC_PROFILE_SCOPE();
         scheduler_->Submit(this);
     }
 

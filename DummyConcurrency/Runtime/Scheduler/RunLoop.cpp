@@ -14,6 +14,7 @@ namespace NDummyConcurrency::NRuntime {
     RunLoop::RunLoop() : invoker_(&InlineInvoker()) {}
 
     void RunLoop::Submit(ITask* task) {
+        DC_PROFILE_SCOPE();
         queue_.PushBack(task);
     }
 
@@ -21,6 +22,7 @@ namespace NDummyConcurrency::NRuntime {
         invoker_ = invoker;
     }
     size_t RunLoop::RunAtMost(size_t limit) {
+        DC_PROFILE_SCOPE();
         current_run_limit_  = limit;
         current_task_count_ = 0;
         invoker_->Invoke(this);
@@ -28,6 +30,7 @@ namespace NDummyConcurrency::NRuntime {
     }
 
     size_t RunLoop::Run() {
+        DC_PROFILE_SCOPE();
         current_run_limit_  = 0;
         current_task_count_ = 0;
         invoker_->Invoke(this);
@@ -35,6 +38,7 @@ namespace NDummyConcurrency::NRuntime {
     }
 
     bool RunLoop::RunNext() {
+        DC_PROFILE_SCOPE();
         return RunAtMost(1) == 1;
     }
 
@@ -46,6 +50,7 @@ namespace NDummyConcurrency::NRuntime {
     }
 
     ITask* RunLoop::GetNextTask() noexcept {
+        DC_PROFILE_SCOPE();
         if (!queue_.IsEmpty() && (current_run_limit_ == 0 || current_task_count_ < current_run_limit_)) {
             ++current_task_count_;
             return queue_.PopFront();

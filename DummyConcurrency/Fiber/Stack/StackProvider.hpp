@@ -2,6 +2,8 @@
 
 #include "New.hpp"
 
+#include <DummyConcurrency/ImplementationLayer/ImplementationLayer.hpp>
+
 #include <utility>
 
 namespace NDummyConcurrency::NFiber {

@@ -5,6 +5,7 @@
 namespace NDummyConcurrency::NFiber {
 
     StackPool::StackPool(StackSize size, uint64_t preallocate_count) : stack_size_(SizeInBytes(size)) {
+        DC_PROFILE_SCOPE();
         if (preallocate_count == 0) {
             return;
         }
@@ -18,10 +19,12 @@ namespace NDummyConcurrency::NFiber {
         }
     }
     StackPool::~StackPool() {
+        DC_PROFILE_SCOPE();
         Clear();
     }
 
     NewStack StackPool::AllocateStack() {
+        DC_PROFILE_SCOPE();
         lock_.Lock();
         if (stack_of_stack_ == nullptr) {
             lock_.Unlock();
@@ -35,6 +38,7 @@ namespace NDummyConcurrency::NFiber {
         return stack;
     }
     void StackPool::FreeStack(NewStack&& stack) {
+        DC_PROFILE_SCOPE();
         stack.Reset();
         void*    node_addr = stack.PreAllocate<NewNode>();
         NewNode* node      = new (node_addr) NewNode(std::move(stack));
@@ -46,6 +50,7 @@ namespace NDummyConcurrency::NFiber {
         leased_amount_.fetch_sub(1);
     }
     void StackPool::Clear() {
+        DC_PROFILE_SCOPE();
         lock_.Lock();
         size_.store(0);
         leased_amount_.store(0);

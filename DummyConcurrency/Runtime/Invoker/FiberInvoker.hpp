@@ -21,6 +21,9 @@ namespace NDummyConcurrency::NRuntime {
         virtual void Invoke(ITaskProvider* provider) noexcept override;
 
     private:
+        void Iteration(ITaskProvider* task_provider);
+
+    private:
         IFiberHintProvider* hint_provider_;
         IScheduler*         scheduler_;
     };

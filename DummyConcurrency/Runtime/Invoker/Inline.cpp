@@ -5,6 +5,7 @@ namespace NDummyConcurrency::NRuntime {
     class InlineInvoker : public IInvoker {
     public:
         virtual void Invoke(ITaskProvider* provider) noexcept override {
+            DC_PROFILE_SCOPE();
             auto* task = provider->GetNextTask();
             while (task != nullptr) {
                 task->Run();

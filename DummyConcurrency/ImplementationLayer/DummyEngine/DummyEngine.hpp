@@ -6,6 +6,8 @@
 #include <DummyConcurrency/ImplementationLayer/STD/SpinWait.hpp>
 #include <DummyConcurrency/Utils/Traits.hpp>
 
+#include <tracy/Tracy.hpp>
+
 #include <atomic>
 #include <condition_variable>
 #include <mutex>
@@ -31,5 +33,8 @@ namespace NDummyConcurrency::NImplementationLayer {
     }  // namespace Futex
 
 #define STATIC_THREAD_LOCAL_PTR(type, name) static thread_local type* name = nullptr;
+
+#define DC_PROFILE_SCOPE() TRACY_FUNCTION_SCOPE()
+#define DC_PROFILE_NAMED_SCOPE(name) TRACY_FUNCTION_NAMED_SCOPE(name)
 
 }  // namespace NDummyConcurrency::NImplementationLayer

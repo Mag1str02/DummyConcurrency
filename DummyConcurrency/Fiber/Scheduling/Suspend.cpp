@@ -5,6 +5,7 @@
 namespace NDummyConcurrency::NFiber {
 
     void Suspend(IAwaiter& awaiter) {
+        DC_PROFILE_SCOPE();
         Fiber* current_fiber = Fiber::Self();
         DC_ASSERT(current_fiber != nullptr, "fiber::Suspend must be called from fiber");
 

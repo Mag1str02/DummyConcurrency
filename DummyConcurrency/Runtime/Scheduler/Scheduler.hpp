@@ -2,6 +2,8 @@
 
 #include "Task.hpp"
 
+#include <DummyConcurrency/ImplementationLayer/ImplementationLayer.hpp>
+
 namespace NDummyConcurrency::NRuntime {
 
     struct IScheduler {

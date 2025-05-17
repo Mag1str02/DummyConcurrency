@@ -7,6 +7,8 @@ namespace NDummyConcurrency::NRuntime {
 
     template <typename F>
     void Submit(IScheduler& scheduler, F function) {
+        DC_PROFILE_SCOPE();
+
         class SubmitTask : public ITask {
         public:
             explicit SubmitTask(F function) : function_(std::move(function)) {}
@@ -23,4 +25,4 @@ namespace NDummyConcurrency::NRuntime {
         scheduler.Submit(new SubmitTask(std::move(function)));
     }
 
-}  // namespace NDummyConcurrency::Runtime
+}  // namespace NDummyConcurrency::NRuntime

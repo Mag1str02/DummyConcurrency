@@ -35,6 +35,8 @@ namespace NDummyConcurrency::NFiber {
 
     template <typename F>
     Fiber* Fiber::Create(IScheduler& scheduler, F&& body, Hint hint) {
+        DC_PROFILE_SCOPE();
+
         class Coroutine : public ICoroutine {
         public:
             explicit Coroutine(F&& body, NContext::StackView view) : ICoroutine(view), body_(std::move(body)) {}
